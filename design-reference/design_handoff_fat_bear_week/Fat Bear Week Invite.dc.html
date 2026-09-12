@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Archivo+Black&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#16291F; font-family:Archivo, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#2F6B7A; text-underline-offset:2px; }
+  a:hover { color:#C2522E; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; justify-content:center; background:#16291F">
+<div style="width:100%; max-width:440px; background:#FBF4E4; min-height:100vh; display:flex; flex-direction:column; box-shadow:0 0 60px rgba(0,0,0,0.35)">
+
+  <div style="background:#1F3B2C; padding:12px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; position:sticky; top:0; z-index:5">
+    <button onClick="{{goInvite}}" onDoubleClick="{{goHost}}" style="background:none; border:none; padding:0; cursor:pointer; font-family:Archivo,sans-serif; font-weight:700; font-size:11px; letter-spacing:0.2em; color:#E8A87C">FAT BEAR HQ</button>
+    <div style="display:flex; gap:14px; align-items:center">
+      <button onClick="{{goRoster}}" style="background:none; border:none; padding:0; cursor:pointer; font-family:Archivo,sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; color:#9FBBA9" style-hover="color:#FBF4E4">ROSTER</button>
+      <sc-if value="{{isHostLink}}">
+        <button onClick="{{goHost}}" style="background:none; border:none; padding:0; cursor:pointer; font-family:Archivo,sans-serif; font-weight:600; font-size:11px; letter-spacing:0.14em; color:#9FBBA9" style-hover="color:#FBF4E4">PRESS BOX</button>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{hasMe}}">
+    <div style="background:#EFE6D2; border-bottom:1px solid #DED3BC; padding:9px 18px; display:flex; align-items:center; justify-content:space-between; gap:10px">
+      <span style="font-size:12.5px; color:#5C564C">Checked in as <strong style="color:#1F3B2C">{{myName}}</strong>{{myTagline}}</span>
+      <button onClick="{{switchUser}}" style="background:none; border:none; padding:0; cursor:pointer; font-size:12.5px; color:#2F6B7A; text-decoration:underline; text-underline-offset:2px">Not you?</button>
+    </div>
+  </sc-if>
+
+  <!-- ================= INVITE ================= -->
+  <sc-if value="{{showInvite}}" hint-placeholder-val="{{true}}">
+  <div style="display:flex; flex-direction:column">
+
+    <div style="background:#1F3B2C; padding:6px 20px 26px; display:flex; flex-direction:column; gap:10px">
+      <div style="display:flex; align-items:center; gap:8px">
+        <span style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#E8A87C">KATMAI PLAYOFFS</span>
+        <span style="flex:1; height:1px; background:#3A5A48"></span>
+        <span style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#E8A87C">2026</span>
+      </div>
+      <h1 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:46px; line-height:0.88; letter-spacing:-0.02em; color:#FBF4E4; text-transform:uppercase">Fat Bear<br>Week</h1>
+      <div style="display:inline-flex; align-self:flex-start; background:#C2522E; color:#FFF8EA; font-weight:600; font-size:12px; letter-spacing:0.1em; padding:7px 12px; border-radius:2px; text-transform:uppercase">COMPETING FOR THE GOLDEN SALMON</div>
+    </div>
+
+    <div style="padding:22px 20px 28px; display:flex; flex-direction:column; gap:22px">
+
+      <div style="margin:0; font-size:15px; line-height:1.6; color:#38352E; text-wrap:pretty"><div><p class="isSelectedEnd">I stinkin’ love Fat Bear Week, so naturally this calls for a party.</p><span style="text-wrap-mode: initial;">Come scout some extremely large Alaskan bears, make questionably informed bracket picks, eat salmon-adjacent food, and compete for eternal glory—and possibly</span><span style="text-wrap-mode: initial;">&nbsp;</span><strong style="text-wrap-mode: initial; color: rgb(194, 82, 46);">The Golden Salmon</strong><span style="text-wrap-mode: initial;">.</span></div></div>
+
+
+      <div style="display:flex; flex-direction:column; border-radius:4px; overflow:hidden; border:2px solid #1F3B2C">
+        <div style="padding:10px 12px; background:#1F3B2C; color:#FBF4E4; font-weight:600; font-size:11px; letter-spacing:0.14em">GAME DETAILS</div>
+        <div style="display:flex; justify-content:space-between; gap:14px; padding:12px; font-size:14px; color:#38352E; background:#FFF"><span style="color:#7A7266">When</span><span style="font-weight:500; text-align:right">Friday, October 2 · 7:00 PM</span></div>
+        <div style="display:flex; justify-content:space-between; gap:14px; padding:12px; font-size:14px; color:#38352E; background:#F5EDDC"><span style="color:#7A7266; flex:none">Where</span><span style="font-weight:500; text-align:right">Denver, CO<br><a href="https://maps.google.com/?q=Denver+CO" target="_blank" style="font-size: 13px; color: rgb(47, 107, 122);">Open in Maps ↗</a></span></div>
+        <div style="display:flex; justify-content:space-between; gap:14px; padding:12px; font-size:14px; color:#38352E; background:#FFF"><span style="color:#7A7266">Brackets lock</span><span style="font-weight:500; text-align:right">9:00 PM sharp</span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:9px">
+        
+        <div style="display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.5; color:#38352E"><span style="width:6px; height:6px; background:#C2522E; border-radius:50%; margin-top:7px; flex:none"></span><span><strong>No homework required.</strong> Bear profiles, before/after photos and scouting material provided. Fill out as much—or as little—of the bracket as you want.</span></div>
+        
+        <div style="display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.5; color:#38352E"><span style="width:6px; height:6px; background:#C2522E; border-radius:50%; margin-top:7px; flex:none"></span><span><b>Bring a +1!&nbsp;</b>&nbsp;Friends, spouses, singles, cousins and fellow bear enthusiasts welcome.</span></div>
+
+        <div style="display:flex; gap:10px; align-items:flex-start; font-size:14px; line-height:1.5; color:#38352E"><span style="width: 6px; height: 6px; background: rgb(194, 82, 46); border-radius: 50%; margin-top: 7px; flex: 0 0 auto;"></span><span><b>Costumes encouraged.</b> <a href="#costume" style="color: rgb(47, 107, 122);">See below</a>.</span></div>
+      </div>
+
+      <div style="background:#122019; border-radius:4px; overflow:hidden; display:flex; flex-direction:column">
+        <div style="display:flex; align-items:center; gap:8px; padding:12px 14px 10px">
+          <span style="width:7px; height:7px; border-radius:50%; background:#C2522E; flex:none"></span>
+          <span style="font-weight:700; font-size:10px; letter-spacing:0.2em; color:#E8A87C">LIVE FROM KATMAI</span>
+          <span style="flex:1; height:1px; background:#2A4335"></span>
+          <span style="font-weight:600; font-size:10px; letter-spacing:0.14em; color:#6E8578">{{camIndexLabel}}</span>
+        </div>
+
+        <sc-if value="{{camEmbedded}}" hint-placeholder-val="{{true}}">
+          <div style="position:relative; width:100%; padding-top:56.25%; background:#0B120E">
+            <iframe src="{{camSrc}}" title="Katmai live cam" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen="{{true}}" style="position:absolute; inset:0; width:100%; height:100%; border:0"></iframe>
+          </div>
+        </sc-if>
+        <sc-if value="{{camLinkOnly}}">
+          <div style="position:relative; width:100%; padding-top:56.25%; background:repeating-linear-gradient(135deg, #1C3226 0 8px, #16281E 8px 16px)">
+            <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:16px; text-align:center">
+              <span style="font-weight:700; font-size:11px; letter-spacing:0.18em; color:#EFE6D2">{{camIndexLabel}}</span>
+              <span style="font-size:12.5px; line-height:1.5; color:#B4C4B6; max-width:260px">This feed doesn't embed. Watch it on explore.org.</span>
+              <a href="{{camLink}}" target="_blank" style="font-size:12.5px; font-weight:600; color:#7FB4C0">Open the cam ↗</a>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="display:flex; gap:8px; overflow-x:auto; padding:12px 14px">
+          <sc-for list="{{cams}}" as="c" hint-placeholder-count="4">
+            <button onClick="{{c.onSelect}}" style="flex:none; width:132px; display:flex; flex-direction:column; gap:6px; background:none; border:none; padding:0; cursor:pointer; text-align:left; font-family:Archivo,sans-serif">
+              <div style="width:100%; height:56px; border-radius:3px; border:2px solid {{c.ring}}; background:repeating-linear-gradient(135deg, #1C3226 0 6px, #16281E 6px 12px); display:flex; align-items:flex-end; padding:5px; box-sizing:border-box">
+                <span style="font-weight:700; font-size:10px; letter-spacing:0.12em; color:{{c.label}}">{{c.badge}}</span>
+              </div>
+              <span style="font-size:11.5px; line-height:1.25; color:{{c.label}}">{{c.name}}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <div style="padding:0 14px 14px; font-size:12px; line-height:1.5; color:#A9BCAD">Cams are seasonal — if a feed is dark, it's the off-season. <a href="https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" target="_blank" style="color:#7FB4C0">All Katmai cams on explore.org ↗</a></div>
+      </div>
+
+      <div style="border-top:1px solid #DED3BC; padding-top:16px; display:flex; flex-direction:column; gap:6px">
+        <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#8A8071">WAIT, WHAT IS FAT BEAR WEEK?</div>
+        <p style="margin:0; font-size:13.5px; line-height:1.6; color:#6E675B; text-wrap:pretty">Every fall, the brown bears of Katmai National Park in Alaska gorge on salmon before hibernation. Katmai runs a March Madness–style bracket where the public votes, head to head, on which bear got most gloriously fat. It is a real thing. There is a real champion. We are going to take it extremely seriously for one evening.</p>
+      </div>
+
+      <div style="border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+        <div style="background:#1F3B2C; color:#FBF4E4; padding:10px 12px; font-weight:600; font-size:11px; letter-spacing:0.14em">SCOUTING DEPARTMENT </div>
+        <div style="padding:14px; display:flex; flex-direction:column; gap:10px; background:#FFF">
+          <div style="font-size:13.5px; line-height:1.55; color:#5C564C">Optional homework for the competitively deranged:</div>
+          <a href="https://files.explore.org/files/Brown-Bears-of-Brooks-Camp-ebook.pdf" target="_blank" style="display:flex; flex-direction:column; gap:3px; padding:11px 12px; background:#F5EDDC; border-radius:3px; text-decoration:none">
+            <span style="font-size:14px; font-weight:600; color:#1F3B2C">Bears of Brooks River ↗</span>
+            <span style="font-size:12.5px; line-height:1.45; color:#6E675B">Official Park Service profiles, IDs and life histories.</span>
+          </a>
+          <a href="https://katmai-bearcams.fandom.com/wiki/Bear_Book_~_The_Bearcam_Wiki_Edition" target="_blank" style="display:flex; flex-direction:column; gap:3px; padding:11px 12px; background:#F5EDDC; border-radius:3px; text-decoration:none">
+            <span style="font-size:14px; font-weight:600; color:#1F3B2C">The Bearcam Wiki bear book ↗</span>
+            <span style="font-size:12.5px; line-height:1.45; color:#6E675B">Fan-maintained bear lore. Deep, uneven, delightful.</span>
+          </a>
+          <a href="https://www.nps.gov/katm/learn/fat-bear-week.htm" target="_blank" style="display:flex; flex-direction:column; gap:3px; padding:11px 12px; background:#F5EDDC; border-radius:3px; text-decoration:none">
+            <span style="font-size:14px; font-weight:600; color:#1F3B2C">Katmai's Fat Bear Week page ↗</span>
+            <span style="font-size:12.5px; line-height:1.45; color:#6E675B">Official bracket, dates and voting.</span>
+          </a>
+        </div>
+      </div>
+
+      <div id="costume" style="background:#1F3B2C; border-radius:4px; padding:16px; display:flex; flex-direction:column; gap:9px; scroll-margin-top:70px">
+        <div style="display:flex; align-items:center; gap:8px">
+          <span style="font-weight:700; font-size:10px; letter-spacing:0.2em; color:#E8A87C">COSTUME ENCOURAGED</span>
+          <span style="flex:1; height:1px; background:#3A5A48"></span>
+        </div>
+        <div style="margin:0; font-size:14px; line-height:1.6; color:#EFE6D2; text-wrap:pretty"><div>Come as a <b>bear, salmon, tree, river, ranger, wildlife biologist</b> or suspiciously outdoorsy human.</div><div><br></div><div>Or just wear <b>brown, rust, moss, forest green, salmon pink or river blue.</b></div><div><br></div><div>No purchases required. Commitment to the bit is optional but admired.</div></div>
+        <div style="display:flex; gap:6px; padding-top:4px">
+          <div style="width:24px; height:24px; border-radius:2px; background:#6B4A2E"></div>
+          <div style="width:24px; height:24px; border-radius:2px; background:#C2522E"></div>
+          <div style="width:24px; height:24px; border-radius:2px; background:#7A8B4A"></div>
+          <div style="width:24px; height:24px; border-radius:2px; background:#2E5B41"></div>
+          <div style="width:24px; height:24px; border-radius:2px; background:#E8A87C"></div>
+          <div style="width:24px; height:24px; border-radius:2px; background:#2F6B7A"></div>
+        </div>
+      </div>
+
+      <sc-if value="{{hasMe}}">
+        <div style="border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+          <div style="background:#1F3B2C; color:#FBF4E4; padding:10px 12px; font-weight:600; font-size:11px; letter-spacing:0.14em">YOUR STATUS</div>
+          <div style="padding:16px 14px; display:flex; flex-direction:column; gap:12px; background:#FFF">
+            <div style="font-family:'Archivo Black',sans-serif; font-size:20px; color:#1F3B2C; line-height:1.15">{{myHeadline}}</div>
+            <div style="font-size:14px; color:#5C564C; line-height:1.5">{{mySubline}}</div>
+            <div style="display:flex; gap:8px">
+              <button onClick="{{goRsvp}}" style="flex:1; background:#1F3B2C; color:#FBF4E4; border:none; border-radius:3px; padding:13px; font-family:Archivo,sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#2C5240">Change it</button>
+              <button onClick="{{switchUser}}" style="flex:1; background:#FFF; color:#1F3B2C; border:2px solid #1F3B2C; border-radius:3px; padding:11px; font-family:Archivo,sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#F0E8D6">Not you?</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <div style="display:flex; gap:8px">
+        <div style="flex:1; background:#EFE6D2; color:#8A8071; border-radius:3px; padding:12px; text-align:center; font-weight:600; font-size:10px; letter-spacing:0.14em">POTLUCK · SOON</div>
+        <div style="flex:1; background:#EFE6D2; color:#8A8071; border-radius:3px; padding:12px; text-align:center; font-weight:600; font-size:10px; letter-spacing:0.14em">BRACKET · SOON</div>
+      </div>
+
+      <button onClick="{{goRoster}}" style="background:none; border:none; padding:0; cursor:pointer; text-align:left; font-size:13px; color:#2F6B7A; text-decoration:underline; text-underline-offset:2px">See who's coming ({{yesHeads}} confirmed)</button>
+    </div>
+
+    <div style="position:sticky; bottom:0; z-index:6; background:#1F3B2C; border-top:2px solid #16291F; padding:12px 16px; display:flex; align-items:center; gap:12px">
+      <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px">
+        <span style="font-weight:700; font-size:10px; letter-spacing:0.16em; color:#E8A87C">{{barLabel}}</span>
+        <span style="font-size:12.5px; color:#C5D3C6; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{barDetail}}</span>
+      </div>
+      <button onClick="{{goRsvp}}" style="flex:none; background:#C2522E; color:#FFF8EA; border:none; border-radius:3px; padding:14px 20px; font-family:'Archivo Black',sans-serif; font-size:14px; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer" style-hover="background:#A84322">{{barCta}}</button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- ================= WHO'S THIS ================= -->
+  <sc-if value="{{showWho}}">
+  <div style="padding:24px 20px 30px; display:flex; flex-direction:column; gap:18px">
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#7A7266">CHECK-IN</div>
+      <h2 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:30px; line-height:1; color:#1F3B2C; text-transform:uppercase">Who's this?</h2>
+      <p style="margin:0; font-size:14px; line-height:1.55; color:#5C564C">No password, no account. Pick your name so the roster knows who just walked in.</p>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <sc-for list="{{roster}}" as="g" hint-placeholder-count="6">
+        <button onClick="{{g.onSelect}}" style="display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; background:#FFF; border:1px solid #DED3BC; border-radius:3px; padding:13px 14px; cursor:pointer; text-align:left; font-family:Archivo,sans-serif" style-hover="border-color:#1F3B2C">
+          <span style="font-size:15px; font-weight:500; color:#1F3B2C">{{g.name}}</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.1em; color:#8A8071">{{g.tag}}</span>
+        </button>
+      </sc-for>
+    </div>
+
+    <div style="border-top:1px solid #DED3BC; padding-top:16px; display:flex; flex-direction:column; gap:10px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#7A7266">NOT ON THE LIST</div>
+      <div style="display:flex; gap:8px">
+        <input value="{{newName}}" onChange="{{onNameChange}}" placeholder="Your name" style="flex:1; min-width:0; background:#FFF; border:1px solid #DED3BC; border-radius:3px; padding:13px; font-family:Archivo,sans-serif; font-size:15px; color:#1F3B2C">
+        <button onClick="{{addMe}}" style="background:#1F3B2C; color:#FBF4E4; border:none; border-radius:3px; padding:0 18px; font-family:Archivo,sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#2C5240">ADD</button>
+      </div>
+    </div>
+
+    <button onClick="{{goInvite}}" style="align-self:flex-start; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#2F6B7A; text-decoration:underline; text-underline-offset:2px">Back to the invite</button>
+  </div>
+  </sc-if>
+
+  <!-- ================= RSVP ================= -->
+  <sc-if value="{{showRsvp}}">
+  <div style="padding:24px 20px 30px; display:flex; flex-direction:column; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#7A7266">ON THE CLOCK</div>
+      <h2 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:30px; line-height:1; color:#1F3B2C; text-transform:uppercase">{{myName}}</h2>
+      <p style="margin:0; font-size:14px; line-height:1.55; color:#5C564C">Friday, October 2 · 7:00 PM · Denver, CO</p>
+    </div>
+
+    <div style="display:flex; gap:8px">
+      <button onClick="{{sayYes}}" style="flex:1; background:#C2522E; color:#FFF8EA; border:none; border-radius:3px; padding:20px 12px; font-family:'Archivo Black',sans-serif; font-size:15px; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer" style-hover="background:#A84322">I'm in</button>
+      <button onClick="{{sayNo}}" style="flex:1; background:#FFF; color:#1F3B2C; border:2px solid #1F3B2C; border-radius:3px; padding:18px 12px; font-family:'Archivo Black',sans-serif; font-size:15px; letter-spacing:0.05em; text-transform:uppercase; cursor:pointer" style-hover="background:#F0E8D6">Can't make it</button>
+    </div>
+
+    <sc-if value="{{isYes}}">
+      <div style="display:flex; flex-direction:column; gap:12px; background:#EFE6D2; border-radius:4px; padding:16px">
+        <div style="font-weight:600; font-size:10px; letter-spacing:0.18em; color:#7A7266">BRINGING ANYONE?</div>
+        <div style="display:flex; align-items:center; justify-content:space-between; background:#FFF; border-radius:3px; padding:12px 14px">
+          <span style="font-size:14px; color:#38352E">Additional guests</span>
+          <div style="display:flex; align-items:center; gap:16px">
+            <button onClick="{{decGuests}}" style="background:#F0E8D6; border:none; border-radius:3px; width:36px; height:36px; font-size:18px; color:#1F3B2C; cursor:pointer" style-hover="background:#E2D7BE">–</button>
+            <span style="font-family:'Archivo Black',sans-serif; font-size:17px; color:#1F3B2C; min-width:14px; text-align:center">{{extraGuests}}</span>
+            <button onClick="{{incGuests}}" style="background:#F0E8D6; border:none; border-radius:3px; width:36px; height:36px; font-size:18px; color:#1F3B2C; cursor:pointer" style-hover="background:#E2D7BE">+</button>
+          </div>
+        </div>
+        <div style="font-size:13px; color:#6E675B; line-height:1.5">{{headcountLine}}</div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+        <div style="background:#1F3B2C; color:#FBF4E4; padding:10px 12px; font-weight:600; font-size:11px; letter-spacing:0.14em">DECLARE A BEAR <span style="color:#9FBBA9; letter-spacing:0.08em">· OPTIONAL</span></div>
+        <div style="padding:0 14px 16px; display:flex; flex-direction:column; gap:12px">
+          <div style="font-size:13.5px; line-height:1.55; color:#5C564C">Allegiance usually happens after scouting, but if you already have a bear, stake your claim now. You can switch before brackets lock. <a href="https://files.explore.org/files/Brown-Bears-of-Brooks-Camp-ebook.pdf" target="_blank" style="color:#2F6B7A">Read up on the bears ↗</a></div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px">
+            <sc-for list="{{bearChips}}" as="b" hint-placeholder-count="6">
+              <button onClick="{{b.onSelect}}" style="background:{{b.bg}}; color:{{b.fg}}; border:1px solid {{b.border}}; border-radius:999px; padding:8px 13px; font-family:Archivo,sans-serif; font-weight:600; font-size:12.5px; cursor:pointer">{{b.name}}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:8px">
+            <input value="{{bearDraft}}" onChange="{{onBearChange}}" placeholder="Or type a bear (128, Holly, 856…)" style="flex:1; min-width:0; background:#FFF; border:1px solid #DED3BC; border-radius:3px; padding:12px; font-family:Archivo,sans-serif; font-size:14px; color:#1F3B2C">
+            <button onClick="{{saveBear}}" style="background:#1F3B2C; color:#FBF4E4; border:none; border-radius:3px; padding:0 16px; font-family:Archivo,sans-serif; font-weight:700; font-size:13px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#2C5240">SET</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{hasStatus}}">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <button onClick="{{goInvite}}" style="background:#1F3B2C; color:#FBF4E4; border:none; border-radius:3px; padding:16px; font-family:Archivo,sans-serif; font-weight:700; font-size:14px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#2C5240">Done</button>
+        <button onClick="{{withdraw}}" style="background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#8A8071; text-decoration:underline; text-underline-offset:2px">Withdraw my RSVP entirely</button>
+      </div>
+    </sc-if>
+
+    <button onClick="{{switchUser}}" style="align-self:flex-start; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#2F6B7A; text-decoration:underline; text-underline-offset:2px">Not me? Switch name</button>
+  </div>
+  </sc-if>
+
+  <!-- ================= ROSTER ================= -->
+  <sc-if value="{{showRoster}}">
+  <div style="padding:24px 20px 30px; display:flex; flex-direction:column; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#7A7266">THE FIELD</div>
+      <h2 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:30px; line-height:1; color:#1F3B2C; text-transform:uppercase">Roster</h2>
+    </div>
+
+    <div style="display:flex; gap:8px">
+      <div style="flex:1; background:#1F3B2C; border-radius:4px; padding:14px; display:flex; flex-direction:column; gap:3px">
+        <span style="font-family:'Archivo Black',sans-serif; font-size:26px; color:#FBF4E4; line-height:1">{{yesHeads}}</span>
+        <span style="font-weight:600; font-size:10px; letter-spacing:0.14em; color:#9FBBA9">HEADS EXPECTED</span>
+      </div>
+      <div style="flex:1; background:#EFE6D2; border-radius:4px; padding:14px; display:flex; flex-direction:column; gap:3px">
+        <span style="font-family:'Archivo Black',sans-serif; font-size:26px; color:#C2522E; line-height:1">{{pendingCount}}</span>
+        <span style="font-weight:600; font-size:10px; letter-spacing:0.14em; color:#8A8071">NO REPLY</span>
+      </div>
+      <div style="flex:1; background:#EFE6D2; border-radius:4px; padding:14px; display:flex; flex-direction:column; gap:3px">
+        <span style="font-family:'Archivo Black',sans-serif; font-size:26px; color:#8A8071; line-height:1">{{noCount}}</span>
+        <span style="font-weight:600; font-size:10px; letter-spacing:0.14em; color:#8A8071">OUT</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.18em; color:#7A7266; padding-bottom:2px">COMING</div>
+      <sc-for list="{{yesList}}" as="g" hint-placeholder-count="4">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:#FFF; border:1px solid #DED3BC; border-radius:3px; padding:12px 14px">
+          <div style="display:flex; flex-direction:column; gap:3px; min-width:0">
+            <span style="font-size:15px; font-weight:500; color:#1F3B2C">{{g.name}}</span>
+            <span style="font-size:11px; font-weight:700; letter-spacing:0.1em; color:#C2522E">{{g.bearTag}}</span>
+          </div>
+          <span style="font-size:12px; color:#7A7266; flex:none">{{g.detail}}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.18em; color:#7A7266; padding-bottom:2px">STILL DECIDING</div>
+      <sc-for list="{{pendingList}}" as="g" hint-placeholder-count="3">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:#F5EDDC; border:1px solid #E4DAC4; border-radius:3px; padding:12px 14px">
+          <span style="font-size:15px; color:#6E675B">{{g.name}}</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <button onClick="{{goInvite}}" style="align-self:flex-start; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#2F6B7A; text-decoration:underline; text-underline-offset:2px">Back to the invite</button>
+  </div>
+  </sc-if>
+
+  <!-- ================= PRESS BOX (HOST) ================= -->
+  <sc-if value="{{showHost}}">
+  <div style="padding:24px 20px 30px; display:flex; flex-direction:column; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:6px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.2em; color:#7A7266">HOST ONLY</div>
+      <h2 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:30px; line-height:1; color:#1F3B2C; text-transform:uppercase">Press box</h2>
+      <p style="margin:0; font-size:14px; line-height:1.55; color:#5C564C">{{hostSummary}}</p>
+    </div>
+
+    <div style="border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+      <div style="display:flex; background:#1F3B2C; color:#FBF4E4; font-weight:600; font-size:10px; letter-spacing:0.14em; padding:10px 12px">
+        <span style="flex:1">GUEST</span><span style="width:74px">STATUS</span><span style="width:44px; text-align:right">HEADS</span>
+      </div>
+      <sc-for list="{{allList}}" as="g" hint-placeholder-count="8">
+        <div style="display:flex; align-items:center; padding:11px 12px; border-bottom:1px solid #EFE6D2; background:#FFF; font-size:14px">
+          <span style="flex:1; color:#1F3B2C">{{g.name}}</span>
+          <span style="width:74px; font-weight:600; font-size:11px; letter-spacing:0.08em; color:#7A7266">{{g.statusLabel}}</span>
+          <span style="width:44px; text-align:right; color:#38352E">{{g.heads}}</span>
+        </div>
+      </sc-for>
+      <div style="display:flex; padding:12px; background:#EFE6D2; font-family:'Archivo Black',sans-serif; font-size:14px; color:#1F3B2C">
+        <span style="flex:1">TOTAL EXPECTED</span><span>{{yesHeads}}</span>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:10px; background:#EFE6D2; border-radius:4px; padding:16px">
+      <div style="font-weight:600; font-size:10px; letter-spacing:0.18em; color:#7A7266">SHARE THE LINK</div>
+      <div style="background:#FFF; border:1px solid #DED3BC; border-radius:3px; padding:12px; font-size:13px; color:#5C564C; overflow:hidden; text-overflow:ellipsis">fatbearweek.party/2026</div>
+      <div style="font-size:13px; color:#6E675B; line-height:1.5">Text it to anyone. They pick their name, or add themselves if they're not listed.</div>
+    </div>
+
+    <button onClick="{{resetAll}}" style="align-self:flex-start; background:none; border:none; padding:0; cursor:pointer; font-size:13px; color:#8A8071; text-decoration:underline; text-underline-offset:2px">Reset all RSVPs</button>
+  </div>
+  </sc-if>
+
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900}}">
+const KEY = "fbw2026.rsvps.v1";
+const SEED = ["Mandi","Alex Reyes","Priya Nadkarni","Tom Gallo","Jess Okafor","Danny Liu","Sam Whitfield","Nora Beckett","Ravi Menon","Claire Duval","Ben Ostrowski","Marisol Vega"];
+
+class Component extends DCLogic {
+  state = { view: "invite", meId: null, newName: "", guests: null, loaded: false, cam: 0, bearDraft: "", hostLink: false };
+
+  componentDidMount() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+    const guests = (saved && Array.isArray(saved.guests) && saved.guests.length)
+      ? saved.guests
+      : SEED.map((n, i) => ({ id: "g" + i, name: n, status: null, extra: 0 }));
+    let hostLink = false;
+    try { hostLink = /(^|[?&])host\b/.test(location.search) || location.hash === "#host"; } catch (e) {}
+    this.setState({ guests, meId: (saved && saved.meId) || null, loaded: true, hostLink });
+  }
+
+  persist(guests, meId) {
+    const g = guests || this.state.guests || [];
+    const m = meId === undefined ? this.state.meId : meId;
+    try { localStorage.setItem(KEY, JSON.stringify({ guests: g, meId: m })); } catch (e) {}
+  }
+
+  update(id, patch) {
+    const guests = (this.state.guests || []).map(g => g.id === id ? Object.assign({}, g, patch) : g);
+    this.setState({ guests });
+    this.persist(guests);
+  }
+
+  me() { return (this.state.guests || []).find(g => g.id === this.state.meId) || null; }
+
+  renderVals() {
+    const guests = this.state.guests || [];
+    const me = this.me();
+    const view = this.state.view;
+    const heads = g => 1 + (g.extra || 0);
+    const yes = guests.filter(g => g.status === "yes");
+    const no = guests.filter(g => g.status === "no");
+    const pending = guests.filter(g => !g.status);
+    const yesHeads = yes.reduce((s, g) => s + heads(g), 0);
+
+    const go = v => () => this.setState({ view: v });
+
+    const CAMS = [
+      { name: "Brooks Falls Low", badge: "CAM 01", src: "https://www.youtube.com/embed/EwTH5yY7Mks" },
+      { name: "Brooks Falls Salmon Cam", badge: "CAM 02", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
+      { name: "Lower River", badge: "CAM 03", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
+      { name: "Underwater", badge: "CAM 04", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
+      { name: "Dumpling Mountain", badge: "CAM 05", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" }
+    ];
+    const camIdx = Math.min(this.state.cam || 0, CAMS.length - 1);
+
+    return {
+      camSrc: CAMS[camIdx].src || "",
+      camLink: CAMS[camIdx].link || "",
+      camEmbedded: !!CAMS[camIdx].src,
+      camLinkOnly: !CAMS[camIdx].src,
+      camIndexLabel: CAMS[camIdx].badge + " · " + CAMS[camIdx].name,
+      cams: CAMS.map((c, i) => ({
+        name: c.name,
+        badge: c.badge,
+        ring: i === camIdx ? "#C2522E" : "#3A5244",
+        label: i === camIdx ? "#EFE6D2" : "#A9BCAD",
+        onSelect: () => this.setState({ cam: i })
+      })),
+      showInvite: view === "invite",
+      showWho: view === "who",
+      showRsvp: view === "rsvp",
+      showRoster: view === "roster",
+      showHost: view === "host",
+
+      goInvite: go("invite"),
+      goWho: go("who"),
+      goRoster: go("roster"),
+      goHost: go("host"),
+      goRsvp: () => this.setState({ view: me ? "rsvp" : "who" }),
+
+      isHostLink: !!this.state.hostLink,
+      hasMe: !!me,
+      noMe: !me,
+      myTagline: me
+        ? (me.status === "yes"
+            ? (me.bear ? " · in · Team " + me.bear : " · in")
+            : me.status === "no" ? " · out" : " · no answer yet")
+        : "",
+      barLabel: me
+        ? (me.status === "yes" ? "YOU'RE ON THE ROSTER" : me.status === "no" ? "YOU'RE OUT THIS YEAR" : "YOU HAVEN'T ANSWERED")
+        : "ONE TAP, NO ACCOUNT",
+      barDetail: me
+        ? (me.status === "yes" && me.extra ? me.name + " + " + me.extra + " · Oct 2, 7:00 PM" : me.name + " · Oct 2, 7:00 PM")
+        : "Friday, October 2 · 7:00 PM",
+      barCta: me && me.status ? "Change" : "RSVP",
+
+      bearDraft: this.state.bearDraft,
+      onBearChange: e => this.setState({ bearDraft: e.target.value }),
+      saveBear: () => {
+        const b = (this.state.bearDraft || "").trim();
+        if (!me || !b) return;
+        this.update(me.id, { bear: b });
+        this.setState({ bearDraft: "" });
+      },
+      bearChips: ["Grazer", "Chunk", "747", "Holly", "Undecided"].map(name => {
+        const on = !!me && me.bear === name;
+        return {
+          name,
+          bg: on ? "#1F3B2C" : "#FFF",
+          fg: on ? "#FBF4E4" : "#1F3B2C",
+          border: on ? "#1F3B2C" : "#DED3BC",
+          onSelect: () => me && this.update(me.id, { bear: on ? null : name })
+        };
+      }),
+      myName: me ? me.name : "",
+      myHeadline: me
+        ? (me.status === "yes"
+            ? (me.extra ? me.name + " + " + me.extra + ", confirmed" : me.name + ", confirmed")
+            : me.status === "no" ? me.name + ", out this year" : me.name + ", undeclared")
+        : "",
+      mySubline: me
+        ? (me.status === "yes"
+            ? "You're on the roster. Brackets lock at 9:00 PM."
+            : me.status === "no" ? "The Golden Salmon will miss you." : "You haven't answered yet.")
+        : "",
+
+      roster: guests.map(g => ({
+        id: g.id,
+        name: g.name,
+        tag: g.status === "yes" ? "IN" : g.status === "no" ? "OUT" : "",
+        onSelect: () => { this.setState({ view: "rsvp", meId: g.id }); this.persist(null, g.id); }
+      })),
+
+      newName: this.state.newName,
+      onNameChange: e => this.setState({ newName: e.target.value }),
+      addMe: () => {
+        const name = (this.state.newName || "").trim();
+        if (!name) return;
+        const g = { id: "n" + Date.now(), name, status: null, extra: 0 };
+        const guests2 = guests.concat([g]);
+        this.setState({ guests: guests2, meId: g.id, newName: "", view: "rsvp" });
+        this.persist(guests2, g.id);
+      },
+      switchUser: () => { this.setState({ view: "who", meId: null }); this.persist(null, null); },
+
+      isYes: !!me && me.status === "yes",
+      hasStatus: !!me && !!me.status,
+      extraGuests: me ? (me.extra || 0) : 0,
+      headcountLine: me
+        ? (me.extra ? "Counting you, that's " + (me.extra + 1) + " heads." : "Just you for now — bring a +1, a friend, a cousin, or a fellow bear enthusiast.")
+        : "",
+      sayYes: () => me && this.update(me.id, { status: "yes" }),
+      sayNo: () => me && this.update(me.id, { status: "no", extra: 0 }),
+      incGuests: () => me && this.update(me.id, { extra: Math.min(6, (me.extra || 0) + 1) }),
+      decGuests: () => me && this.update(me.id, { extra: Math.max(0, (me.extra || 0) - 1) }),
+      withdraw: () => { if (me) { this.update(me.id, { status: null, extra: 0 }); this.setState({ view: "invite" }); } },
+
+      yesHeads,
+      noCount: no.length,
+      pendingCount: pending.length,
+      yesList: yes.map(g => ({ id: g.id, name: g.name, bearTag: g.bear ? "TEAM " + String(g.bear).toUpperCase() : "", detail: g.extra ? "+" + g.extra + " guest" + (g.extra > 1 ? "s" : "") : "solo" })),
+      pendingList: pending.map(g => ({ id: g.id, name: g.name })),
+      allList: guests.map(g => ({
+        id: g.id,
+        name: g.name,
+        statusLabel: g.status === "yes" ? (g.bear ? "IN · " + g.bear : "IN") : g.status === "no" ? "OUT" : "—",
+        heads: g.status === "yes" ? heads(g) : "—"
+      })),
+      hostSummary: yesHeads + " expected · " + yes.length + (yes.length === 1 ? " ballot" : " ballots") + " · " + pending.length + " still deciding",
+      resetAll: () => {
+        const guests2 = guests.map(g => Object.assign({}, g, { status: null, extra: 0, bear: null }));
+        this.setState({ guests: guests2 });
+        this.persist(guests2);
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>
