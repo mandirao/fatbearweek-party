@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests, yesHeadsTotal } from "@/lib/guests";
-import { PARTY, CAMS, SCOUTING_LINKS, BROADCAST_LINKS, upcomingBroadcastEvents } from "@/lib/party";
+import { PARTY, CAMS, SCOUTING_LINKS, upcomingBroadcastEvents } from "@/lib/party";
 import { switchUserAction } from "@/lib/actions";
 
 export default async function InvitePage({
@@ -353,19 +353,6 @@ export default async function InvitePage({
                 This season&apos;s live events have wrapped.
               </div>
             )}
-
-            <div className="border-t border-tan pt-2.5 flex flex-col">
-              {BROADCAST_LINKS.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  target="_blank"
-                  className="min-h-11 inline-flex items-center text-sm text-river"
-                >
-                  {l.label}
-                </a>
-              ))}
-            </div>
           </div>
         </div>
       </div>

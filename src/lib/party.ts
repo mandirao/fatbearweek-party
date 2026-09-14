@@ -107,14 +107,6 @@ export function upcomingBroadcastEvents(now = Date.now()): BroadcastEvent[] {
   return BROADCAST_EVENTS.filter((e) => new Date(e.iso).getTime() + 2 * 3600e3 > now);
 }
 
-export const BROADCAST_LINKS = [
-  { href: "https://explore.org/livecams/brown-bears/brooks-live-chat", label: "Brooks Live Chat channel ↗" },
-  {
-    href: "https://youtube.com/playlist?list=PLAnuZBl2BUgtwG-Dpn2DvHd_WKSkpOWXO",
-    label: "Replays of earlier events ↗",
-  },
-];
-
 export const SCOUTING_LINKS = [
   {
     href: "https://files.explore.org/files/Brown-Bears-of-Brooks-Camp-ebook.pdf",

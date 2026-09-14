@@ -45,9 +45,11 @@ export default async function RosterPage() {
                 </span>
               )}
             </div>
-            <span className="text-sm text-ink-faint flex-none">
-              {g.extraGuests ? `+${g.extraGuests} guest${g.extraGuests > 1 ? "s" : ""}` : "solo"}
-            </span>
+            {g.extraGuests ? (
+              <span className="text-sm text-ink-faint flex-none">
+                +{g.extraGuests} guest{g.extraGuests > 1 ? "s" : ""}
+              </span>
+            ) : null}
           </div>
         ))}
       </div>
