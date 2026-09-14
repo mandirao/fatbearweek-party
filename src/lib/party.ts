@@ -6,8 +6,9 @@ export const PARTY = {
   addressLine: "Denver, CO",
   mapUrl: "https://maps.google.com/?q=Denver+CO",
   bracketLockLabel: "9:00 PM sharp",
-  shareUrl: "fatbearweek.party/2026",
 };
+
+export const SITE_URL = "https://fatbear.sprigbo.com";
 
 export const BEAR_CHIPS = ["Grazer", "Chunk", "747", "Holly", "Undecided"];
 

@@ -6,6 +6,7 @@ import { Wordmark } from "@/components/Wordmark";
 import { getMeId, isHost } from "@/lib/identity";
 import { getGuest, checkinTagline } from "@/lib/guests";
 import { switchUserAction } from "@/lib/actions";
+import { SITE_URL } from "@/lib/party";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -20,6 +21,7 @@ const archivoBlack = Archivo_Black({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Fat Bear Week Party",
   description: "RSVP for the Fat Bear Week draft-night party.",
 };
