@@ -20,11 +20,10 @@ export type Cam = {
 };
 
 export const CAMS: Cam[] = [
-  { badge: "CAM 01", name: "Brooks Falls Low", src: "https://www.youtube.com/embed/EwTH5yY7Mks" },
-  { badge: "CAM 02", name: "Brooks Falls Salmon Cam", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
-  { badge: "CAM 03", name: "Lower River", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
-  { badge: "CAM 04", name: "Underwater", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
-  { badge: "CAM 05", name: "Dumpling Mountain", link: "https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls" },
+  { badge: "CAM 01", name: "Brooks Falls", src: "https://www.youtube.com/embed/J7ZrIDvqlic" },
+  { badge: "CAM 02", name: "River Watch", src: "https://www.youtube.com/embed/wkVLYfU-Kew" },
+  { badge: "CAM 03", name: "The Riffles", src: "https://www.youtube.com/embed/z7_GhJeFxQI" },
+  { badge: "CAM 04", name: "Kat's River View", src: "https://www.youtube.com/embed/cTsjMtjRLCo" },
 ];
 
 export const SCOUTING_LINKS = [
