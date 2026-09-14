@@ -11,6 +11,8 @@ export const PARTY = {
 
 export const SITE_URL = "https://fatbear.sprigbo.com";
 
+export const WHATSAPP_URL = "https://chat.whatsapp.com/REVOKED";
+
 export const BEAR_CHIPS = ["Grazer", "Chunk", "747", "Holly", "Undecided"];
 
 export type Cam = {

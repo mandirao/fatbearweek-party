@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests, yesHeadsTotal } from "@/lib/guests";
-import { PARTY, CAMS, SCOUTING_LINKS, upcomingBroadcastEvents } from "@/lib/party";
+import { PARTY, CAMS, SCOUTING_LINKS, WHATSAPP_URL, upcomingBroadcastEvents } from "@/lib/party";
 import { findPotluckItem } from "@/lib/potluck";
 import { switchUserAction } from "@/lib/actions";
 
@@ -145,13 +145,23 @@ export default async function InvitePage({
                 </div>
               )}
               {me.status === "yes" && (
-                <Link
-                  href="/potluck"
-                  className="flex items-center justify-between gap-2 bg-tan rounded-[3px] px-3.5 py-3 text-[15px] text-forest no-underline"
-                >
-                  <span>{myDish ? `You're bringing ${myDish.name}` : "Claim a dish for the feast"}</span>
-                  <span className="text-salmon font-bold">→</span>
-                </Link>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/potluck"
+                    className="flex items-center justify-between gap-2 bg-tan rounded-[3px] px-3.5 py-3 text-[15px] text-forest no-underline"
+                  >
+                    <span>{myDish ? `You're bringing ${myDish.name}` : "Claim a dish for the feast"}</span>
+                    <span className="text-salmon font-bold">→</span>
+                  </Link>
+                  <a
+                    href={WHATSAPP_URL}
+                    target="_blank"
+                    className="flex items-center justify-between gap-2 bg-tan rounded-[3px] px-3.5 py-3 text-[15px] text-forest no-underline"
+                  >
+                    <span>Join the party WhatsApp group</span>
+                    <span className="text-salmon font-bold">→</span>
+                  </a>
+                </div>
               )}
               <div className="flex gap-2">
                 <Link
