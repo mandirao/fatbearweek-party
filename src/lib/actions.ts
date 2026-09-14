@@ -72,6 +72,7 @@ export async function toggleBearChipAction(formData: FormData) {
   const bear = String(formData.get("bear") || "");
   await updateGuest(me.id, { bear: me.bear === bear ? null : bear });
   revalidatePath("/bears");
+  revalidatePath("/bears/[num]", "page");
   revalidatePath("/");
   revalidatePath("/roster");
 }

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest } from "@/lib/guests";
-import { BEAR_CHIPS } from "@/lib/party";
 import { toggleBearChipAction, saveBearTextAction } from "@/lib/actions";
+import { BearField } from "@/components/BearField";
+import { BRIEFS, bearPhotoUrl } from "@/lib/bears";
 
 export default async function BearsPage() {
   const meId = await getMeId();
@@ -39,13 +40,13 @@ export default async function BearsPage() {
           <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">YOUR BEAR</div>
           <div className="p-3.5 flex flex-col gap-3.5 bg-warm-white">
             {me?.bear ? (
-              <div className="flex items-center gap-3 bg-salmon rounded-[3px] p-3.5">
-                <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-salmon-tint">
+              <div className="flex items-center gap-3 bg-forest rounded p-3.5">
+                <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-cream">
                   TEAM {me.bear.toUpperCase()}
                 </span>
                 <form action={toggleBearChipAction}>
                   <input type="hidden" name="bear" value={me.bear} />
-                  <button className="flex-none bg-transparent text-salmon-tint border border-salmon-hover rounded-[3px] min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-salmon-hover">
+                  <button className="flex-none bg-transparent text-green-muted-4 border border-green-rule rounded min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-spruce">
                     Undeclare
                   </button>
                 </form>
@@ -53,60 +54,49 @@ export default async function BearsPage() {
             ) : (
               <div className="text-[15px] leading-[1.55] text-ink-muted">
                 {me
-                  ? "Nothing declared yet. Pick one of the usual suspects, or name any bear you like."
+                  ? "Nothing declared yet. Scout the field below, or type any bear you like."
                   : "Check in on the invite first, then pick a bear here."}
               </div>
             )}
 
-            <div className="flex flex-wrap gap-1.5">
-              {BEAR_CHIPS.map((name) => {
-                const selected = me?.bear === name;
-                const chipClasses = `min-h-11 inline-flex items-center rounded-full px-[17px] font-sans font-semibold text-[15px] border ${
-                  selected ? "bg-forest text-cream border-forest" : "bg-warm-white text-forest border-border-tan"
-                }`;
-
-                if (!me) {
-                  return (
-                    <Link key={name} href="/checkin" className={`${chipClasses} no-underline`}>
-                      {name}
-                    </Link>
-                  );
-                }
-
-                return (
-                  <form key={name} action={toggleBearChipAction}>
-                    <input type="hidden" name="bear" value={name} />
-                    <button className={`${chipClasses} cursor-pointer`}>{name}</button>
-                  </form>
-                );
-              })}
-            </div>
-
-            {me && (
-              <form action={saveBearTextAction} className="flex gap-2">
-                <input
-                  name="bear"
-                  placeholder="Or type a bear (128, Holly, 856…)"
-                  className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded-[3px] p-3 text-base text-forest"
-                />
-                <button className="bg-forest text-cream border-none rounded-[3px] px-4 font-sans font-bold text-sm tracking-[0.06em] cursor-pointer hover:bg-green-hover">
-                  SET
-                </button>
-              </form>
-            )}
-
-            <div className="text-sm leading-[1.5] text-ink-muted">
-              Not sure yet?{" "}
-              <a
-                href="https://files.explore.org/files/Brown-Bears-of-Brooks-Camp-ebook.pdf"
-                target="_blank"
-                className="text-river"
-              >
-                Read up on the bears ↗
-              </a>{" "}
-              or wait for the bracket reveal.
-            </div>
+            <form action={saveBearTextAction} className="flex gap-2">
+              <input
+                name="bear"
+                aria-label="Your bear"
+                placeholder="Type a bear (128, Holly, 856…)"
+                className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded py-[15px] px-3 text-base text-forest"
+              />
+              <button className="bg-forest text-cream border-none rounded min-h-11 px-4 font-sans font-bold text-[15px] tracking-[0.06em] cursor-pointer hover:bg-green-hover">
+                SET
+              </button>
+            </form>
           </div>
+        </div>
+
+        <BearField meBear={me?.bear ?? null} />
+
+        <div className="flex flex-col gap-2.5">
+          {BRIEFS.map((brief) => (
+            <details key={brief.key} name="bear-briefs" className="group border border-border-tan rounded bg-warm-white overflow-hidden">
+              <summary className="w-full text-left px-3.5 py-[15px] min-h-13 flex items-center gap-2.5 cursor-pointer list-none font-sans">
+                <span className="flex-1 font-bold text-[15px] text-forest">{brief.title}</span>
+                <span className="flex-none text-lg text-salmon">
+                  <span className="group-open:hidden">+</span>
+                  <span className="hidden group-open:inline">–</span>
+                </span>
+              </summary>
+              <div className="px-3.5 pb-4 flex flex-col gap-3">
+                {brief.img && (
+                  <img src={bearPhotoUrl(brief.img)} alt={brief.title} className="block w-full h-auto rounded" />
+                )}
+                {brief.paras.map((p, i) => (
+                  <p key={i} className="m-0 text-[15.5px] leading-[1.6] text-ink">
+                    {p}
+                  </p>
+                ))}
+              </div>
+            </details>
+          ))}
         </div>
 
         <div className="bg-cam-bg rounded overflow-hidden">
