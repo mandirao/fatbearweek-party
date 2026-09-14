@@ -174,11 +174,12 @@ export default async function InvitePage({
                   className="flex-none w-[132px] flex flex-col gap-1.5 text-left"
                 >
                   <div
-                    className="w-full h-14 rounded-[3px] flex items-end p-[5px] box-border"
+                    className="w-full h-14 rounded-[3px] flex items-end p-[5px] box-border bg-cover bg-center"
                     style={{
                       border: `2px solid ${selected ? "#C2522E" : "#3A5244"}`,
-                      backgroundImage:
-                        "repeating-linear-gradient(135deg, #1C3226 0 6px, #16281E 6px 12px)",
+                      backgroundImage: c.thumb
+                        ? `linear-gradient(to top, rgba(10,20,14,0.8), rgba(10,20,14,0.15) 65%), url(${c.thumb})`
+                        : "repeating-linear-gradient(135deg, #1C3226 0 6px, #16281E 6px 12px)",
                     }}
                   >
                     <span

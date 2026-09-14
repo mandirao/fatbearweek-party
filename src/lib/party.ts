@@ -16,14 +16,22 @@ export type Cam = {
   badge: string;
   name: string;
   src?: string;
+  thumb?: string;
   link?: string;
 };
 
+const youtubeCam = (badge: string, name: string, id: string): Cam => ({
+  badge,
+  name,
+  src: `https://www.youtube.com/embed/${id}`,
+  thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+});
+
 export const CAMS: Cam[] = [
-  { badge: "CAM 01", name: "Brooks Falls", src: "https://www.youtube.com/embed/J7ZrIDvqlic" },
-  { badge: "CAM 02", name: "River Watch", src: "https://www.youtube.com/embed/wkVLYfU-Kew" },
-  { badge: "CAM 03", name: "The Riffles", src: "https://www.youtube.com/embed/z7_GhJeFxQI" },
-  { badge: "CAM 04", name: "Kat's River View", src: "https://www.youtube.com/embed/cTsjMtjRLCo" },
+  youtubeCam("CAM 01", "Brooks Falls", "J7ZrIDvqlic"),
+  youtubeCam("CAM 02", "River Watch", "wkVLYfU-Kew"),
+  youtubeCam("CAM 03", "The Riffles", "z7_GhJeFxQI"),
+  youtubeCam("CAM 04", "Kat's River View", "cTsjMtjRLCo"),
 ];
 
 export const SCOUTING_LINKS = [
