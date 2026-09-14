@@ -23,7 +23,7 @@ export type Cam = {
 const youtubeCam = (badge: string, name: string, id: string): Cam => ({
   badge,
   name,
-  src: `https://www.youtube.com/embed/${id}`,
+  src: `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1`,
   thumb: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
 });
 
