@@ -24,56 +24,58 @@ export default async function HostPage() {
   return (
     <div className="px-5 pt-6 pb-[30px] flex flex-col gap-5">
       <div className="flex flex-col gap-1.5">
-        <div className="font-semibold text-[10px] tracking-[0.2em] text-ink-faint">HOST ONLY</div>
+        <div className="font-semibold text-[11px] tracking-[0.2em] text-ink-faint">HOST ONLY</div>
         <h2 className="m-0 font-display text-[30px] leading-none text-forest uppercase">Press box</h2>
-        <p className="m-0 text-sm leading-[1.55] text-ink-muted">{hostSummary}</p>
+        <p className="m-0 text-base leading-[1.55] text-ink-muted">{hostSummary}</p>
       </div>
 
       <div className="border-2 border-forest rounded overflow-hidden">
-        <div className="flex bg-forest text-cream font-semibold text-[10px] tracking-[0.14em] px-3 py-2.5">
-          <span className="flex-1">GUEST</span>
-          <span className="w-[74px]">STATUS</span>
-          <span className="w-11 text-right">HEADS</span>
+        <div className="flex bg-forest text-cream font-semibold text-[11px] tracking-[0.14em] px-3 py-3">
+          <span className="flex-1 min-w-0">GUEST</span>
+          <span className="w-24 flex-none">STATUS</span>
+          <span className="w-12 flex-none text-right">HEADS</span>
         </div>
         {guests.map((g) => (
           <div
             key={g.id}
-            className="flex items-center px-3 py-[11px] border-b border-tan bg-warm-white text-sm"
+            className="flex items-center px-3 py-[13px] border-b border-tan bg-warm-white text-base"
           >
-            <span className="flex-1 text-forest">{g.name}</span>
-            <span className="w-[74px] font-semibold text-[11px] tracking-[0.08em] text-ink-faint">
+            <span className="flex-1 min-w-0 text-forest overflow-hidden text-ellipsis whitespace-nowrap">
+              {g.name}
+            </span>
+            <span className="w-24 flex-none font-semibold text-xs leading-[1.3] tracking-[0.06em] text-ink-faint">
               {g.status === "yes" ? (g.bear ? `IN · ${g.bear}` : "IN") : g.status === "no" ? "OUT" : "—"}
             </span>
-            <span className="w-11 text-right text-ink">{g.status === "yes" ? heads(g) : "—"}</span>
+            <span className="w-12 flex-none text-right text-ink">{g.status === "yes" ? heads(g) : "—"}</span>
           </div>
         ))}
-        <div className="flex px-3 py-3 bg-tan font-display text-sm text-forest">
+        <div className="flex px-3 py-3 bg-tan font-display text-base text-forest">
           <span className="flex-1">TOTAL EXPECTED</span>
           <span>{yesHeads}</span>
         </div>
       </div>
 
       <div className="flex flex-col gap-2.5 bg-tan rounded p-4">
-        <div className="font-semibold text-[10px] tracking-[0.18em] text-ink-faint">SHARE THE LINK</div>
-        <div className="bg-warm-white border border-border-tan rounded-[3px] p-3 text-[13px] text-ink-muted overflow-hidden text-ellipsis">
+        <div className="font-semibold text-[11px] tracking-[0.18em] text-ink-faint">SHARE THE LINK</div>
+        <div className="bg-warm-white border border-border-tan rounded-[3px] p-3 text-[15px] text-ink-muted overflow-hidden text-ellipsis">
           {inviteUrl || "Deploy the app to get a shareable link."}
         </div>
         {inviteUrl && <CopyLinkButton url={inviteUrl} />}
-        <div className="text-[13px] text-ink-muted-2 leading-[1.5]">
+        <div className="text-[15px] text-ink-muted-2 leading-[1.55]">
           Text it to anyone. They pick their name, or add themselves if they&apos;re not listed.
         </div>
       </div>
 
       <div className="flex flex-col gap-2.5 border border-border-tan rounded p-4">
-        <div className="font-semibold text-[10px] tracking-[0.18em] text-ink-faint">ADD A GUEST</div>
+        <div className="font-semibold text-[11px] tracking-[0.18em] text-ink-faint">ADD A GUEST</div>
         <form action={hostAddGuestAction} className="flex gap-2">
           <input
             name="name"
             placeholder="Guest name"
             required
-            className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded-[3px] p-3 text-sm text-forest"
+            className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded-[3px] p-3 text-base text-forest"
           />
-          <button className="bg-forest text-cream border-none rounded-[3px] px-4 font-sans font-bold text-[13px] tracking-[0.06em] cursor-pointer hover:bg-green-hover">
+          <button className="bg-forest text-cream border-none rounded-[3px] px-4 font-sans font-bold text-sm tracking-[0.06em] cursor-pointer hover:bg-green-hover">
             ADD
           </button>
         </form>
@@ -82,7 +84,7 @@ export default async function HostPage() {
       <form action={resetAllAction}>
         <ConfirmSubmitButton
           confirmText="Reset every guest's RSVP, guest count and bear pick? This can't be undone."
-          className="text-[13px] text-ink-faint-2 underline underline-offset-2 cursor-pointer bg-transparent border-none p-0"
+          className="min-h-11 inline-flex items-center text-[15px] text-ink-faint underline underline-offset-2 cursor-pointer bg-transparent border-none p-0"
         >
           Reset all RSVPs
         </ConfirmSubmitButton>

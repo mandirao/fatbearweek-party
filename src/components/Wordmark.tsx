@@ -8,7 +8,7 @@ export function Wordmark() {
     <button
       onClick={() => router.push("/")}
       onDoubleClick={() => router.push("/host")}
-      className="font-sans font-bold text-[11px] tracking-[0.2em] text-apricot bg-transparent border-none p-0 cursor-pointer"
+      className="min-h-11 inline-flex items-center font-sans font-bold text-xs tracking-[0.2em] text-apricot bg-transparent border-none p-0 cursor-pointer"
     >
       FAT BEAR HQ
     </button>

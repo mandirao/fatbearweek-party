@@ -41,14 +41,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
               <div className="flex gap-3.5 items-center">
                 <Link
                   href="/roster"
-                  className="font-sans font-semibold text-[11px] tracking-[0.14em] text-green-muted hover:text-cream"
+                  className="min-h-11 inline-flex items-center font-sans font-semibold text-xs tracking-[0.14em] text-green-muted hover:text-cream"
                 >
                   ROSTER
                 </Link>
                 {hostFlag && (
                   <Link
                     href="/host"
-                    className="font-sans font-semibold text-[11px] tracking-[0.14em] text-green-muted hover:text-cream"
+                    className="min-h-11 inline-flex items-center font-sans font-semibold text-xs tracking-[0.14em] text-green-muted hover:text-cream"
                   >
                     PRESS BOX
                   </Link>
@@ -57,13 +57,13 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             </div>
 
             {me && (
-              <div className="bg-tan border-b border-border-tan px-[18px] py-[9px] flex items-center justify-between gap-2.5">
-                <span className="text-[12.5px] text-ink-muted">
+              <div className="bg-tan border-b border-border-tan px-[18px] py-0 flex items-center justify-between gap-2.5">
+                <span className="text-sm text-ink-muted">
                   Checked in as <strong className="text-forest">{me.name}</strong>
                   {checkinTagline(me)}
                 </span>
                 <form action={switchUserAction}>
-                  <button className="text-[12.5px] text-river underline underline-offset-2 cursor-pointer bg-transparent border-none p-0">
+                  <button className="min-h-11 inline-flex items-center text-sm text-river underline underline-offset-2 cursor-pointer bg-transparent border-none p-0">
                     Not you?
                   </button>
                 </form>
