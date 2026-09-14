@@ -4,6 +4,11 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getMeId, setMeId, clearMeId, isHost } from "./identity";
 import { addGuest, getGuest, updateGuest, resetAllGuests } from "./guests";
+import { POTLUCK_ITEMS } from "./potluck";
+
+function isUniqueViolation(err: unknown): boolean {
+  return !!err && typeof err === "object" && (err as { code?: string }).code === "23505";
+}
 
 async function requireMe() {
   const id = await getMeId();
@@ -66,7 +71,7 @@ export async function toggleBearChipAction(formData: FormData) {
   const me = await requireMe();
   const bear = String(formData.get("bear") || "");
   await updateGuest(me.id, { bear: me.bear === bear ? null : bear });
-  revalidatePath("/rsvp");
+  revalidatePath("/bears");
   revalidatePath("/");
   revalidatePath("/roster");
 }
@@ -75,9 +80,32 @@ export async function saveBearTextAction(formData: FormData) {
   const me = await requireMe();
   const bear = String(formData.get("bear") || "").trim();
   if (bear) await updateGuest(me.id, { bear });
-  revalidatePath("/rsvp");
+  revalidatePath("/bears");
   revalidatePath("/");
   revalidatePath("/roster");
+}
+
+export async function claimDishAction(formData: FormData) {
+  const me = await requireMe();
+  const dishId = Number(formData.get("dishId"));
+  const item = POTLUCK_ITEMS.find((i) => i.n === dishId);
+  if (!item || item.host) redirect("/potluck");
+
+  if (me.dishId === dishId) {
+    await updateGuest(me.id, { dishId: null });
+  } else {
+    try {
+      await updateGuest(me.id, { dishId });
+    } catch (err) {
+      if (!isUniqueViolation(err)) throw err;
+      revalidatePath("/potluck");
+      redirect("/potluck?taken=1");
+    }
+  }
+
+  revalidatePath("/potluck");
+  revalidatePath("/roster");
+  revalidatePath("/");
 }
 
 export async function withdrawAction() {
@@ -85,6 +113,7 @@ export async function withdrawAction() {
   await updateGuest(me.id, { status: null, extraGuests: 0, bear: null });
   revalidatePath("/rsvp");
   revalidatePath("/roster");
+  revalidatePath("/bears");
   redirect("/");
 }
 
@@ -93,6 +122,7 @@ export async function resetAllAction() {
   await resetAllGuests();
   revalidatePath("/host");
   revalidatePath("/roster");
+  revalidatePath("/bears");
   revalidatePath("/");
 }
 

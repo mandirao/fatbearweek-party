@@ -1,12 +1,19 @@
 import Link from "next/link";
-import { getAllGuests, yesHeadsTotal } from "@/lib/guests";
+import { getMeId } from "@/lib/identity";
+import { getGuest, getAllGuests, heads, yesHeadsTotal } from "@/lib/guests";
+import { findPotluckItem } from "@/lib/potluck";
 
 export default async function RosterPage() {
+  const meId = await getMeId();
+  const me = meId ? await getGuest(meId) : null;
   const guests = await getAllGuests();
   const yes = guests.filter((g) => g.status === "yes");
   const no = guests.filter((g) => g.status === "no");
   const pending = guests.filter((g) => !g.status);
   const yesHeads = yesHeadsTotal(guests);
+
+  const myDish = me?.status === "yes" ? findPotluckItem(me.dishId) : null;
+  const myHeadsLabel = me?.status === "yes" ? (heads(me) === 1 ? "1 head" : `${heads(me)} heads`) : "";
 
   return (
     <div className="px-5 pt-6 pb-[30px] flex flex-col gap-5">
@@ -29,6 +36,26 @@ export default async function RosterPage() {
           <span className="font-semibold text-[11px] tracking-[0.14em] text-ink-faint">OUT</span>
         </div>
       </div>
+
+      {me?.status === "yes" && (
+        <div className="border-2 border-forest rounded overflow-hidden">
+          <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">
+            YOU&apos;RE ON THE ROSTER
+          </div>
+          <div className="p-4 px-3.5 flex flex-col gap-3 bg-warm-white">
+            <p className="m-0 text-base text-ink-muted leading-[1.5]">
+              {myDish ? `You're down for ${myHeadsLabel}, bringing ${myDish.name}.` : "Next up: pick a dish for the feast."}
+            </p>
+            <Link
+              href="/potluck"
+              className="flex items-center justify-between gap-2 bg-salmon text-salmon-tint rounded-[3px] px-4 py-[13px] font-display text-[15px] tracking-[0.05em] uppercase hover:bg-salmon-hover"
+            >
+              <span>{myDish ? "CHANGE MY DISH" : "CLAIM A DISH"}</span>
+              <span>→</span>
+            </Link>
+          </div>
+        </div>
+      )}
 
       <div className="flex flex-col gap-1.5">
         <div className="font-semibold text-[11px] tracking-[0.18em] text-ink-faint pb-0.5">COMING</div>

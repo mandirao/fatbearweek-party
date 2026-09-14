@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests, yesHeadsTotal } from "@/lib/guests";
 import { PARTY, CAMS, SCOUTING_LINKS, upcomingBroadcastEvents } from "@/lib/party";
+import { findPotluckItem } from "@/lib/potluck";
 import { switchUserAction } from "@/lib/actions";
 
 export default async function InvitePage({
@@ -15,6 +16,7 @@ export default async function InvitePage({
   const allGuests = await getAllGuests();
   const yesHeads = yesHeadsTotal(allGuests);
   const upcomingEvents = upcomingBroadcastEvents();
+  const myDish = me ? findPotluckItem(me.dishId) : null;
 
   const camIdx = Math.min(Math.max(parseInt(cam || "0", 10) || 0, 0), CAMS.length - 1);
   const activeCam = CAMS[camIdx];
@@ -54,11 +56,7 @@ export default async function InvitePage({
   return (
     <div className="flex flex-col">
       <div className="bg-forest pt-1.5 px-5 pb-[26px] flex flex-col gap-2.5">
-        <div className="flex items-center gap-2">
-          <span className="font-semibold text-[11px] tracking-[0.2em] text-apricot">KATMAI PLAYOFFS</span>
-          <span className="flex-1 h-px bg-green-rule" />
-          <span className="font-semibold text-[11px] tracking-[0.2em] text-apricot">{PARTY.dateEyebrow}</span>
-        </div>
+        <span className="font-semibold text-[11px] tracking-[0.2em] text-apricot">{PARTY.dateEyebrow}</span>
         <h1 className="m-0 font-display text-[46px] leading-[0.88] tracking-[-0.02em] text-cream uppercase">
           Fat Bear
           <br />
@@ -70,11 +68,14 @@ export default async function InvitePage({
       </div>
 
       <div className="px-5 pt-[22px] pb-4 flex flex-col gap-[22px]">
-        <p className="m-0 text-[17px] leading-[1.6] text-ink">
-          I stinkin&rsquo; love Fat Bear Week, so naturally this calls for a party. Come scout some extremely large
-          Alaskan bears, make questionably informed bracket picks, eat salmon-adjacent food, and compete for eternal
-          glory&mdash;and possibly <strong className="text-salmon">The Golden Salmon.</strong> Love, Mandi
-        </p>
+        <div className="flex flex-col gap-2.5 text-[17px] leading-[1.6] text-ink">
+          <p className="m-0">
+            I stinkin&rsquo; love Fat Bear Week, so naturally this calls for a party. Come scout extremely large
+            Alaskan bears, make questionably informed bracket picks, eat salmon-adjacent food, and compete for
+            eternal glory&mdash;and possibly <strong className="text-salmon">The Golden Salmon.</strong>
+          </p>
+          <p className="m-0">Love, Mandi</p>
+        </div>
 
         <div className="flex flex-col rounded overflow-hidden border-2 border-forest">
           <div className="px-3 py-3 bg-forest text-cream font-semibold text-xs tracking-[0.14em]">GAME DETAILS</div>
@@ -84,7 +85,9 @@ export default async function InvitePage({
           </div>
           <div className="flex justify-between gap-3.5 px-3 py-[14px] text-base text-ink bg-sand">
             <span className="text-ink-faint flex-none">Where</span>
-            <span className="font-medium text-right">{PARTY.addressLine}</span>
+            <a href={PARTY.mapUrl} target="_blank" className="font-medium text-right text-river">
+              {PARTY.addressLine} ↗
+            </a>
           </div>
           <div className="flex justify-between gap-3.5 px-3 py-[14px] text-base text-ink bg-warm-white">
             <span className="text-ink-faint">Brackets lock</span>
@@ -96,14 +99,14 @@ export default async function InvitePage({
           <div className="flex gap-2.5 items-start text-base leading-[1.55] text-ink">
             <span className="w-1.5 h-1.5 bg-salmon rounded-full mt-[9px] flex-none" />
             <span>
-              <strong>No homework required.</strong> Bear profiles, before/after photos and scouting material
-              provided. Fill out as much&mdash;or as little&mdash;of the bracket as you want.
+              <strong>No homework.</strong> Bear intel provided. You&apos;ll fill out as much&mdash;or as
+              little&mdash;of your bracket as you want on the night.
             </span>
           </div>
           <div className="flex gap-2.5 items-start text-base leading-[1.55] text-ink">
             <span className="w-1.5 h-1.5 bg-salmon rounded-full mt-[9px] flex-none" />
             <span>
-              <strong>Bring a +1!</strong> Friends, spouses, singles, cousins and fellow bear enthusiasts welcome.
+              <strong>Bring a +1!</strong> Friends, spouses, cousins &amp; fellow bear enthusiasts welcome.
             </span>
           </div>
         </div>
@@ -115,13 +118,12 @@ export default async function InvitePage({
           <div className="p-3.5 flex flex-col gap-3.5 bg-warm-white">
             <div className="text-[16px] leading-[1.6] text-ink flex flex-col gap-2.5">
               <p className="m-0">
-                Come as a <strong>bear, salmon, tree, river, ranger, wildlife biologist</strong> or suspiciously
-                outdoorsy human.
+                <strong>Bear. Salmon. Tree. Ranger.</strong> Suspiciously outdoorsy human.
               </p>
               <p className="m-0">
                 Or just wear <strong>brown, rust, moss, forest green, salmon pink or river blue.</strong>
               </p>
-              <p className="m-0">No purchases required. Commitment to the bit is optional but admired.</p>
+              <p className="m-0">Commitment to the bit: optional but admired.</p>
             </div>
             <div className="flex gap-1.5">
               {["#6B4A2E", "#C2522E", "#7A8B4A", "#2E5B41", "#E8A87C", "#2F6B7A"].map((c) => (
@@ -142,6 +144,15 @@ export default async function InvitePage({
                   TEAM {me.bear.toUpperCase()}
                 </div>
               )}
+              {me.status === "yes" && (
+                <Link
+                  href="/potluck"
+                  className="flex items-center justify-between gap-2 bg-tan rounded-[3px] px-3.5 py-3 text-[15px] text-forest no-underline"
+                >
+                  <span>{myDish ? `You're bringing ${myDish.name}` : "Claim a dish for the feast"}</span>
+                  <span className="text-salmon font-bold">→</span>
+                </Link>
+              )}
               <div className="flex gap-2">
                 <Link
                   href="/rsvp"
@@ -158,17 +169,6 @@ export default async function InvitePage({
             </div>
           </div>
         )}
-
-        <div className="flex gap-2">
-          <div className="flex-1 bg-tan rounded-[3px] p-3.5 text-center flex flex-col gap-1">
-            <span className="font-bold text-[11px] tracking-[0.14em] text-ink-faint">POTLUCK</span>
-            <span className="text-[13px] leading-[1.35] text-ink-faint">Sign-up list goes up in September</span>
-          </div>
-          <div className="flex-1 bg-tan rounded-[3px] p-3.5 text-center flex flex-col gap-1">
-            <span className="font-bold text-[11px] tracking-[0.14em] text-ink-faint">BRACKET</span>
-            <span className="text-[13px] leading-[1.35] text-ink-faint">Katmai reveals the field Sept 18</span>
-          </div>
-        </div>
 
         <Link
           href="/roster"
@@ -263,25 +263,17 @@ export default async function InvitePage({
               );
             })}
           </div>
-
-          <div className="px-3.5 pb-3.5 text-xs leading-[1.5] text-green-muted-2">
-            Cams are seasonal &mdash; if a feed is dark, it&apos;s the off-season.{" "}
-            <a
-              href="https://explore.org/livecams/brown-bears/brown-bear-salmon-cam-brooks-falls"
-              target="_blank"
-              className="text-river-light"
-            >
-              All Katmai cams on explore.org ↗
-            </a>
-          </div>
         </div>
 
-        <p className="m-0 text-[15px] leading-[1.6] text-ink-muted">
-          Every fall, the brown bears of Katmai National Park in Alaska gorge on salmon before hibernation. Katmai
-          runs a March Madness&ndash;style bracket where the public votes, head to head, on which bear got most
-          gloriously fat. <strong>It is a real thing. There is a real champion.</strong> We are going to take it
-          extremely seriously for one evening.
-        </p>
+        <div className="flex flex-col gap-2.5 text-[15px] leading-[1.6] text-ink-muted">
+          <p className="m-0">
+            Every fall, Katmai&rsquo;s brown bears gorge on salmon before hibernation. Then the public votes, March
+            Madness&ndash;style, for the most gloriously fat.
+          </p>
+          <p className="m-0">
+            <strong>It is real. There is a champion.</strong> We will take this extremely seriously.
+          </p>
+        </div>
 
         <div className="border-2 border-forest rounded overflow-hidden">
           <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">

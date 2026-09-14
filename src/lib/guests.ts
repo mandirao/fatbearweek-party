@@ -25,7 +25,10 @@ export async function addGuest(name: string): Promise<Guest> {
   return row;
 }
 
-export async function updateGuest(id: string, patch: Partial<Pick<Guest, "status" | "extraGuests" | "bear">>) {
+export async function updateGuest(
+  id: string,
+  patch: Partial<Pick<Guest, "status" | "extraGuests" | "bear" | "dishId">>,
+) {
   const db = getDb();
   await db.update(guests).set(patch).where(eq(guests.id, id));
 }
@@ -37,10 +40,4 @@ export async function resetAllGuests() {
 
 export function yesHeadsTotal(all: Guest[]) {
   return all.filter((g) => g.status === "yes").reduce((s, g) => s + heads(g), 0);
-}
-
-export function checkinTagline(g: Guest) {
-  if (g.status === "yes") return g.bear ? ` · in · Team ${g.bear}` : " · in";
-  if (g.status === "no") return " · out";
-  return " · no answer yet";
 }
