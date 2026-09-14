@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Wordmark } from "./Wordmark";
 
 const TABS = [
-  { label: "INVITE", href: "/" },
+  { label: "DETAILS", href: "/" },
   { label: "ROSTER", href: "/roster" },
   { label: "POTLUCK", href: "/potluck" },
   { label: "BEARS", href: "/bears" },
