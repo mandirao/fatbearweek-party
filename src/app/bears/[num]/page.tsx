@@ -224,8 +224,17 @@ export default async function BearDetailPage(props: PageProps<"/bears/[num]">) {
             </div>
 
             <div className="border-t border-border-tan pt-3.5 text-[13px] leading-[1.5] text-ink-muted">
-              Text and photographs from <em>Bears of Brooks River</em>, National Park Service, Katmai National Park
-              and Preserve. Page {bear.page}.
+              {bear.page != null ? (
+                <>
+                  Text and photographs from <em>Bears of Brooks River</em>, National Park Service, Katmai National
+                  Park and Preserve. Page {bear.page}.
+                </>
+              ) : (
+                <>
+                  Description, biography and photographs from Fat Bear Week 2022, National Park Service, Katmai
+                  National Park and Preserve. Photos {(bear.credits ?? []).join("; ")}.
+                </>
+              )}
             </div>
           </>
         )}

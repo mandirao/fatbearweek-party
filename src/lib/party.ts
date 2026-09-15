@@ -107,13 +107,3 @@ export const BROADCAST_EVENTS: BroadcastEvent[] = [
 export function upcomingBroadcastEvents(now = Date.now()): BroadcastEvent[] {
   return BROADCAST_EVENTS.filter((e) => new Date(e.iso).getTime() + 2 * 3600e3 > now);
 }
-
-// Spoiler policy: no link anywhere to official Fat Bear Week voting/results pages
-// or fan pages documenting past/current winners. Only the profile ebook remains.
-export const SCOUTING_LINKS = [
-  {
-    href: "https://files.explore.org/files/Brown-Bears-of-Brooks-Camp-ebook.pdf",
-    title: "Bears of Brooks River ↗",
-    desc: "Official Park Service profiles, IDs and life histories.",
-  },
-];

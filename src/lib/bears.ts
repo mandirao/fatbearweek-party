@@ -25,6 +25,7 @@ export type Bear = {
   chip: BearChip;
   noBook?: boolean;
   record?: BearRecord;
+  credits?: string[];
 };
 
 export const BEARS: Bear[] = bearsData as Bear[];

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Archivo+Black&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#16291F; font-family:Archivo, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#2F6B7A; text-underline-offset:2px; }
+  a:hover { color:#C2522E; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; justify-content:center; background:#16291F">
+<div style="width:100%; max-width:440px; background:#FBF4E4; min-height:100vh; display:flex; flex-direction:column; box-shadow:0 0 60px rgba(0,0,0,0.35)">
+
+  <div style="background:#1F3B2C; position:sticky; top:0; z-index:5; display:flex; flex-direction:column">
+    <div style="padding:0 16px; display:flex; align-items:center">
+      <a href="Fat Bear Week Invite.dc.html" style="padding:0 4px; min-height:40px; display:inline-flex; align-items:center; text-decoration:none; font-weight:700; font-size:12px; letter-spacing:0.2em; color:#E8A87C">FAT BEAR HQ</a>
+    </div>
+    <div style="display:flex; border-top:1px solid #2C5240">
+      <a href="Fat Bear Week Invite.dc.html" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">INVITE</a>
+      <a href="Fat Bear Week Invite.dc.html#roster" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">ROSTER</a>
+      <span style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid #C2522E; min-height:46px; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#FBF4E4">POTLUCK</span>
+      <a href="Bears.dc.html" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">BEARS</a>
+    </div>
+  </div>
+
+  <sc-if value="{{hasMe}}" hint-placeholder-val="{{true}}">
+    <div style="background:#EFE6D2; border-bottom:1px solid #DED3BC; padding:0 20px; display:flex; align-items:center; justify-content:space-between; gap:10px">
+      <span style="font-size:14px; line-height:1.4; color:#5C564C">Signed in as <strong style="color:#1F3B2C">{{myName}}</strong></span>
+      <a href="Fat Bear Week Invite.dc.html" style="flex:none; font-size:14px; padding:14px 0; min-height:44px; display:inline-flex; align-items:center; color:#2F6B7A">Not you?</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{noMe}}">
+    <a href="Fat Bear Week Invite.dc.html" style="background:#C2522E; border-bottom:2px solid #A84322; padding:13px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-decoration:none">
+      <span style="font-size:14.5px; line-height:1.4; color:#FFF8EA">Browse freely — <strong>check in on the invite</strong> to claim something.</span>
+      <span style="flex:none; font-weight:700; font-size:14px; color:#FFF8EA">→</span>
+    </a>
+  </sc-if>
+
+  <div style="padding:22px 20px 30px; display:flex; flex-direction:column; gap:20px">
+
+    <div style="display:flex; flex-direction:column; gap:9px; align-items:center; text-align:center; border-bottom:2px solid #1F3B2C; padding-bottom:18px">
+      <div style="font-weight:600; font-size:11px; letter-spacing:0.22em; color:#5C564C">KATMAI PLAYOFFS · OCTOBER 2</div>
+      <h1 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:36px; line-height:0.92; color:#1F3B2C; text-transform:uppercase">Fat Bear<br>Feast</h1>
+      <p style="margin:0; font-size:16px; line-height:1.55; color:#38352E; max-width:320px">Pick a food thing to bring. Some require cooking. Some require buying gummy bears and accepting praise.</p>
+    </div>
+
+    <div style="background:#F5EDDC; border-radius:4px; padding:14px; font-size:15px; line-height:1.55; color:#38352E"><strong style="color: rgb(31, 59, 44);">The brief:</strong> salmon, smoke, brine, berries, dark fruit, mushroom, nuts, honey, chocolate, butterscotch — plus anything bear-, fish-, or forest-shaped.</div>
+
+    <div style="background:#1F3B2C; border-radius:4px; padding:16px; display:flex; flex-direction:column; gap:6px">
+      <div style="display:flex; align-items:center; gap:8px">
+        <span style="font-weight:700; font-size:11px; letter-spacing:0.2em; color:#E8A87C">DRINKS</span>
+        <span style="flex:1; height:1px; background:#3A5A48"></span>
+      </div>
+      <p style="margin:0; font-size:17px; line-height:1.5; color:#FBF4E4; font-weight:500">BYO wine, beer, cider, or batch cocktail to share.</p>
+      <p style="margin:0; font-size:14.5px; line-height:1.5; color:#C5D3C6">Please bring a drink <em>and</em> claim a dish, below.</p>
+    </div>
+
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px 16px; font-size:15px; color:#5C564C">
+      <span>🛒 Buy it</span><span>👩‍🍳 Make it</span><span>🤡 Commit to the bit</span>
+    </div>
+
+    <sc-for list="{{courses}}" as="co" hint-placeholder-count="5">
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <div style="display:flex; align-items:baseline; gap:10px">
+          <span style="font-weight:700; font-size:12px; letter-spacing:0.18em; color:{{co.labelColor}}">{{co.label}}</span>
+          <span style="flex:1; height:1px; background:#DED3BC"></span>
+          <span style="font-size:13.5px; color:#5C564C">{{co.status}}</span>
+        </div>
+        <sc-if value="{{co.hasNote}}">
+          
+        </sc-if>
+        <sc-for list="{{co.items}}" as="it">
+          <button onClick="{{it.onClaim}}" disabled="{{it.locked}}" style="display:flex; flex-direction:column; gap:3px; width:100%; background:{{it.rowBg}}; border:none; border-bottom:1px solid #EFE6D2; border-radius:{{it.radius}}; padding:{{it.pad}}; cursor:{{it.cursor}}; text-align:left; font-family:Archivo,sans-serif">
+            <span style="display:flex; align-items:baseline; gap:8px; width:100%">
+              <span style="font-size:16px; font-weight:600; line-height:1.35; color:{{it.nameColor}}">{{it.name}}</span>
+              <span style="flex:1; min-width:14px; border-bottom:1px dotted #CFC5B0; transform:translateY(-4px)"></span>
+              <span style="flex:none; font-size:13.5px; color:#5C564C">{{it.eff}}</span>
+            </span>
+            <sc-if value="{{it.hasDesc}}">
+              <span style="font-size:14px; line-height:1.4; color:#5C564C">{{it.desc}}</span>
+            </sc-if>
+            <span style="align-self:flex-start; margin-top:3px; display:inline-flex; align-items:center; min-height:34px; padding:{{it.byPad}}; border:1px solid {{it.byBorder}}; border-radius:3px; background:{{it.byBg}}; font-size:13.5px; font-weight:700; letter-spacing:{{it.byTrack}}; line-height:1.3; color:{{it.byColor}}">{{it.by}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{hasMine}}">
+    <div style="position:sticky; bottom:0; z-index:6; background:#1F3B2C; border-top:2px solid #16291F; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); display:flex; align-items:center; gap:12px">
+      <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px">
+        <span style="font-weight:700; font-size:11px; letter-spacing:0.16em; color:#E8A87C">YOU'RE BRINGING</span>
+        <span style="font-size:14.5px; line-height:1.3; color:#FBF4E4; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">{{mineName}}</span>
+      </div>
+      <button onClick="{{releaseMine}}" style="flex:none; background:transparent; color:#C5D3C6; border:1px solid #3A5A48; border-radius:3px; min-height:44px; padding:0 16px; font-family:Archivo,sans-serif; font-weight:600; font-size:14px; cursor:pointer" style-hover="background:#16291F">Pick something else</button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{needsPick}}">
+    <div style="position:sticky; bottom:0; z-index:6; background:#EFE6D2; border-top:2px solid #1F3B2C; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); display:flex; align-items:center">
+      <span style="font-size:14.5px; line-height:1.4; color:#5C564C">{{openCount}} dishes still open. Pick one above.</span>
+    </div>
+  </sc-if>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900}}">
+const HOST = "Mandi";
+
+const ITEMS = [
+  { n: 0, name: "Salmon Centerpiece", desc: "", eff: "👩‍🍳", host: true },
+  { n: 1, name: "Salmon Dip + Accoutrements", desc: "Dip + crackers, dippin' veg, capers, etc.", eff: "👩‍🍳" },
+  { n: 2, name: "Something Hearty from the Riverbank", desc: "A substantial savory casserole, grain dish, savory pie, etc.", eff: "👩‍🍳" },
+  { n: 3, name: "Something Smoky", desc: "Smoked cheese, dip, trout, BBQ, etc.", eff: "👩‍🍳" },
+  { n: 4, name: "Bear Food, But Make It Dinner", desc: "Vegetarian w/ squash, roots, mushrooms, grains, greens, etc.", eff: "👩‍🍳" },
+  { n: 5, name: "Forest Floor Salad", desc: "Dark greens, nuts, berries, roasted veg, etc.", eff: "👩‍🍳" },
+  { n: 6, name: "Hibernation Carb", desc: "Potatoes, rice, pasta, flatbread, stuffing, etc.", eff: "👩‍🍳" },
+  { n: 7, name: "Something Pickled / Briny", desc: "Pickles, olives, capers, conservas, marinated things, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 8, name: "Dark Fruit + Berry Forage", desc: "Berries, figs, plums, cherries, grapes, pomegranate, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 9, name: "Something Nutty", desc: "Spiced nuts, nut brittle, smoked almonds, hazelnut fluff, etc", eff: "🛒 / 👩‍🍳" },
+  { n: 10, name: "Tiny Tree Branches", desc: "Pretzel sticks. Literally.", eff: "🛒" },
+  { n: 11, name: "Tree / Log / Forest Object", desc: "Chocolate logs, edible rocks, haribo berries, etc.", eff: "🤡" },
+  { n: 12, name: "Salmon-Shaped Food", desc: "Goldfish, pastry, sandwiches, unnecessary molding.", eff: "🤡" },
+  { n: 13, name: "Bear-Shaped Food", desc: "Cookies, Teddy Grahams, sandwiches, cheese cutouts, etc.", eff: "🤡" },
+  { n: 14, name: "A Bag of Gummy Bears", desc: "That's the whole assignment.", eff: "🛒" },
+  { n: 15, name: "Something Honeyed", desc: "Honeycomb, honey butter, cheese + honey, cake, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 16, name: "Something Butterscotch / Caramel-Brown", desc: "Blondies, caramel corn, pudding, candy, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 17, name: "Something Chocolatey + Brown-Bear Colored", desc: "Brownies, bark, cookies, truffles, mousse, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 18, name: "Bear Bait", desc: "Snack mix, chips, cheesy things, etc.", eff: "🛒 / 👩‍🍳" },
+  { n: 19, name: "Brooks River", desc: "A fun nonalcoholic drink.", eff: "🛒 / 👩‍🍳" },
+  { n: 20, name: "Wild Bear Card", desc: "Anything gloriously on-theme.", eff: "🛒 / 👩‍🍳 / 🤡" },
+  { n: 21, name: "Dessert Centerpiece", desc: "", eff: "👩‍🍳", host: true }
+];
+
+const COURSES = [
+  { label: "THE MEAL", ns: [0, 1, 2, 3, 4, 5, 6], note: "Claim here first if you can cook." },
+  { label: "THE SPREAD", ns: [7, 8, 9, 18] },
+  { label: "SOMETHING SWEET", ns: [21, 15, 16, 17] },
+  { label: "TO POUR", ns: [19] },
+  { label: "COMMIT TO THE BIT", ns: [10, 11, 12, 13, 14, 20] }
+];
+
+const KEY = "fbw2026.potluck.v1";
+const ID_KEY = "fbw2026.rsvps.v1";
+
+class Component extends DCLogic {
+  state = { claims: null, me: null, bear: null };
+
+  componentDidMount() {
+    let claims = null, me = null, bear = null;
+    try { claims = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
+    try {
+      const saved = JSON.parse(localStorage.getItem(ID_KEY) || "null");
+      if (saved && saved.meId && Array.isArray(saved.guests)) {
+        const g = saved.guests.find(x => x.id === saved.meId);
+        if (g) { me = g.name; bear = g.bear || null; }
+      }
+    } catch (e) {}
+    this.setState({ claims: claims || { 3: "Priya N.", 8: "Tom G.", 14: "Jess O." }, me: me, bear: bear });
+  }
+
+  toggle(n) {
+    const claims = Object.assign({}, this.state.claims);
+    const me = this.state.me;
+    if (!me) return;
+    if (claims[n] === me) delete claims[n];
+    else if (claims[n]) return;
+    else {
+      Object.keys(claims).forEach(k => { if (claims[k] === me) delete claims[k]; });
+      claims[n] = me;
+    }
+    this.setState({ claims });
+    try { localStorage.setItem(KEY, JSON.stringify(claims)); } catch (e) {}
+  }
+
+  renderVals() {
+    const claims = this.state.claims || {};
+    const me = this.state.me;
+    const signedIn = !!me;
+    const mineN = signedIn ? Object.keys(claims).find(k => claims[k] === me) : null;
+    const mineItem = mineN != null ? ITEMS.find(i => String(i.n) === String(mineN)) : null;
+    const openCount = ITEMS.filter(i => !i.host && !claims[i.n]).length;
+
+    return {
+      hasMe: signedIn,
+      noMe: !signedIn,
+      myName: me || "",
+      myTagline: " · " + (this.state.bear ? "Team " + this.state.bear : "bear undeclared") + " · " + (mineItem ? "bringing " + mineItem.name : "no dish claimed"),
+      hasMine: !!mineItem,
+      mineName: mineItem ? mineItem.name : "",
+      needsPick: signedIn && !mineItem,
+      openCount,
+      releaseMine: () => mineItem && this.toggle(mineItem.n),
+
+      courses: COURSES.map(c => {
+        const items = c.ns.map(n => ITEMS.find(i => i.n === n));
+        const openN = items.filter(i => !i.host && !claims[i.n]).length;
+        return {
+          label: c.label,
+          labelColor: c.label === "THE MEAL" && openN ? "#C2522E" : "#5C564C",
+          status: openN ? openN + " open" : "all claimed",
+          hasNote: !!c.note,
+          note: c.note || "",
+          items: items.map(i => {
+            const by = i.host ? HOST : claims[i.n];
+            const mine = !i.host && by === me;
+            return {
+              name: i.name, desc: i.desc, hasDesc: !!i.desc, eff: i.eff,
+              locked: !!i.host,
+              cursor: i.host ? "default" : "pointer",
+              rowBg: i.host ? "#F5EDDC" : mine ? "#EFE6D2" : "transparent",
+              radius: i.host || mine ? "3px" : "0",
+              pad: i.host || mine ? "10px 12px" : "7px 0",
+              nameColor: by && !mine ? "#5C564C" : "#1F3B2C",
+              by: i.host
+                ? HOST + " HAS THIS COVERED"
+                : mine ? "YOURS — TAP TO RELEASE"
+                : by ? String(by).toUpperCase() + " IS BRINGING THIS"
+                : signedIn ? "TAP TO CLAIM" : "CHECK IN TO CLAIM",
+              byColor: mine ? "#FBF4E4" : by ? "#5C564C" : "#FFF8EA",
+              byBg: mine ? "#1F3B2C" : by ? "transparent" : "#C2522E",
+              byBorder: mine ? "#1F3B2C" : by ? "#DED3BC" : "#C2522E",
+              byPad: "0 12px",
+              byTrack: "0.08em",
+              onClaim: () => {
+                if (i.host) return;
+                if (!signedIn) { location.href = "Fat Bear Week Invite.dc.html"; return; }
+                this.toggle(i.n);
+              }
+            };
+          })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

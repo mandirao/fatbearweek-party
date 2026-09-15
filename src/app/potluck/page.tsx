@@ -50,6 +50,11 @@ export default async function PotluckPage({
           </div>
         )}
 
+        <div className="bg-sand rounded p-3.5 text-[15px] leading-[1.55] text-ink">
+          <strong className="text-forest">The brief:</strong> salmon, smoke, brine, berries, dark fruit, mushroom,
+          nuts, honey, chocolate, butterscotch — plus anything bear-, fish-, or forest-shaped.
+        </div>
+
         <div className="bg-forest rounded p-4 flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
             <span className="font-bold text-[11px] tracking-[0.2em] text-apricot">DRINKS</span>
@@ -61,11 +66,6 @@ export default async function PotluckPage({
           <p className="m-0 text-[14.5px] leading-[1.5] text-green-muted-4">
             Please bring a drink <em>and</em> claim a dish, below.
           </p>
-        </div>
-
-        <div className="bg-sand rounded p-3.5 text-[15px] leading-[1.55] text-ink">
-          <strong className="text-forest">The brief:</strong> salmon, smoke, brine, berries, dark fruit, mushroom,
-          nuts, honey, chocolate, butterscotch — plus anything bear-, fish-, or forest-shaped.
         </div>
 
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[15px] text-ink-muted">

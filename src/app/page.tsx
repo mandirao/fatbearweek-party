@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests, yesHeadsTotal } from "@/lib/guests";
-import { PARTY, CAMS, SCOUTING_LINKS, WHATSAPP_URL, upcomingBroadcastEvents } from "@/lib/party";
+import { PARTY, CAMS, WHATSAPP_URL, upcomingBroadcastEvents } from "@/lib/party";
 import { findPotluckItem } from "@/lib/potluck";
 import { switchUserAction } from "@/lib/actions";
 
@@ -285,27 +285,19 @@ export default async function InvitePage({
           </p>
         </div>
 
-        <div className="border-2 border-forest rounded overflow-hidden">
-          <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">
-            SCOUTING DEPARTMENT
+        <Link
+          href="/bears"
+          className="flex items-center gap-3 bg-warm-white border-2 border-forest rounded px-4 py-3.5 no-underline"
+        >
+          <div className="flex-1 min-w-0 flex flex-col gap-[3px]">
+            <span className="font-bold text-xs tracking-[0.14em] text-salmon">SCOUT THE COMPETITION</span>
+            <span className="text-[15px] leading-[1.5] text-ink">
+              Optional homework for the competitively deranged: 42 bear profiles, Park Service IDs and life
+              histories.
+            </span>
           </div>
-          <div className="p-3.5 flex flex-col gap-2.5 bg-warm-white">
-            <div className="text-[15px] leading-[1.55] text-ink-muted">
-              Optional homework for the competitively deranged:
-            </div>
-            {SCOUTING_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                target="_blank"
-                className="flex flex-col gap-[3px] px-3.5 py-[14px] bg-sand rounded-[3px] no-underline"
-              >
-                <span className="text-base font-semibold text-forest">{link.title}</span>
-                <span className="text-sm leading-[1.45] text-ink-muted-2">{link.desc}</span>
-              </a>
-            ))}
-          </div>
-        </div>
+          <span className="flex-none font-bold text-base text-forest">→</span>
+        </Link>
 
         <div className="border-2 border-forest rounded overflow-hidden">
           <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">

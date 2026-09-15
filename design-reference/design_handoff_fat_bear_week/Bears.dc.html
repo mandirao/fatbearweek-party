@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Archivo+Black&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#16291F; font-family:Archivo, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#2F6B7A; text-underline-offset:2px; }
+  a:hover { color:#C2522E; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; justify-content:center; background:#16291F">
+<div style="width:100%; max-width:440px; background:#FBF4E4; min-height:100vh; display:flex; flex-direction:column; box-shadow:0 0 60px rgba(0,0,0,0.35)">
+
+  <div style="background:#1F3B2C; position:sticky; top:0; z-index:5; display:flex; flex-direction:column">
+    <div style="padding:0 16px; display:flex; align-items:center">
+      <a href="Fat Bear Week Invite.dc.html" style="padding:0 4px; min-height:40px; display:inline-flex; align-items:center; text-decoration:none; font-weight:700; font-size:12px; letter-spacing:0.2em; color:#E8A87C">FAT BEAR HQ</a>
+    </div>
+    <div style="display:flex; border-top:1px solid #2C5240">
+      <a href="Fat Bear Week Invite.dc.html" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">INVITE</a>
+      <a href="Fat Bear Week Invite.dc.html#roster" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">ROSTER</a>
+      <a href="Fat Bear Feast.dc.html" style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid transparent; min-height:46px; text-decoration:none; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#9FBBA9" style-hover="color:#FBF4E4">POTLUCK</a>
+      <span style="flex:1; display:flex; align-items:center; justify-content:center; border-bottom:3px solid #C2522E; min-height:46px; font-weight:600; font-size:12px; letter-spacing:0.12em; color:#FBF4E4">BEARS</span>
+    </div>
+  </div>
+
+  <sc-if value="{{hasMe}}" hint-placeholder-val="{{true}}">
+    <div style="background:#EFE6D2; border-bottom:1px solid #DED3BC; padding:0 20px; display:flex; align-items:center; justify-content:space-between; gap:10px">
+      <span style="font-size:14px; line-height:1.4; color:#5C564C">Signed in as <strong style="color:#1F3B2C">{{myName}}</strong></span>
+      <a href="Fat Bear Week Invite.dc.html" style="flex:none; font-size:14px; padding:14px 0; min-height:44px; display:inline-flex; align-items:center; color:#2F6B7A">Not you?</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{noMe}}">
+    <a href="Fat Bear Week Invite.dc.html" style="background:#C2522E; border-bottom:2px solid #A84322; padding:13px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; text-decoration:none">
+      <span style="font-size:14.5px; line-height:1.4; color:#FFF8EA">Browse freely — <strong>check in on the invite</strong> to pick a bear.</span>
+      <span style="flex:none; font-weight:700; font-size:14px; color:#FFF8EA">→</span>
+    </a>
+  </sc-if>
+
+  <sc-if value="{{detailOpen}}">
+    <div style="display:flex; flex-direction:column">
+      <div style="background:#1F3B2C; position:sticky; top:86px; z-index:4; padding:0 12px; display:flex; align-items:center; gap:6px">
+        <button onClick="{{closeDetail}}" style="background:transparent; border:none; color:#E8A87C; font-family:Archivo,sans-serif; font-weight:600; font-size:14px; min-height:44px; padding:0 6px; cursor:pointer">← The field</button>
+        <span style="flex:1"></span>
+        <span style="font-size:12px; letter-spacing:0.14em; font-weight:600; color:#9FBBA9">{{dCounter}}</span>
+      </div>
+
+      <div style="position:relative; background:#122019; min-height:180px">
+        <sc-if value="{{dHasPhoto}}" hint-placeholder-val="{{true}}">
+          <img src="{{dPhoto}}" alt="{{dAlt}}" style="display:block; width:100%; height:auto">
+        </sc-if>
+
+        <sc-if value="{{dNoPhoto}}">
+          <div style="height:210px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; background:repeating-linear-gradient(135deg, #1C3226 0 10px, #16281E 10px 20px)">
+            <span style="font-family:'Archivo Black',sans-serif; font-size:86px; line-height:1; color:#2C4A37">{{dNum}}</span>
+            <span style="font-weight:700; font-size:11px; letter-spacing:0.18em; color:#9FBBA9">PHOTO ARRIVES WITH THE BRACKET</span>
+          </div>
+        </sc-if>
+        <div style="position:absolute; left:0; right:0; bottom:0; padding:28px 18px 14px; background:linear-gradient(to top, rgba(10,18,14,0.9), rgba(10,18,14,0))">
+          <div style="font-family:'Archivo Black',sans-serif; font-size:32px; line-height:1; color:#FBF4E4">{{dTitle}}</div>
+          <div style="margin-top:6px; display:flex; align-items:center; flex-wrap:wrap; gap:8px">
+            <span style="font-weight:600; font-size:13px; letter-spacing:0.16em; color:#E8A87C">{{dCls}}</span>
+            <sc-if value="{{dHasChip}}">
+              <span style="font-weight:700; font-size:10px; letter-spacing:0.16em; color:#FBF4E4; border:1px solid rgba(251,244,228,0.45); border-radius:3px; padding:3px 7px">{{dChip}}</span>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:16px 20px 30px; display:flex; flex-direction:column; gap:18px">
+
+        <sc-if value="{{dHasSpots}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px">
+          <span style="font-weight:700; font-size:11px; letter-spacing:0.18em; color:#5C564C; padding-right:2px">FISHES</span>
+          <sc-for list="{{dSpots}}" as="s" hint-placeholder-count="2">
+            <span style="background:#EFE6D2; border:1px solid #DED3BC; border-radius:999px; padding:6px 12px; font-size:13px; font-weight:600; color:#1F3B2C">{{s}}</span>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{dIsLegend}}">
+          <div style="border-left:3px solid #E8A87C; background:#EFE6D2; border-radius:0 4px 4px 0; padding:13px 14px; display:flex; flex-direction:column; gap:5px">
+            <span style="font-weight:700; font-size:11px; letter-spacing:0.18em; color:#1F3B2C">WHY LEGEND</span>
+            <span style="font-size:15px; line-height:1.55; color:#38352E">{{dLegendWhy}}</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{dIsMemorial}}">
+          <div style="border-left:3px solid #C2522E; background:#EFE6D2; border-radius:0 4px 4px 0; padding:13px 14px; display:flex; flex-direction:column; gap:5px">
+            <span style="font-weight:700; font-size:11px; letter-spacing:0.18em; color:#C2522E">IN MEMORIAM</span>
+            <span style="font-size:15px; line-height:1.55; color:#38352E">No longer on the river. This page stays in the guide.</span>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{dHasRecord}}">
+          <div style="border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+            <div style="background:#1F3B2C; color:#FBF4E4; padding:10px 12px; font-weight:700; font-size:12px; letter-spacing:0.16em">FAT BEAR RECORD</div>
+            <div style="background:#FFF; padding:13px; display:flex; flex-direction:column; gap:10px">
+              <div style="display:flex; flex-wrap:wrap; gap:6px">
+                <sc-for list="{{dBadges}}" as="g" hint-placeholder-count="2">
+                  <span style="background:#1F3B2C; color:#FBF4E4; border-radius:4px; padding:7px 11px; font-size:14px; font-weight:700; line-height:1.2; white-space:nowrap; display:inline-flex; align-items:center; gap:5px">{{g}}</span>
+                </sc-for>
+              </div>
+              <div style="font-family:'Archivo Black',sans-serif; font-size:17px; line-height:1.2; color:#C2522E">{{dRecordLine}}</div>
+              <sc-for list="{{dRecordDetail}}" as="p" hint-placeholder-count="1">
+                <p style="margin:0; font-size:15.5px; line-height:1.6; color:#38352E">{{p}}</p>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <button onClick="{{backThisBear}}" style="background:{{dBackBg}}; color:{{dBackFg}}; border:2px solid {{dBackBorder}}; border-radius:4px; min-height:52px; font-family:Archivo,sans-serif; font-weight:700; font-size:16px; letter-spacing:0.06em; cursor:pointer">{{dBackLabel}}</button>
+
+        <sc-if value="{{dInBook}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <div style="font-weight:700; font-size:12px; letter-spacing:0.18em; color:#C2522E">ID MARKS AND HINTS</div>
+          <sc-for list="{{dId}}" as="p" hint-placeholder-count="2">
+            <p style="margin:0; font-size:16px; line-height:1.6; color:#38352E">{{p}}</p>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{dNotInBook}}">
+          <div style="background:#EFE6D2; border-radius:4px; padding:16px; font-size:15px; line-height:1.55; color:#5C564C">This bear rose to fame after the Park Service guide was published, so there's no ID page for them here — photos and marks arrive with Katmai's bracket post.</div>
+        </sc-if>
+
+        <sc-if value="{{dHasPhoto2}}">
+          <figure style="margin:0; display:flex; flex-direction:column; gap:6px">
+            <img src="{{dPhoto2}}" alt="{{dAlt}}" style="display:block; width:100%; height:auto; border-radius:4px">
+            <figcaption style="font-size:13px; line-height:1.4; color:#5C564C">Another look from the guide. Coats darken and bodies fill out as the season goes on, so the same bear can look like two.</figcaption>
+          </figure>
+        </sc-if>
+
+        <sc-if value="{{dInBook}}" hint-placeholder-val="{{true}}">
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <div style="font-weight:700; font-size:12px; letter-spacing:0.18em; color:#C2522E">LIFE HISTORY</div>
+          <sc-for list="{{dLife}}" as="p" hint-placeholder-count="3">
+            <p style="margin:0; font-size:16px; line-height:1.6; color:#38352E">{{p}}</p>
+          </sc-for>
+        </div>
+
+        <div style="border-top:1px solid #DED3BC; padding-top:14px; font-size:13px; line-height:1.5; color:#5C564C">{{dCredit}}</div>
+        </sc-if>
+
+        <div style="display:flex; gap:10px">
+          <button onClick="{{prevBear}}" style="flex:1; background:#FFF; border:1px solid #DED3BC; border-radius:4px; min-height:48px; font-family:Archivo,sans-serif; font-weight:600; font-size:15px; color:#1F3B2C; cursor:pointer" style-hover="border-color:#1F3B2C">← {{prevLabel}}</button>
+          <button onClick="{{nextBear}}" style="flex:1; background:#FFF; border:1px solid #DED3BC; border-radius:4px; min-height:48px; font-family:Archivo,sans-serif; font-weight:600; font-size:15px; color:#1F3B2C; cursor:pointer" style-hover="border-color:#1F3B2C">{{nextLabel}} →</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{listOpen}}" hint-placeholder-val="{{true}}">
+  <div style="padding:22px 20px 30px; display:flex; flex-direction:column; gap:20px">
+
+    <div style="display:flex; flex-direction:column; gap:9px">
+      <h1 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:36px; line-height:0.92; color:#1F3B2C; text-transform:uppercase">Pick<br>your bear</h1>
+      <p style="margin:0; font-size:16px; line-height:1.55; color:#38352E">Allegiance is free, non-binding, and has no bearing on the bracket. It exists so we can talk trash.</p>
+    </div>
+
+    <div style="border:2px solid #1F3B2C; border-radius:4px; overflow:hidden">
+      <div style="background:#1F3B2C; color:#FBF4E4; padding:12px; font-weight:600; font-size:12px; letter-spacing:0.14em">YOUR BEAR</div>
+      <div style="background:#FFF; padding:14px; display:flex; flex-direction:column; gap:14px">
+        <sc-if value="{{hasBear}}">
+          <div style="display:flex; align-items:center; gap:12px; background:#C2522E; border-radius:4px; padding:14px">
+            <span style="flex:1; min-width:0; font-family:'Archivo Black',sans-serif; font-size:19px; line-height:1.1; color:#FFF8EA">{{bearTag}}</span>
+            <button onClick="{{clearBear}}" style="flex:none; background:transparent; color:#FFE8DC; border:1px solid #DE8465; border-radius:4px; min-height:44px; padding:0 14px; font-family:Archivo,sans-serif; font-weight:600; font-size:14px; cursor:pointer" style-hover="background:#A84322">Undeclare</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{noBear}}" hint-placeholder-val="{{true}}">
+          <div style="font-size:15px; line-height:1.55; color:#5C564C">{{pickPrompt}}</div>
+        </sc-if>
+
+        <div style="display:flex; gap:8px">
+          <input value="{{draft}}" onChange="{{onDraft}}" placeholder="Type a bear (128, Holly, 856…)" style="flex:1; min-width:0; background:#FFF; border:1px solid #DED3BC; border-radius:4px; padding:15px 12px; font-family:Archivo,sans-serif; font-size:16px; color:#1F3B2C">
+          <button onClick="{{saveDraft}}" style="background:#1F3B2C; color:#FBF4E4; border:none; border-radius:4px; min-height:44px; padding:0 16px; font-family:Archivo,sans-serif; font-weight:700; font-size:15px; letter-spacing:0.06em; cursor:pointer" style-hover="background:#2C5240">SET</button>
+        </div>
+
+        
+      </div>
+    </div>
+
+    <div id="field" style="display:flex; flex-direction:column; gap:14px; padding-top:6px">
+      <div style="display:flex; flex-direction:column; gap:7px">
+        <div style="font-weight:600; font-size:11px; letter-spacing:0.22em; color:#5C564C">SCOUTING REPORT</div>
+        <h2 style="margin:0; font-family:'Archivo Black',sans-serif; font-size:30px; line-height:0.95; color:#1F3B2C; text-transform:uppercase">The field</h2>
+        <p style="margin:0; font-size:15.5px; line-height:1.55; color:#38352E">Get to know the bears profiled by the Brooks River Park Service. <i>Stay tuned for official season before/after photos.&nbsp;</i></p>
+      </div>
+
+      <div style="display:flex; gap:6px; flex-wrap:wrap">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+          <button onClick="{{f.onPick}}" style="background:{{f.bg}}; color:{{f.fg}}; border:1px solid {{f.border}}; border-radius:999px; min-height:40px; display:inline-flex; align-items:center; padding:0 14px; font-family:Archivo,sans-serif; font-weight:600; font-size:14px; cursor:pointer">{{f.label}}</button>
+        </sc-for>
+      </div>
+
+      <input value="{{query}}" onChange="{{onQuery}}" placeholder="Search a number, name, or fishing spot" style="background:#FFF; border:1px solid #DED3BC; border-radius:4px; padding:14px 12px; font-family:Archivo,sans-serif; font-size:16px; color:#1F3B2C">
+
+      <div style="display:flex; flex-direction:column; gap:10px">
+        <sc-for list="{{field}}" as="b" hint-placeholder-count="6">
+          <sc-if value="{{b.isHeader}}">
+            <div style="display:flex; align-items:center; gap:10px; padding:14px 0 2px">
+              <span style="font-weight:700; font-size:11px; letter-spacing:0.2em; color:#5C564C">{{b.headerLabel}}</span>
+              <span style="flex:1; height:1px; background:#DED3BC"></span>
+              <span style="font-size:12px; color:#8A8275">{{b.headerCount}}</span>
+            </div>
+            <sc-if value="{{b.hasBlurb}}" hint-placeholder-val="{{true}}">
+              <div style="font-size:13.5px; line-height:1.5; color:#5C564C; padding-bottom:2px">{{b.headerBlurb}}</div>
+            </sc-if>
+          </sc-if>
+          <sc-if value="{{b.isBear}}" hint-placeholder-val="{{true}}">
+          <button onClick="{{b.onOpen}}" style="text-align:left; background:{{b.cardBg}}; border:1px solid #DED3BC; border-left:4px solid {{b.accent}}; border-radius:4px; padding:0; display:flex; gap:12px; align-items:stretch; cursor:pointer; overflow:hidden" style-hover="border-color:#1F3B2C">
+            <sc-if value="{{b.hasPhoto}}" hint-placeholder-val="{{true}}">
+              <img src="{{b.photo}}" alt="{{b.alt}}" style="flex:none; width:{{b.thumb}}; height:{{b.thumb}}; object-fit:cover; background:#EFE6D2">
+            </sc-if>
+            <sc-if value="{{b.noPhoto}}">
+              <span style="flex:none; width:{{b.thumb}}; height:{{b.thumb}}; background:#1F3B2C; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px">
+                <span style="font-family:'Archivo Black',sans-serif; font-size:23px; line-height:1; color:#E8A87C">{{b.num}}</span>
+                <span style="font-weight:700; font-size:10px; letter-spacing:0.1em; line-height:1.3; text-align:center; color:#9FBBA9">NO PHOTO<br>YET</span>
+              </span>
+            </sc-if>
+            <span style="flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; padding:11px 12px 11px 0">
+              <span style="display:flex; align-items:baseline; flex-wrap:wrap; gap:8px">
+                <span style="font-family:'Archivo Black',sans-serif; font-size:{{b.titleSize}}; line-height:1.1; color:#1F3B2C">{{b.title}}</span>
+                <sc-if value="{{b.hasChip}}">
+                  <span style="font-weight:700; font-size:10px; letter-spacing:0.16em; color:{{b.chipFg}}; border:1px solid {{b.chipBorder}}; border-radius:3px; padding:2px 6px">{{b.chip}}</span>
+                </sc-if>
+              </span>
+              <span style="font-size:13px; color:#5C564C">{{b.meta}}</span>
+              <sc-if value="{{b.hasRecord}}">
+                <span style="display:flex; flex-wrap:wrap; gap:5px; padding:2px 0 1px">
+                  <sc-for list="{{b.badges}}" as="g" hint-placeholder-count="2">
+                    <span style="background:#1F3B2C; color:#FBF4E4; border-radius:4px; padding:4px 8px; font-size:12px; font-weight:700; line-height:1.3; white-space:nowrap; display:inline-flex; align-items:center; gap:4px">{{g}}</span>
+                  </sc-for>
+                </span>
+              </sc-if>
+              <span style="font-size:14px; line-height:1.5; color:#38352E; display:-webkit-box; -webkit-line-clamp:{{b.clamp}}; -webkit-box-orient:vertical; overflow:hidden; text-overflow:ellipsis; padding-bottom:2px">{{b.note}}</span>
+            </span>
+          </button>
+          </sc-if>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{noResults}}">
+        <div style="background:#EFE6D2; border-radius:4px; padding:18px; font-size:15px; line-height:1.55; color:#5C564C">No bear by that name in the book. The guide is a sample of regulars, not a complete roster — type any bear into Your Bear above to back them anyway.</div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{showBriefings}}" hint-placeholder-val="{{true}}">
+    <div style="display:flex; flex-direction:column; gap:10px">
+      <sc-for list="{{briefs}}" as="b" hint-placeholder-count="3">
+        <div style="border:1px solid #DED3BC; border-radius:4px; background:#FFF; overflow:hidden">
+          <button onClick="{{b.onToggle}}" style="width:100%; text-align:left; background:transparent; border:none; padding:15px 14px; min-height:52px; display:flex; align-items:center; gap:10px; cursor:pointer; font-family:Archivo,sans-serif">
+            <span style="flex:1; font-weight:700; font-size:15px; color:#1F3B2C">{{b.title}}</span>
+            <span style="flex:none; font-size:17px; color:#C2522E">{{b.mark}}</span>
+          </button>
+          <sc-if value="{{b.open}}">
+            <div style="padding:0 14px 16px; display:flex; flex-direction:column; gap:12px">
+              <sc-if value="{{b.hasImg}}">
+                <img src="{{b.img}}" alt="{{b.title}}" style="display:block; width:100%; height:auto; border-radius:4px">
+              </sc-if>
+              <sc-for list="{{b.paras}}" as="p" hint-placeholder-count="2">
+                <p style="margin:0; font-size:15.5px; line-height:1.6; color:#38352E">{{p}}</p>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-for>
+    </div>
+    </sc-if>
+
+    <div style="background:#122019; border-radius:4px; overflow:hidden">
+      <div style="padding:14px; display:flex; align-items:center; gap:8px">
+        <span style="font-weight:700; font-size:11px; letter-spacing:0.2em; color:#E8A87C">THE BRACKET</span>
+        <span style="flex:1; height:1px; background:#2A4335"></span>
+        <span style="font-weight:600; font-size:11px; letter-spacing:0.14em; color:#9FB3A4">LOCKED</span>
+      </div>
+      <div style="padding:0 14px 16px; display:flex; flex-direction:column; gap:12px">
+        <div style="position:relative; border-radius:4px; background:repeating-linear-gradient(135deg, #1C3226 0 8px, #16281E 8px 16px); padding:26px 16px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center">
+          <span style="font-family:'Archivo Black',sans-serif; font-size:21px; line-height:1.1; color:#EFE6D2">Opens September 18</span>
+          <span style="font-size:14.5px; line-height:1.5; color:#C5D3C6; max-width:280px">Katmai reveals the contenders and the bracket that afternoon. Picks open here the moment it drops, and lock at 9:00 PM on October 2.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:440,&quot;height&quot;:900},&quot;defaultFilter&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;all&quot;,&quot;Adult Male&quot;,&quot;Adult Female&quot;,&quot;sub&quot;],&quot;default&quot;:&quot;all&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Guide&quot;},&quot;showBriefings&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Guide&quot;}}">
+const ID_KEY = "fbw2026.rsvps.v1";
+const POT_KEY = "fbw2026.potluck.v1";
+const CHIPS = ["Grazer", "Chunk", "747", "Holly", "Undecided"];
+const DISHES = { 1: "Salmon Dip + Accoutrements", 2: "Something Hearty from the Riverbank", 3: "Something Smoky", 4: "Bear Food, But Make It Dinner", 5: "Forest Floor Salad", 6: "Hibernation Carb", 7: "Something Pickled / Briny", 8: "Dark Fruit + Berry Forage", 9: "Something Nutty", 10: "Tiny Tree Branches", 11: "Tree / Log / Forest Object", 12: "Salmon-Shaped Food", 13: "Bear-Shaped Food", 14: "A Bag of Gummy Bears", 15: "Something Honeyed", 16: "Something Butterscotch / Caramel-Brown", 17: "Something Chocolatey + Brown-Bear Colored", 18: "Bear Bait", 19: "Brooks River", 20: "Wild Bear Card" };
+const FILTERS = [
+  { key: "all", label: "All bears" },
+  { key: "Adult Male", label: "Adult males" },
+  { key: "Adult Female", label: "Adult females" },
+  { key: "sub", label: "Subadults" },
+  { key: "record", label: "Fat Bear record" }
+];
+const LEGEND_WHY = {
+  6: "Classified as an adult in 1988 and seen at Brooks River for more than twenty straight years. Even in old age he displaced younger males from the top of the falls.",
+  16: "Also classified as an adult male in 1988, and one of the oldest bears ever known at Brooks — he returned every single year after.",
+  24: "For a decade he was the largest and most dominant bear on the river, hyper-dominant enough to have been observed killing other bears.",
+  864: "The bear who displaced 24 as the dominant bear at Brooks in 2006 and 2007 — the one fight that changed the hierarchy."
+};
+const TIER_ORDER = ["current", "guide", "legacy", "memorial"];
+const TIERS = {
+  current: { label: "LIKELY CONTENDERS", blurb: "The cast of the last few brackets—champions, runners-up, and the ones people argue about." },
+  guide: { label: "THE FIELD AT BROOKS RIVER", blurb: "Other regulars. How to tell them apart and where they fish." },
+  legacy: { label: "DEEP LORE", blurb: "Legends from the guide. Gone from the bracket, not our hearts." },
+  memorial: { label: "IN MEMORIAM", blurb: "" }
+};
+const BRIEFS = [
+  { key: "river", title: "The Brooks River", img: "photos/p4_1.jpg", paras: [
+    "Because it is one of the first streams in the region where bright, energetic, and pre-spawned salmon are available to bears, the Brooks River hosts one of the greatest seasonal concentrations of brown bears anywhere on earth.",
+    "Early in the salmon run, Brooks Falls creates a temporary barrier to migrating salmon, making it a particularly successful fishing spot. The lip, the jacuzzi, and the far pool are the prime seats, and adult males dominate them.",
+    "In July, the riffles below the falls are fished most often by less dominant bears and females with offspring. The cut bank suits bears that are not tolerant of people. During late summer and fall, bears concentrate in the lower half of the river, fishing for dead and dying salmon."
+  ] },
+  { key: "facts", title: "Quick facts: how many bears?", img: null, paras: [
+    "From late June through July, the annual cumulative total of independent bears identified regularly using Brooks River has ranged from 43 to 70. From September into early October, that total has ranged from 45 to 59. Another 5 to 10 transient bears are typically documented in each period.",
+    "The same bears come back. In 2008, 59 of the 70 independent bears identified in July were recognized from previous years, as were 35 of the 52 identified in fall. Most of the bears not recognized were subadults.",
+    "Numbers have trended up over two decades, credited to sustained work minimizing bear-human conflict, strong regional salmon runs averaging 1.8 million fish escapement in the Naknek drainage, and mild weather."
+  ] },
+  { key: "intro", title: "An introduction to brown bears", img: "photos/p7_1.jpg", paras: [
+    "The only bears in Katmai are brown bears. Taxonomists consider brown bears and grizzlies the same species; in North America, brown bears are the ones with access to coastal food sources like salmon runs, while grizzlies live further inland.",
+    "Bears are eating machines. Survival depends on taking in enough calories across spring, summer, and fall to last the denning period. Hearing and vision are roughly equivalent to ours; smell, many times better than a dog's, is what sets them apart.",
+    "To identify one: look for the rounded, dish-shaped face and the prominent shoulder hump, a mass of muscle that black and polar bears lack. Coats range from blonde to dark brown and tend to darken with age and with the season. A wild brown bear averages 20 years, though bears over thirty have been documented."
+  ] }
+];
+
+class Component extends DCLogic {
+  state = { guests: null, meId: null, draft: "", dish: null, bears: [], filter: null, query: "", openNum: null, briefOpen: null };
+
+  componentDidMount() {
+    let guests = null, meId = null, dish = null;
+    try {
+      const saved = JSON.parse(localStorage.getItem(ID_KEY) || "null");
+      if (saved && Array.isArray(saved.guests)) { guests = saved.guests; meId = saved.meId || null; }
+    } catch (e) {}
+    try {
+      const claims = JSON.parse(localStorage.getItem(POT_KEY) || "{}") || {};
+      const me = guests && meId ? guests.find(g => g.id === meId) : null;
+      if (me) {
+        const key = Object.keys(claims).find(k => claims[k] === me.name);
+        if (key) dish = DISHES[key] || null;
+      }
+    } catch (e) {}
+    this.setState({ guests: guests || [], meId, dish });
+    fetch("bears-data.json").then(r => r.json()).then(bears => this.setState({ bears })).catch(() => {});
+  }
+
+  setBear(bear) {
+    const guests = (this.state.guests || []).map(g => g.id === this.state.meId ? Object.assign({}, g, { bear }) : g);
+    this.setState({ guests, draft: "" });
+    try {
+      const saved = JSON.parse(localStorage.getItem(ID_KEY) || "null") || {};
+      saved.guests = guests;
+      saved.meId = this.state.meId;
+      localStorage.setItem(ID_KEY, JSON.stringify(saved));
+    } catch (e) {}
+  }
+
+  label(b) { return b.name ? b.name : "#" + b.num; }
+  title(b) { return b.name ? b.num + " · " + b.name : "Bear " + b.num; }
+
+  visible() {
+    const filter = this.state.filter || this.props.defaultFilter || "all";
+    const q = (this.state.query || "").trim().toLowerCase();
+    const rank = b => TIER_ORDER.indexOf(b.tier || "guide");
+    return (this.state.bears || []).slice().sort((a, b) => rank(a) - rank(b) || (b.record ? 1 : 0) - (a.record ? 1 : 0)).filter(b => {
+      const clsOk = filter === "all" ? true
+        : filter === "record" ? !!b.record
+        : filter === "sub" ? b.cls.indexOf("Subadult") === 0
+        : b.cls === filter;
+      if (!clsOk) return false;
+      if (!q) return true;
+      const rec = b.record ? b.record.line + " " + b.record.badges.join(" ") + " champion" : "";
+      return (String(b.num) + " " + b.name + " " + b.cls + " " + (b.spots || []).join(" ") + " " + b.note + " " + rec).toLowerCase().indexOf(q) >= 0;
+    });
+  }
+
+  renderVals() {
+    const guests = this.state.guests || [];
+    const me = this.state.meId ? guests.find(g => g.id === this.state.meId) : null;
+    const bear = me && me.bear ? me.bear : null;
+
+    const groups = {};
+    guests.forEach(g => { if (g.bear) (groups[String(g.bear)] = groups[String(g.bear)] || []).push(g.name); });
+    const teams = Object.keys(groups)
+      .sort((a, b) => groups[b].length - groups[a].length || a.localeCompare(b))
+      .map(k => ({ name: "Team " + k, count: groups[k].length, who: groups[k].join(", ") }));
+
+    const list = this.visible();
+    const all = this.state.bears || [];
+    const d = this.state.openNum ? all.find(b => b.num === this.state.openNum) : null;
+    const idx = d ? list.findIndex(b => b.num === d.num) : -1;
+    const prev = idx > 0 ? list[idx - 1] : (idx === 0 ? list[list.length - 1] : null);
+    const next = idx >= 0 ? list[(idx + 1) % list.length] : null;
+    const backing = d ? this.label(d) : "";
+    const isBacked = !!d && bear === backing;
+    const activeFilter = this.state.filter || this.props.defaultFilter || "all";
+
+    return {
+      hasMe: !!me,
+      noMe: !me,
+      myName: me ? me.name : "",
+      hasBear: !!bear,
+      noBear: !bear,
+      bearTag: bear ? "TEAM " + String(bear).toUpperCase() : "",
+      pickPrompt: me
+        ? "No bear declared yet. "
+        : "Check in on the invite first, then pick a bear here.",
+      clearBear: () => me && this.setBear(null),
+
+      chips: CHIPS.map(name => {
+        const on = bear === name;
+        return {
+          name,
+          bg: on ? "#1F3B2C" : "#FFF",
+          fg: on ? "#FBF4E4" : "#1F3B2C",
+          border: on ? "#1F3B2C" : "#DED3BC",
+          onSelect: () => {
+            if (!me) { location.href = "Fat Bear Week Invite.dc.html"; return; }
+            this.setBear(on ? null : name);
+          }
+        };
+      }),
+
+      draft: this.state.draft,
+      onDraft: e => this.setState({ draft: e.target.value }),
+      saveDraft: () => {
+        const v = (this.state.draft || "").trim();
+        if (!v) return;
+        if (!me) { location.href = "Fat Bear Week Invite.dc.html"; return; }
+        this.setBear(v);
+      },
+
+      hasTeams: teams.length > 0,
+      teams,
+
+      listOpen: !d,
+      detailOpen: !!d,
+
+      filters: FILTERS.map(f => {
+        const on = f.key === activeFilter;
+        return {
+          label: f.label,
+          bg: on ? "#1F3B2C" : "#FFF",
+          fg: on ? "#FBF4E4" : "#1F3B2C",
+          border: on ? "#1F3B2C" : "#DED3BC",
+          onPick: () => this.setState({ filter: f.key })
+        };
+      }),
+      query: this.state.query,
+      onQuery: e => this.setState({ query: e.target.value }),
+      noResults: (this.state.bears || []).length > 0 && list.length === 0,
+
+      field: (() => {
+        const rows = [];
+        let seen = null;
+        list.forEach(b => {
+          const tier = b.tier || "guide";
+          if (tier !== seen) {
+            seen = tier;
+            const t = TIERS[tier] || TIERS.guide;
+            const n = list.filter(x => (x.tier || "guide") === tier).length;
+            rows.push({ isHeader: true, isBear: false, headerLabel: t.label, headerBlurb: t.blurb, hasBlurb: !!t.blurb, headerCount: n + (n === 1 ? " bear" : " bears") });
+          }
+          const quiet = tier === "legacy" || tier === "memorial";
+          rows.push({
+            isHeader: false,
+            isBear: true,
+            title: this.title(b),
+            meta: b.cls + ((b.spots || []).length ? " · " + b.spots.join(", ") : ""),
+            note: b.record ? b.record.line : b.note,
+            num: b.num,
+            hasPhoto: !!(b.photos && b.photos[0]),
+            noPhoto: !(b.photos && b.photos[0]),
+            hasRecord: !!b.record,
+            badges: b.record ? b.record.badges : [],
+            photo: (b.photos && b.photos[0]) || "",
+            alt: "Bear " + b.num + (b.name ? " (" + b.name + ")" : "") + " at Brooks River",
+            accent: bear === this.label(b) ? "#C2522E" : "#DED3BC",
+            cardBg: quiet ? "#FDFAF1" : "#FFF",
+            thumb: quiet ? "74px" : "96px",
+            titleSize: quiet ? "16px" : "18px",
+            clamp: quiet ? 1 : 2,
+            hasChip: !!b.chip,
+            chip: b.chip || "",
+            chipFg: b.chip === "IN MEMORIAM" ? "#C2522E" : "#5C564C",
+            chipBorder: b.chip === "IN MEMORIAM" ? "#E0B4A2" : "#DED3BC",
+            onOpen: () => { this.setState({ openNum: b.num }); window.scrollTo(0, 0); }
+          });
+        });
+        return rows;
+      })(),
+
+      dTitle: d ? this.title(d) : "",
+      dCls: d ? d.cls.toUpperCase() : "",
+      dPage: d ? d.page : "",
+      dPhoto: d && d.photos ? (d.photos[0] || "") : "",
+      dPhoto2: d && d.photos ? (d.photos[1] || "") : "",
+      dHasPhoto: !!(d && d.photos && d.photos[0]),
+      dNoPhoto: !!d && !(d.photos && d.photos[0]),
+      dNum: d ? d.num : "",
+      dIsLegend: !!(d && d.chip === "LEGEND"),
+      dLegendWhy: d && LEGEND_WHY[d.num] ? LEGEND_WHY[d.num] : "",
+      dIsMemorial: !!(d && d.chip === "IN MEMORIAM"),
+      dHasChip: !!(d && d.chip),
+      dChip: d && d.chip ? d.chip : "",
+      dHasPhoto2: !!(d && d.photos && d.photos[1]),
+      dCredit: !d ? ""
+        : d.page
+          ? "Text and photographs from Bears of Brooks River, National Park Service, Katmai National Park and Preserve. Page " + d.page + "."
+          : "Description, biography and photographs from Fat Bear Week 2022, National Park Service, Katmai National Park and Preserve. Photos " + (d.credits || []).join("; ") + ".",
+      dInBook: !!d && !d.noBook,
+      dNotInBook: !!d && !!d.noBook,
+      dHasRecord: !!(d && d.record),
+      dBadges: d && d.record ? d.record.badges : [],
+      dRecordLine: d && d.record ? d.record.line : "",
+      dRecordDetail: d && d.record ? d.record.detail : [],
+      dAlt: d ? "Bear " + d.num + (d.name ? " (" + d.name + ")" : "") + " at Brooks River" : "",
+      dSpots: d ? (d.spots || []) : [],
+      dHasSpots: !!(d && (d.spots || []).length),
+      dId: d ? d.id : [],
+      dLife: d ? d.life : [],
+      dCounter: d && idx >= 0 ? (idx + 1) + " of " + list.length : "",
+      dBackLabel: !me
+        ? "Check in to back a bear"
+        : (isBacked
+          ? "You're backing " + backing + " — tap to undo"
+          : (bear ? "Change your bear to " + backing : "Back " + backing)),
+      dBackBg: isBacked ? "#C2522E" : "#1F3B2C",
+      dBackFg: "#FFF8EA",
+      dBackBorder: isBacked ? "#A84322" : "#1F3B2C",
+      backThisBear: () => {
+        if (!me) { location.href = "Fat Bear Week Invite.dc.html"; return; }
+        this.setBear(isBacked ? null : backing);
+      },
+      closeDetail: () => this.setState({ openNum: null }),
+      prevLabel: prev ? this.label(prev) : "",
+      nextLabel: next ? this.label(next) : "",
+      prevBear: () => prev && this.setState({ openNum: prev.num }) || window.scrollTo(0, 0),
+      nextBear: () => next && this.setState({ openNum: next.num }) || window.scrollTo(0, 0),
+
+      showBriefings: this.props.showBriefings !== false,
+      briefs: BRIEFS.map(b => ({
+        title: b.title,
+        open: this.state.briefOpen === b.key,
+        mark: this.state.briefOpen === b.key ? "–" : "+",
+        hasImg: !!b.img,
+        img: b.img,
+        paras: b.paras,
+        onToggle: () => this.setState({ briefOpen: this.state.briefOpen === b.key ? null : b.key })
+      }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

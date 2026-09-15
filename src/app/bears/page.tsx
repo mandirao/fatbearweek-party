@@ -41,13 +41,13 @@ export default async function BearsPage() {
           <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">YOUR BEAR</div>
           <div className="p-3.5 flex flex-col gap-3.5 bg-warm-white">
             {me?.bear ? (
-              <div className="flex items-center gap-3 bg-forest rounded p-3.5">
-                <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-cream">
+              <div className="flex items-center gap-3 bg-salmon rounded p-3.5">
+                <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-salmon-tint">
                   TEAM {me.bear.toUpperCase()}
                 </span>
                 <form action={toggleBearChipAction}>
                   <input type="hidden" name="bear" value={me.bear} />
-                  <button className="flex-none bg-transparent text-green-muted-4 border border-green-rule rounded min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-spruce">
+                  <button className="flex-none bg-transparent text-rust-tint border border-rust-rule rounded min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-salmon-hover">
                     Undeclare
                   </button>
                 </form>
