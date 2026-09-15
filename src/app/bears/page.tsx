@@ -3,6 +3,7 @@ import { getMeId } from "@/lib/identity";
 import { getGuest } from "@/lib/guests";
 import { toggleBearChipAction, saveBearTextAction } from "@/lib/actions";
 import { BearField } from "@/components/BearField";
+import { LiveCamPanel } from "@/components/LiveCamPanel";
 import { BRIEFS, bearPhotoUrl } from "@/lib/bears";
 
 export default async function BearsPage() {
@@ -98,6 +99,8 @@ export default async function BearsPage() {
             </details>
           ))}
         </div>
+
+        <LiveCamPanel />
 
         <div className="bg-cam-bg rounded overflow-hidden">
           <div className="p-3.5 flex items-center gap-2">
