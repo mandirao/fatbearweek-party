@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests, heads, yesHeadsTotal } from "@/lib/guests";
 import { findPotluckItem } from "@/lib/potluck";
+import { LiveCamPanel } from "@/components/LiveCamPanel";
 
 export default async function RosterPage() {
   const meId = await getMeId();
@@ -92,6 +93,8 @@ export default async function RosterPage() {
           </div>
         ))}
       </div>
+
+      <LiveCamPanel />
 
       <Link
         href="/"

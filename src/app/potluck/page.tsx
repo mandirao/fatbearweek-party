@@ -3,6 +3,7 @@ import { getMeId } from "@/lib/identity";
 import { getGuest, getAllGuests } from "@/lib/guests";
 import { POTLUCK_ITEMS, POTLUCK_COURSES, HOST, findPotluckItem } from "@/lib/potluck";
 import { claimDishAction } from "@/lib/actions";
+import { LiveCamPanel } from "@/components/LiveCamPanel";
 
 export default async function PotluckPage({
   searchParams,
@@ -139,6 +140,8 @@ export default async function PotluckPage({
             </div>
           );
         })}
+
+        <LiveCamPanel />
       </div>
 
       {myItem && (
