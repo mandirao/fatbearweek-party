@@ -113,10 +113,10 @@ export default async function BearsPage() {
               className="relative rounded-[3px] py-[26px] px-4 flex flex-col items-center gap-2 text-center"
               style={{ backgroundImage: "repeating-linear-gradient(135deg, #1C3226 0 8px, #16281E 8px 16px)" }}
             >
-              <span className="font-display text-[21px] leading-[1.1] text-tan">Opens September 18</span>
+              <span className="font-display text-[21px] leading-[1.1] text-tan">Opens at the party</span>
               <span className="text-[14.5px] leading-[1.5] text-green-muted-4 max-w-[280px]">
-                Katmai reveals the contenders and the bracket that afternoon. Picks open here the moment it drops,
-                and lock at 9:00 PM on October 2.
+                Bracket night starts ~8 PM on October 2. Everyone plays the same 15 matchups together, one round at a
+                time, on their own phone.
               </span>
             </div>
           </div>

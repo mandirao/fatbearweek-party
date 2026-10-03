@@ -1,0 +1,23 @@
+{
+  "source": "https://explore.org/fat-bear-week",
+  "checked": "2026-10-02",
+  "champion": 89,
+  "totalVotes": 2503731,
+  "matches": [
+    {"id":0, "round":"Round 1", "date":"2026-09-23", "a":132, "aVotes":171619, "b":284, "bVotes":46449, "winner":132},
+    {"id":1, "round":"Round 1", "date":"2026-09-23", "a":806, "aVotes":135510, "b":901, "bVotes":74679, "winner":806},
+    {"id":2, "round":"Round 1", "date":"2026-09-23", "a":909, "aVotes":155899, "b":428, "bVotes":51493, "winner":909},
+    {"id":3, "round":"Round 1", "date":"2026-09-23", "a":131, "aVotes":84145, "b":910, "bVotes":98126, "winner":910},
+    {"id":4, "round":"Round 1", "date":"2026-09-24", "a":694, "aVotes":17589, "b":620, "bVotes":149449, "winner":620},
+    {"id":5, "round":"Round 1", "date":"2026-09-24", "a":610, "aVotes":20635, "b":89, "bVotes":140140, "winner":89},
+    {"id":6, "round":"Round 1", "date":"2026-09-24", "a":32, "aVotes":46053, "b":164, "bVotes":118731, "winner":164},
+    {"id":7, "round":"Round 1", "date":"2026-09-24", "a":151, "aVotes":134153, "b":903, "bVotes":31087, "winner":151},
+    {"id":8, "round":"Round 2", "date":"2026-09-25", "a":132, "aVotes":75035, "b":806, "bVotes":57600, "winner":132},
+    {"id":9, "round":"Round 2", "date":"2026-09-25", "a":909, "aVotes":26766, "b":910, "bVotes":104545, "winner":910},
+    {"id":10, "round":"Round 2", "date":"2026-09-25", "a":620, "aVotes":6173, "b":89, "bVotes":123416, "winner":89},
+    {"id":11, "round":"Round 2", "date":"2026-09-25", "a":164, "aVotes":84514, "b":151, "bVotes":45775, "winner":164},
+    {"id":12, "round":"Semifinal", "date":"2026-09-28", "a":132, "aVotes":36428, "b":910, "bVotes":110385, "winner":910},
+    {"id":13, "round":"Semifinal", "date":"2026-09-28", "a":89, "aVotes":79945, "b":164, "bVotes":75805, "winner":89},
+    {"id":14, "round":"Final", "date":"2026-09-29", "a":910, "aVotes":98253, "b":89, "bVotes":103334, "winner":89}
+  ]
+}

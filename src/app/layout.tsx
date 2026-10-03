@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import { Archivo, Archivo_Black } from "next/font/google";
+import { Archivo, Archivo_Black, Chakra_Petch, Silkscreen } from "next/font/google";
 import "./globals.css";
-import { NavHeader } from "@/components/NavHeader";
-import { getMeId, isHost } from "@/lib/identity";
-import { getGuest } from "@/lib/guests";
-import { switchUserAction } from "@/lib/actions";
 import { SITE_URL } from "@/lib/party";
 
 const archivo = Archivo({
@@ -19,41 +15,31 @@ const archivoBlack = Archivo_Black({
   weight: ["400"],
 });
 
+const silkscreen = Silkscreen({
+  variable: "--font-silkscreen",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
+const chakraPetch = Chakra_Petch({
+  variable: "--font-chakra-petch",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Fat Bear Week Party",
   description: "RSVP for the Fat Bear Week draft-night party.",
 };
 
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const meId = await getMeId();
-  const me = meId ? await getGuest(meId) : null;
-  const hostFlag = await isHost();
-
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${archivo.variable} ${archivoBlack.variable}`}>
-      <body>
-        <div className="min-h-screen flex justify-center bg-spruce">
-          <div className="w-full max-w-[440px] bg-cream min-h-screen flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.35)]">
-            <NavHeader hostFlag={hostFlag} />
-
-            {me && (
-              <div className="bg-tan border-b border-border-tan px-5 flex items-center justify-between gap-2.5">
-                <span className="min-h-11 inline-flex items-center text-sm text-ink-muted">
-                  Signed in as <strong className="text-forest">&nbsp;{me.name}</strong>
-                </span>
-                <form action={switchUserAction}>
-                  <button className="min-h-11 inline-flex items-center text-sm text-river underline underline-offset-2 cursor-pointer bg-transparent border-none p-0">
-                    Not you?
-                  </button>
-                </form>
-              </div>
-            )}
-
-            {children}
-          </div>
-        </div>
-      </body>
+    <html
+      lang="en"
+      className={`${archivo.variable} ${archivoBlack.variable} ${silkscreen.variable} ${chakraPetch.variable}`}
+    >
+      <body>{children}</body>
     </html>
   );
 }

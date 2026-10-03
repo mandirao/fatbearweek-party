@@ -6,7 +6,7 @@ export const PARTY = {
   whenShort: "Oct 2, 7:00 PM",
   addressLine: "Denver, CO",
   mapUrl: "https://maps.google.com/?q=Denver+CO",
-  bracketLockLabel: "9:00 PM sharp",
+  bracketNightLabel: "Starts ~8 PM",
 };
 
 export const SITE_URL = "https://fatbear.sprigbo.com";

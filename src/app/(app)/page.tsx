@@ -47,7 +47,7 @@ export default async function InvitePage({
     : "";
   const mySubline = me
     ? me.status === "yes"
-      ? `You're on the roster. Brackets lock at ${PARTY.bracketLockLabel}.`
+      ? "You're on the roster. Bracket night starts ~8 PM."
       : me.status === "no"
         ? "The Golden Salmon will miss you."
         : "You haven't answered yet."
@@ -90,8 +90,8 @@ export default async function InvitePage({
             </a>
           </div>
           <div className="flex justify-between gap-3.5 px-3 py-[14px] text-base text-ink bg-warm-white">
-            <span className="text-ink-faint">Brackets lock</span>
-            <span className="font-medium text-right">{PARTY.bracketLockLabel}</span>
+            <span className="text-ink-faint">Bracket night</span>
+            <span className="font-medium text-right">{PARTY.bracketNightLabel}</span>
           </div>
         </div>
 

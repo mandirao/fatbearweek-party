@@ -3,6 +3,18 @@
 @theme inline {
   --font-sans: var(--font-archivo);
   --font-display: var(--font-archivo-black);
+  --font-pixel: var(--font-silkscreen), monospace;
+  --font-game: var(--font-chakra-petch), sans-serif;
+
+  /* Bracket Night arcade palette */
+  --color-night: #081627;
+  --color-deep: #0e2238;
+  --color-line: #16304a;
+  --color-teal: #1c6e8c;
+  --color-ice: #7fc4da;
+  --color-arcade-cream: #f3e6c4;
+  --color-gold: #f7c21b;
+  --color-arcade-red: #e3262e;
 
   --color-forest: #1f3b2c;
   --color-spruce: #16291f;

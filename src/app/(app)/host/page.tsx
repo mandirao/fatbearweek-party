@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { isHost } from "@/lib/identity";
@@ -28,6 +29,13 @@ export default async function HostPage() {
         <h2 className="m-0 font-display text-[30px] leading-none text-forest uppercase">Press box</h2>
         <p className="m-0 text-base leading-[1.55] text-ink-muted">{hostSummary}</p>
       </div>
+
+      <Link
+        href="/bracket/host"
+        className="min-h-[52px] flex items-center justify-center rounded-md bg-salmon text-salmon-tint font-bold text-base no-underline hover:bg-salmon-hover hover:text-salmon-tint"
+      >
+        Bracket Night remote →
+      </Link>
 
       <div className="border-2 border-forest rounded overflow-hidden">
         <div className="flex bg-forest text-cream font-semibold text-[11px] tracking-[0.14em] px-3 py-3">

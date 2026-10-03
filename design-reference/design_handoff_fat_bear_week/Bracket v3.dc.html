@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&amp;family=Archivo+Black&amp;family=Silkscreen:wght@400;700&amp;family=Chakra+Petch:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#232823; font-family:Archivo, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  a { color:#7FC4DA; text-underline-offset:2px; }
+  a:hover { color:#F7C21B; }
+</style>
+</helmet>
+
+<div style="padding:40px 48px 80px; display:flex; flex-direction:column; gap:28px; min-width:max-content">
+
+  <div style="position:sticky; top:0; z-index:40; background:#232823; padding:12px 0; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-bottom:1px solid #3A423A">
+    <span style="font-weight:700; font-size:12px; letter-spacing:0.18em; color:#9FBBA9">HOST REMOTE (SIMULATED)</span>
+    <span style="font-size:14px; color:#FBF4E4"><strong>{{roundLabel}}</strong> · {{hostStatus}}</span>
+    <div style="display:flex; gap:8px">
+      <button onClick="{{hostPrimary}}" style="font-family:Archivo,sans-serif; font-weight:700; font-size:14px; min-height:40px; padding:0 18px; border-radius:6px; border:none; background:#C2522E; color:#FFF8EA; cursor:pointer">{{hostPrimaryLabel}}</button>
+      <button onClick="{{hostBack}}" style="font-family:Archivo,sans-serif; font-weight:600; font-size:14px; min-height:40px; padding:0 14px; border-radius:6px; border:1px solid #C2522E; background:transparent; color:#FBF4E4; cursor:pointer; opacity:{{hostBackOp}}">◀ Back a step</button>
+      <button onClick="{{rejoin}}" style="font-family:Archivo,sans-serif; font-weight:600; font-size:14px; min-height:40px; padding:0 14px; border-radius:6px; border:1px solid #4A544A; background:transparent; color:#FBF4E4; cursor:pointer">Replay join flow</button>
+      <button onClick="{{reset}}" style="font-family:Archivo,sans-serif; font-weight:600; font-size:14px; min-height:40px; padding:0 14px; border-radius:6px; border:1px solid #4A544A; background:transparent; color:#9FBBA9; cursor:pointer">Start over</button>
+    </div>
+  </div>
+
+  <section style="display:flex; flex-direction:column; gap:20px">
+    <div style="display:flex; flex-direction:column; gap:6px; max-width:920px">
+      <span style="font-family:'Archivo Black',sans-serif; font-size:28px; color:#FBF4E4">Turn 3 · Join flow, two-beat reveal, Read the Room</span>
+      <span style="font-size:15px; line-height:1.5; color:#B9C7BC; text-wrap:pretty">Guests arrive through the Bracket tab once the host goes live. Checked-in guests confirm in one tap. Everyone else picks their name from the roster, or types one if they're a +1. Late joiners start at the open round. Each match reveals in two beats: first the party split, which scores Read the Room points for agreeing with the majority (a tie scores everyone), then the Katmai count, which moves the winner on the poster. Before the Final, everyone can bet their points on reading the room. If first place is still tied after the Final, the tied players guess a number from tonight's party votes, and closest wins.</span>
+    </div>
+
+    <div style="display:flex; gap:48px; align-items:flex-start; flex-wrap:wrap">
+
+      <div id="3a" style="display:flex; flex-direction:column; gap:12px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="background:#E3262E; color:#FFF; font-weight:700; font-size:13px; padding:4px 9px; border-radius:4px">3a</span>
+          <span style="font-size:14px; color:#FBF4E4"><strong>Guest phone</strong> · {{phoneStateLabel}}</span>
+        </div>
+        <div style="position:relative; width:390px; height:844px; border:10px solid #0D0F0D; border-radius:44px; overflow:hidden; background:#0E2238; box-shadow:0 30px 60px rgba(0,0,0,0.4)">
+
+          <sc-if value="{{showJoin}}" hint-placeholder-val="{{true}}">
+            <div style="height:100%; overflow-y:auto; display:flex; flex-direction:column; font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+              <div style="padding:26px 18px 16px; display:flex; flex-direction:column; gap:8px; background:#081627; border-bottom:3px solid #E3262E">
+                <span style="font-family:Silkscreen,monospace; font-size:12px; color:#F7C21B">● LIVE · BRACKET NIGHT</span>
+                <span style="font-family:Silkscreen,monospace; font-size:28px; line-height:1.05">{{joinTitle}}</span>
+                <span style="font-size:14.5px; line-height:1.4; color:#7FC4DA">{{joinSub}}</span>
+              </div>
+
+              <sc-if value="{{jConfirm}}">
+                <div style="padding:22px 18px; display:flex; flex-direction:column; gap:14px">
+                  <button onClick="{{joinSignedIn}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:#F7C21B; color:#081627; cursor:pointer">JOIN AS {{signedInUp}}</button>
+                  <button onClick="{{goWho}}" style="font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:15px; min-height:44px; border:none; background:transparent; color:#7FC4DA; cursor:pointer; text-decoration:underline">Not {{signedIn}}? Pick another name</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{jWho}}" hint-placeholder-val="{{true}}">
+                <div style="padding:16px 18px 24px; display:flex; flex-direction:column; gap:8px">
+                  <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">ON THE ROSTER</span>
+                  <sc-for list="{{rosterRows}}" as="p" hint-placeholder-count="8">
+                    <div style="display:flex">
+                      <sc-if value="{{p.open}}">
+                        <button onClick="{{p.pick}}" style="flex:1; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:52px; padding:0 14px; border:2px solid #1C6E8C; background:#081627; color:#F3E6C4; font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:600; cursor:pointer; text-align:left">
+                          <span>{{p.name}}</span><span style="font-size:13px; font-weight:500; color:#7FC4DA">{{p.sub}}</span>
+                        </button>
+                      </sc-if>
+                      <sc-if value="{{p.taken}}">
+                        <button onClick="{{p.pick}}" style="flex:1; display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:52px; padding:0 14px; border:2px solid #16304A; background:transparent; color:#5E7A8C; font-family:'Chakra Petch',sans-serif; font-size:16px; font-weight:600; cursor:pointer; text-align:left">
+                          <span>{{p.name}}</span><span style="display:flex; flex-direction:column; align-items:flex-end; gap:2px"><span style="font-family:Silkscreen,monospace; font-size:11px">PLAYING</span><span style="font-size:12px; color:#7FC4DA; text-decoration:underline">That’s me</span></span>
+                        </button>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                  <div style="margin-top:12px; border-top:2px dashed #1C6E8C; padding-top:16px; display:flex; flex-direction:column; gap:8px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">NOT ON THE LIST?</span>
+                    <button onClick="{{goNew}}" style="font-family:Silkscreen,monospace; font-size:16px; min-height:56px; border:3px solid #F7C21B; background:transparent; color:#F7C21B; cursor:pointer">I'M A +1 / NEW HERE ▶</button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{jReclaim}}">
+                <div style="padding:22px 18px; display:flex; flex-direction:column; gap:14px">
+                  <span style="font-size:15px; line-height:1.5">{{reclaimUp}} is already playing on another phone. If that’s you, your picks and points move to this phone. The host sees a note and can undo it if it wasn’t you.</span>
+                  <button onClick="{{confirmReclaim}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:#F7C21B; color:#081627; cursor:pointer">YES, I’M {{reclaimUp}}</button>
+                  <button onClick="{{goWho}}" style="font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:15px; min-height:44px; border:none; background:transparent; color:#7FC4DA; cursor:pointer">◀ Back to the roster</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{jNew}}">
+                <div style="padding:20px 18px 24px; display:flex; flex-direction:column; gap:16px">
+                  <div style="display:flex; flex-direction:column; gap:6px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">YOUR NAME</span>
+                    <input value="{{newName}}" onChange="{{onNewName}}" placeholder="First name" maxLength="20" style="font-family:'Chakra Petch',sans-serif; font-size:18px; font-weight:600; padding:0 14px; min-height:54px; border:3px solid #F7C21B; background:#081627; color:#F3E6C4">
+                    <sc-if value="{{dupeHint}}"><span style="font-size:13.5px; line-height:1.4; color:#F7C21B">{{dupeText}}</span></sc-if>
+                  </div>
+                  <div style="display:flex; flex-direction:column; gap:8px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">WHO BROUGHT YOU? (OPTIONAL)</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px">
+                      <sc-for list="{{hostChips}}" as="c" hint-placeholder-count="8">
+                        <button onClick="{{c.pick}}" style="font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:14px; min-height:40px; padding:0 12px; border:2px solid {{c.bd}}; background:{{c.bg}}; color:{{c.fg}}; cursor:pointer">{{c.name}}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <button onClick="{{joinNew}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:{{joinBtnBg}}; color:#081627; cursor:pointer">JOIN THE BRACKET</button>
+                  <button onClick="{{goWho}}" style="font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:15px; min-height:44px; border:none; background:transparent; color:#7FC4DA; cursor:pointer">◀ Back to the roster</button>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{jDone}}">
+                <div style="padding:24px 18px; display:flex; flex-direction:column; gap:16px">
+                  <div style="background:#F7C21B; color:#081627; padding:16px; display:flex; flex-direction:column; gap:6px">
+                    <span style="font-family:Silkscreen,monospace; font-size:24px; line-height:1.05">YOU'RE IN, {{myNameUp}}</span>
+                    <span style="font-size:15px; line-height:1.45; font-weight:600">{{lateNote}}</span>
+                  </div>
+                  <div style="border:2px solid #1C6E8C; padding:12px 14px; display:flex; flex-direction:column; gap:6px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">HOW SCORING WORKS</span>
+                    <span style="font-size:15px; line-height:1.5">Pick the fatter bear. Score by agreeing with the room: one point each time your pick matches the party majority, and everyone scores on a tie. Katmai’s official count decides who moves on.</span>
+                  </div>
+                  <button onClick="{{enterGame}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:#E3262E; color:#F7C21B; cursor:pointer">LET'S GO ▶</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{zoomRot}}">
+            <div style="position:absolute; inset:0; z-index:30; background:#000; overflow:hidden">
+              <div style="position:absolute; left:50%; top:50%; width:824px; height:370px; transform:translate(-50%,-50%) rotate(90deg); display:flex; flex-direction:column; font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+                <div style="display:flex; align-items:center; gap:12px; padding:10px 16px; background:#081627; border-bottom:3px solid #E3262E">
+                  <span style="font-family:Silkscreen,monospace; font-size:20px">{{act.label}}</span>
+                  <span style="font-size:13px; color:#7FC4DA">{{act.cls}}</span>
+                  <span style="flex:1"></span>
+                  <button onClick="{{toggleRot}}" style="font-family:Silkscreen,monospace; font-size:12px; min-height:40px; padding:0 12px; border:2px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer">UPRIGHT</button>
+                  <button onClick="{{closeZoom}}" style="font-family:Silkscreen,monospace; font-size:12px; min-height:40px; padding:0 12px; border:2px solid #F7C21B; background:#F7C21B; color:#081627; cursor:pointer">✕ CLOSE</button>
+                </div>
+                <div style="flex:1; min-height:0; display:flex; align-items:center; justify-content:center; padding:8px"><img src="{{act.photo}}" alt="{{act.label}} before and after, enlarged" style="max-width:100%; max-height:100%; object-fit:contain; display:block"></div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; background:#081627; font-family:Silkscreen,monospace; font-size:13px; text-align:center">
+                  <span style="padding:8px; color:#7FC4DA">← EARLY SUMMER</span>
+                  <span style="padding:8px; color:#F7C21B">SEPTEMBER →</span>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{zoomUp}}">
+            <div style="position:absolute; inset:0; z-index:30; background:#000; display:flex; flex-direction:column; font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+              <div style="display:flex; align-items:center; gap:8px; padding:44px 14px 12px; background:#081627; border-bottom:3px solid #E3262E">
+                <span style="font-family:Silkscreen,monospace; font-size:18px; flex:1; min-width:0">{{act.label}}</span>
+                <button onClick="{{toggleRot}}" style="font-family:Silkscreen,monospace; font-size:12px; min-height:44px; padding:0 10px; border:2px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer">SIDEWAYS</button>
+                <button onClick="{{closeZoom}}" style="font-family:Silkscreen,monospace; font-size:12px; min-height:44px; padding:0 10px; border:2px solid #F7C21B; background:#F7C21B; color:#081627; cursor:pointer">✕</button>
+              </div>
+              <div style="flex:1; min-height:0; overflow:auto; display:flex; align-items:center"><img src="{{act.photo}}" alt="{{act.label}} before and after, enlarged" style="width:100%; height:auto; display:block"></div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; background:#081627; font-family:Silkscreen,monospace; font-size:12px; text-align:center; padding-bottom:20px">
+                <span style="padding:10px; color:#7FC4DA">← EARLY SUMMER</span>
+                <span style="padding:10px; color:#F7C21B">SEPTEMBER →</span>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showGame}}">
+          <div style="height:100%; overflow-y:auto; display:flex; flex-direction:column; font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+
+            <div style="padding:22px 16px 12px; display:flex; flex-direction:column; gap:12px; background:#081627; border-bottom:3px solid #E3262E; position:sticky; top:0; z-index:3">
+              <div style="display:flex; justify-content:space-between; align-items:center">
+                <span style="font-family:Silkscreen,monospace; font-size:13px; color:#F7C21B">{{roundLabelUp}} · {{roundDateUp}}</span>
+                <span style="font-family:Silkscreen,monospace; font-size:13px; color:#F3E6C4">{{myNameUp}} · {{myScore}} PTS</span>
+              </div>
+              <span style="font-family:Silkscreen,monospace; font-size:24px; line-height:1; color:#F3E6C4">{{phoneTitle}}</span>
+              <div style="display:flex; gap:4px">
+                <sc-for list="{{roundPips}}" as="p" hint-placeholder-count="8">
+                  <button onClick="{{p.go}}" style="flex:1; height:22px; min-width:0; border:2px solid {{p.bd}}; background:{{p.bg}}; color:{{p.fg}}; font-family:Silkscreen,monospace; font-size:10px; padding:0; cursor:pointer">{{p.n}}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{showTabs}}" hint-placeholder-val="{{true}}">
+                <div style="display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); gap:8px; align-items:stretch">
+                  <button onClick="{{showA}}" style="font-family:Silkscreen,monospace; font-size:15px; min-height:52px; border-radius:4px; border:3px solid {{tabA.bd}}; background:{{tabA.bg}}; color:{{tabA.fg}}; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:4px"><span>{{tabA.label}}</span><span style="font-family:'Chakra Petch',sans-serif; font-size:11px; font-weight:600">{{tabA.sub}}</span></button>
+                  <span style="font-family:Silkscreen,monospace; font-weight:700; font-size:20px; color:#F7C21B; display:flex; align-items:center">VS</span>
+                  <button onClick="{{showB}}" style="font-family:Silkscreen,monospace; font-size:15px; min-height:52px; border-radius:4px; border:3px solid {{tabB.bd}}; background:{{tabB.bg}}; color:{{tabB.fg}}; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:4px"><span>{{tabB.label}}</span><span style="font-family:'Chakra Petch',sans-serif; font-size:11px; font-weight:600">{{tabB.sub}}</span></button>
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{showWager}}">
+              <div style="padding:18px 16px 24px; display:flex; flex-direction:column; gap:16px">
+                <div style="border:2px solid #1C6E8C; padding:12px 14px; display:flex; flex-direction:column; gap:6px">
+                  <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">HOW THE WAGER WORKS</span>
+                  <span style="font-size:15px; line-height:1.5">Bet any of your points on the Final. Vote with the room and you win your bet. Vote against it and you lose it. If the room splits, you keep it.</span>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:6px">
+                  <span style="font-family:Silkscreen,monospace; font-size:12px; color:#7FC4DA">YOUR BET</span>
+                  <div style="display:grid; grid-template-columns:60px minmax(0,1fr) 60px; gap:10px; align-items:center; width:100%">
+                    <button onClick="{{wagerMinus}}" style="font-family:Silkscreen,monospace; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer; min-height:60px; font-size:26px">−</button>
+                    <span style="font-family:Silkscreen,monospace; font-size:60px; line-height:1; color:#F7C21B; text-align:center">{{wagerVal}}</span>
+                    <button onClick="{{wagerPlus}}" style="font-family:Silkscreen,monospace; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer; min-height:60px; font-size:26px">+</button>
+                  </div>
+                  <span style="font-size:14px">of your {{wagerMax}} points</span>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px">
+                  <button onClick="{{wagerZero}}" style="font-family:Silkscreen,monospace; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer; min-height:48px; font-size:14px">NONE</button>
+                  <button onClick="{{wagerHalf}}" style="font-family:Silkscreen,monospace; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer; min-height:48px; font-size:14px">HALF</button>
+                  <button onClick="{{wagerAll}}" style="font-family:Silkscreen,monospace; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer; min-height:48px; font-size:14px">ALL IN</button>
+                </div>
+                <button onClick="{{lockWager}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:{{wagerLockBg}}; color:{{wagerLockFg}}; cursor:pointer">{{wagerLockLabel}}</button>
+                <span style="font-size:13.5px; line-height:1.4; color:#7FC4DA; text-align:center">{{wagerNote}}</span>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showTb}}">
+              <div style="padding:18px 16px 24px; display:flex; flex-direction:column; gap:16px">
+                <div style="background:#F7C21B; color:#081627; padding:12px; display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:18px">{{tbNames}}</span>
+                  <span style="font-size:14.5px; line-height:1.4; font-weight:600">{{tbIntro}}</span>
+                </div>
+                <span style="font-weight:700; font-size:19px; line-height:1.35; color:#FFF">{{tbQuestion}}</span>
+                <sc-if value="{{tbAsk}}">
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    <input value="{{tbGuess}}" onChange="{{onTbGuess}}" inputMode="numeric" placeholder="Your guess" style="font-family:Silkscreen,monospace; font-size:28px; text-align:center; padding:0 14px; min-height:64px; border:3px solid #F7C21B; background:#081627; color:#F3E6C4">
+                    <button onClick="{{lockTb}}" style="font-family:Silkscreen,monospace; font-size:18px; min-height:60px; border:3px solid #F7C21B; background:{{tbLockBg}}; color:#081627; cursor:pointer">LOCK GUESS</button>
+                    <span style="font-size:13.5px; line-height:1.4; color:#7FC4DA; text-align:center">Closest wins. Same distance? First to lock in wins.</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{tbLockedMine}}">
+                  <div style="border:2px solid #F7C21B; padding:14px; display:flex; flex-direction:column; gap:4px; align-items:center; text-align:center">
+                    <span style="font-family:Silkscreen,monospace; font-size:20px; color:#F7C21B">GUESS LOCKED: {{tbGuessShown}}</span>
+                    <span style="font-size:14.5px">The answer comes up on the big screen.</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{tbReveal}}">
+                  <div style="display:flex; flex-direction:column; gap:10px; align-items:center; text-align:center">
+                    <span style="font-family:Silkscreen,monospace; font-size:13px; color:#7FC4DA">THE ANSWER</span>
+                    <span style="font-family:Silkscreen,monospace; font-size:56px; line-height:1; color:#F7C21B">{{tbAnswer}}</span>
+                    <sc-if value="{{tbHasMine}}"><span style="font-size:15px">{{tbMine}}</span></sc-if>
+                    <div style="background:#E3262E; border:3px solid #F7C21B; padding:12px; width:100%; box-sizing:border-box; display:flex; flex-direction:column; gap:4px">
+                      <span style="font-family:Silkscreen,monospace; font-size:13px; color:#FFF">PARTY CHAMPION</span>
+                      <span style="font-family:Silkscreen,monospace; font-size:24px; color:#F7C21B">{{tbWinnerUp}}</span>
+                    </div>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showCard}}">
+              <div style="padding:18px 16px; display:flex; flex-direction:column; gap:14px">
+                <div style="background:#F7C21B; color:#081627; padding:12px; display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:18px">CARD LOCKED IN</span>
+                  <span style="font-size:14.5px; line-height:1.4; font-weight:600">{{cardNote}}</span>
+                </div>
+                <sc-for list="{{cardRows}}" as="c" hint-placeholder-count="8">
+                  <button onClick="{{c.go}}" style="display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:10px; align-items:center; background:#081627; border:2px solid #1C6E8C; padding:10px 12px; min-height:48px; cursor:pointer; text-align:left; font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+                    <span style="font-family:Silkscreen,monospace; font-size:12px; color:#7FC4DA">{{c.n}}</span>
+                    <span style="font-size:14px">{{c.matchup}}</span>
+                    <span style="font-family:Silkscreen,monospace; font-size:13px; color:#F7C21B">{{c.pick}}</span>
+                  </button>
+                </sc-for>
+                <span style="font-size:13px; color:#7FC4DA">Tap a matchup to change your pick until the host locks the round.</span>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showWaitReveal}}">
+              <div style="padding:14px 16px; background:#081627; display:flex; flex-direction:column; gap:4px; align-items:center; text-align:center">
+                <span style="font-family:Silkscreen,monospace; font-size:16px; color:#F7C21B">EYES ON THE BIG SCREEN</span>
+                <span style="font-size:14.5px">Party vote coming up. You picked <strong style="color:#F7C21B">{{myPickLabel}}</strong>.</span>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{partyShown}}">
+              <div style="padding:16px; display:flex; flex-direction:column; gap:12px; background:#081627">
+                <div style="display:flex; flex-direction:column; gap:6px">
+                  <div style="display:flex; justify-content:space-between; font-family:Silkscreen,monospace; font-size:12px"><span>PARTY {{partyA}}</span><span>{{partyB}}</span></div>
+                  <div style="display:flex; height:16px; border:2px solid #F3E6C4"><span style="width:{{partyPctA}}; background:#F7C21B"></span><span style="flex:1; background:#1C6E8C"></span></div>
+                </div>
+                <span style="font-family:Silkscreen,monospace; font-size:15px; text-align:center">{{myResultShort}}</span>
+                <sc-if value="{{katmaiPending}}">
+                  <span style="font-family:Silkscreen,monospace; font-size:13px; text-align:center; color:#7FC4DA">KATMAI COUNT NEXT…</span>
+                </sc-if>
+                <sc-if value="{{isRevealed}}">
+                  <div style="display:flex; flex-direction:column; gap:12px">
+                    <div style="display:flex; flex-direction:column; gap:6px">
+                      <div style="display:flex; justify-content:space-between; font-family:Silkscreen,monospace; font-size:12px"><span>KATMAI {{offA}}</span><span>{{offB}}</span></div>
+                      <div style="display:flex; height:16px; border:2px solid #F3E6C4"><span style="width:{{offPctA}}; background:#F7C21B"></span><span style="flex:1; background:#1C6E8C"></span></div>
+                    </div>
+                    <sc-if value="{{isBust}}">
+                      <div style="background:#E3262E; border:3px solid #F7C21B; padding:12px; display:flex; flex-direction:column; gap:4px; align-items:center; text-align:center">
+                        <span style="font-family:Silkscreen,monospace; font-size:22px; color:#F7C21B">BRACKET BUSTED!</span>
+                        <span style="font-size:14px; line-height:1.4; color:#FFF">{{bustText}}</span>
+                      </div>
+                    </sc-if>
+                    <span style="font-family:Silkscreen,monospace; font-size:20px; color:#F7C21B; text-align:center">{{winnerLabel}} ADVANCES</span>
+                  </div>
+                </sc-if>
+                <sc-if value="{{showBetweenRounds}}">
+                  <span style="font-size:14px; text-align:center; color:#7FC4DA">{{betweenText}}</span>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showBear}}" hint-placeholder-val="{{true}}">
+              <div style="display:flex; flex-direction:column">
+                <button onClick="{{openZoom}}" style="position:relative; display:block; width:100%; padding:0; border:none; background:#000; min-height:120px; cursor:zoom-in">
+                  <img src="{{act.photo}}" alt="{{act.label}} before and after" style="display:block; width:100%; height:auto">
+                  <span style="position:absolute; right:8px; bottom:8px; background:#081627; border:2px solid #F7C21B; color:#F7C21B; font-family:Silkscreen,monospace; font-size:11px; padding:5px 8px; display:flex; align-items:center; gap:6px">⤢ TAP TO ENLARGE</span>
+                </button>
+                <div style="padding:14px 16px 20px; display:flex; flex-direction:column; gap:12px">
+                  <div style="display:flex; flex-direction:column; gap:4px">
+                    <span style="font-family:Silkscreen,monospace; font-size:34px; line-height:1; color:#F3E6C4">{{act.label}}</span>
+                    <span style="font-weight:600; font-size:13px; letter-spacing:0.12em; color:#F7C21B">{{act.clsUp}}</span>
+                  </div>
+                  <span style="font-weight:700; font-size:17px; line-height:1.35; color:#FFF">{{act.hook}}</span>
+                  <div style="border:2px solid #1C6E8C; padding:10px 12px; display:flex; flex-direction:column; gap:4px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">HOW TO SPOT</span>
+                    <span style="font-size:15px; line-height:1.5">{{act.id}}</span>
+                  </div>
+                  <div style="border:2px solid #1C6E8C; padding:10px 12px; display:flex; flex-direction:column; gap:4px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">THIS SUMMER</span>
+                    <span style="font-size:15px; line-height:1.5; text-wrap:pretty">{{act.story}}</span>
+                  </div>
+                  <sc-if value="{{act.hasFishes}}">
+                    <span style="font-size:14px"><span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">FISHES </span>{{act.fishes}}</span>
+                  </sc-if>
+                  <a href="https://explore.org/meet-the-bears" target="_blank" style="font-size:14px">Full bio on explore.org →</a>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showTalk}}">
+              <div style="padding:0 16px 16px; display:flex; flex-direction:column; gap:8px">
+                <span style="font-family:Silkscreen,monospace; font-size:12px; color:#F7C21B">TRASH TALK</span>
+                <sc-if value="{{canTalk}}">
+                  <div style="display:flex; gap:8px">
+                    <input value="{{draft}}" onChange="{{onDraft}}" placeholder="Make your case…" maxLength="80" style="flex:1; min-width:0; font-family:'Chakra Petch',sans-serif; font-size:15px; padding:0 12px; min-height:44px; border:2px solid #1C6E8C; background:#081627; color:#F3E6C4">
+                    <button onClick="{{sendTalk}}" style="font-family:Silkscreen,monospace; font-size:13px; min-height:44px; padding:0 12px; border:none; background:#F7C21B; color:#081627; cursor:pointer">POST</button>
+                  </div>
+                </sc-if>
+                <sc-for list="{{talkList}}" as="t" hint-placeholder-count="0">
+                  <div style="border-left:4px solid #E3262E; background:#081627; padding:8px 10px; display:flex; flex-direction:column; gap:2px">
+                    <span style="font-family:Silkscreen,monospace; font-size:11px; color:#F7C21B">{{t.who}} → {{t.bear}}</span>
+                    <span style="font-size:14.5px; line-height:1.4">{{t.text}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showVoteBar}}" hint-placeholder-val="{{true}}">
+              <div style="position:sticky; bottom:0; margin-top:auto; background:#081627; border-top:3px solid #E3262E; padding:12px 14px 22px; display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px">
+                <button onClick="{{swapSide}}" style="font-family:Silkscreen,monospace; font-size:13px; min-height:54px; padding:0 12px; border:3px solid #1C6E8C; background:transparent; color:#F3E6C4; cursor:pointer">SEE {{otherShortUp}}</button>
+                <sc-if value="{{showChoose}}" hint-placeholder-val="{{true}}">
+                  <button onClick="{{voteAct}}" style="font-family:Silkscreen,monospace; font-size:16px; min-height:54px; border:3px solid #F7C21B; background:#F7C21B; color:#081627; cursor:pointer">CHOOSE {{act.shortUp}}</button>
+                </sc-if>
+                <sc-if value="{{showNext}}">
+                  <button onClick="{{nextMatch}}" style="font-family:Silkscreen,monospace; font-size:15px; min-height:54px; border:3px solid #F7C21B; background:#E3262E; color:#F7C21B; cursor:pointer">{{nextLabel}}</button>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <div id="3b" style="display:flex; flex-direction:column; gap:12px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="background:#F7C21B; color:#081627; font-weight:700; font-size:13px; padding:4px 9px; border-radius:4px">3b</span>
+          <span style="font-size:14px; color:#FBF4E4"><strong>Big screen</strong> · {{tvStateLabel}}</span>
+        </div>
+        <div style="width:1600px; height:900px; background:#081627; display:flex; box-shadow:0 30px 60px rgba(0,0,0,0.5); font-family:'Chakra Petch',sans-serif; color:#F3E6C4">
+          <div style="position:relative; width:1166px; height:900px; flex:none">
+            <img src="photos/fbw-2026-blank-bracket.png" alt="Fat Bear Week 2026 bracket" style="display:block; width:100%; height:100%">
+            <sc-for list="{{slots}}" as="s" hint-placeholder-count="0">
+              <div style="position:absolute; left:{{s.x}}; top:{{s.y}}; width:{{s.w}}; aspect-ratio:1; transform:translate(-50%,-50%); border-radius:50%; background:{{s.bg}}; border:4px solid {{s.bd}}; box-shadow:{{s.glow}}; opacity:{{s.op}}; display:flex; align-items:center; justify-content:center; font-family:Silkscreen,monospace; font-weight:700; font-size:{{s.fs}}; color:#081627; line-height:1">{{s.t}}</div>
+            </sc-for>
+          </div>
+          <div style="flex:1; min-width:0; padding:28px 26px; display:flex; flex-direction:column; gap:18px; border-left:4px solid #E3262E">
+
+            <sc-if value="{{isVoting}}" hint-placeholder-val="{{true}}">
+              <div style="display:flex; flex-direction:column; gap:16px">
+                <div style="display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:14px; color:#F7C21B">NOW OPEN · {{roundDateUp}}</span>
+                  <span style="font-family:Silkscreen,monospace; font-size:34px; line-height:1">{{roundLabelUp}}</span>
+                  <span style="font-size:17px; color:#7FC4DA">{{roundCountLabel}} · fill in your card</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:7px">
+                  <sc-for list="{{guestProgress}}" as="g" hint-placeholder-count="8">
+                    <div style="display:grid; grid-template-columns:80px minmax(0,1fr) 40px; gap:10px; align-items:center">
+                      <span style="font-weight:600; font-size:16px; overflow:hidden; text-overflow:ellipsis">{{g.name}}</span>
+                      <div style="height:12px; border:2px solid #1C6E8C; display:flex"><span style="width:{{g.pct}}; background:{{g.c}}"></span></div>
+                      <span style="font-family:Silkscreen,monospace; font-size:13px; color:{{g.c}}; text-align:right">{{g.label}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <span style="font-family:Silkscreen,monospace; font-size:18px; color:#F7C21B">{{doneCount}}/{{playerCount}} CARDS IN</span>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{isRevealPhase}}">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div style="display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:14px; color:#F7C21B">{{roundLabelUp}} · MATCH {{rpNum}} OF {{roundLen}}</span>
+                  <span style="font-family:Silkscreen,monospace; font-size:28px; line-height:1">{{tvMatchTitle}}</span>
+                </div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+                  <sc-for list="{{pair}}" as="b" hint-placeholder-count="2">
+                    <div style="display:flex; flex-direction:column; gap:6px">
+                      <div style="height:120px; background:#000; overflow:hidden; border:3px solid #F3E6C4"><img src="{{b.photo}}" alt="{{b.label}}" style="width:100%; height:100%; object-fit:cover; display:block"></div>
+                      <span style="font-family:Silkscreen,monospace; font-size:17px; line-height:1.1">{{b.label}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{tvPreReveal}}">
+                  <span style="font-family:Silkscreen,monospace; font-size:22px; color:#F7C21B">DRUMROLL…</span>
+                </sc-if>
+                <sc-if value="{{partyShown}}">
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    <div style="display:flex; justify-content:space-between; font-family:Silkscreen,monospace; font-size:13px"><span>PARTY {{partyA}}</span><span>{{partyB}}</span></div>
+                    <div style="display:flex; height:14px; border:2px solid #F3E6C4"><span style="width:{{partyPctA}}; background:#F7C21B"></span><span style="flex:1; background:#1C6E8C"></span></div>
+                    <sc-if value="{{isTie}}">
+                      <span style="font-family:Silkscreen,monospace; font-size:18px; color:#F3E6C4">SPLIT ROOM · EVERY VOTE SCORES</span>
+                    </sc-if>
+                    <sc-if value="{{katmaiPending}}">
+                      <span style="font-family:Silkscreen,monospace; font-size:16px; color:#7FC4DA">KATMAI COUNT NEXT…</span>
+                    </sc-if>
+                    <sc-if value="{{isRevealed}}">
+                      <div style="display:flex; flex-direction:column; gap:10px">
+                        <div style="display:flex; justify-content:space-between; font-family:Silkscreen,monospace; font-size:13px"><span>KATMAI {{offA}}</span><span>{{offB}}</span></div>
+                        <div style="display:flex; height:14px; border:2px solid #F3E6C4"><span style="width:{{offPctA}}; background:#F7C21B"></span><span style="flex:1; background:#1C6E8C"></span></div>
+                        <sc-if value="{{isBust}}">
+                          <div style="background:#E3262E; border:3px solid #F7C21B; padding:8px 12px; font-family:Silkscreen,monospace; font-size:20px; color:#F7C21B; text-align:center">BRACKET BUSTED!</div>
+                        </sc-if>
+                        <span style="font-family:Silkscreen,monospace; font-size:22px; color:#F7C21B">{{winnerLabel}} ADVANCES</span>
+                      </div>
+                    </sc-if>
+                    <sc-for list="{{talkTop}}" as="t" hint-placeholder-count="0">
+                      <div style="border-left:4px solid #E3262E; padding:2px 10px; display:flex; flex-direction:column">
+                        <span style="font-size:16px; line-height:1.35">“{{t.text}}”</span>
+                        <span style="font-family:Silkscreen,monospace; font-size:11px; color:#7FC4DA">{{t.who}}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{tvWager}}">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div style="display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:14px; color:#F7C21B">BEFORE THE FINAL</span>
+                  <span style="font-family:Silkscreen,monospace; font-size:34px; line-height:1">FINAL WAGER</span>
+                  <span style="font-size:17px; line-height:1.4; color:#7FC4DA">Bet your points. Vote with the room to win your bet. Bets stay secret until the party vote.</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px">
+                  <sc-for list="{{wagerRows}}" as="w" hint-placeholder-count="8">
+                    <div style="display:flex; justify-content:space-between; font-size:16px; font-weight:600"><span>{{w.name}}</span><span style="font-family:Silkscreen,monospace; font-size:13px; color:{{w.c}}">{{w.status}}</span></div>
+                  </sc-for>
+                </div>
+                <span style="font-family:Silkscreen,monospace; font-size:18px; color:#F7C21B">{{wagerLockedCount}}/{{playerCount}} BETS LOCKED</span>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{tvTb}}">
+              <div style="display:flex; flex-direction:column; gap:14px">
+                <div style="display:flex; flex-direction:column; gap:4px">
+                  <span style="font-family:Silkscreen,monospace; font-size:14px; color:#F7C21B">TIE FOR FIRST · {{tbNames}}</span>
+                  <span style="font-family:Silkscreen,monospace; font-size:34px; line-height:1">TIEBREAKER</span>
+                  <span style="font-weight:700; font-size:20px; line-height:1.35">{{tbQuestion}}</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:6px">
+                  <sc-for list="{{tbRows}}" as="t" hint-placeholder-count="2">
+                    <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:600; color:{{t.c}}"><span>{{t.name}}</span><span style="font-family:Silkscreen,monospace; font-size:14px">{{t.status}}</span></div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{tbReveal}}">
+                  <div style="display:flex; flex-direction:column; gap:10px">
+                    <span style="font-family:Silkscreen,monospace; font-size:22px">ANSWER: <span style="color:#F7C21B">{{tbAnswer}}</span></span>
+                    <div style="background:#E3262E; border:3px solid #F7C21B; padding:10px 12px; display:flex; flex-direction:column; gap:2px">
+                      <span style="font-family:Silkscreen,monospace; font-size:13px; color:#FFF">PARTY CHAMPION</span>
+                      <span style="font-family:Silkscreen,monospace; font-size:28px; color:#F7C21B">{{tbWinnerUp}}</span>
+                    </div>
+                    <sc-if value="{{tbHasSame}}"><span style="font-size:15px; color:#7FC4DA">{{tbSameNote}}</span></sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <div style="margin-top:auto; display:flex; flex-direction:column; gap:6px; border-top:2px solid #1C6E8C; padding-top:14px">
+              <span style="font-family:Silkscreen,monospace; font-size:13px; color:#7FC4DA">READ THE ROOM · LEADERBOARD</span>
+              <sc-for list="{{leaders}}" as="l" hint-placeholder-count="5">
+                <div style="display:flex; justify-content:space-between; gap:10px; font-size:17px; font-weight:600"><span>{{l.rank}}. {{l.name}}</span><span style="display:flex; gap:10px; align-items:baseline"><span style="font-family:Silkscreen,monospace; font-size:12px; color:{{l.dc}}">{{l.delta}}</span><span style="font-family:Silkscreen,monospace; color:#F7C21B">{{l.score}}</span></span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;signedInName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Simulation&quot;},&quot;simTie&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Simulation&quot;},&quot;partySize&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:3,&quot;max&quot;:12,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Simulation&quot;}}">
+const PH = 'https://media.explore.org/documents/';
+const BEARS = {
+  132:{label:'132',short:'132',cls:'Mother + 3 spring cubs',photo:PH+'132-1789686411010.png',hook:'Lost a cub for days in July. Got it back.',id:'Large, grizzled dark brown, forward-leaning ears, wide belly. A chevron of fur on her forehead.',story:'First identified in 2009, now on her fourth litter. One cub wandered alone for several days before the family reunited in the lower river. Believed to be 806’s mother. First Fat Bear Week.',fishes:''},
+  284:{label:'284',short:'284',cls:'Mother + 2 spring cubs',photo:PH+'284-1789686614929.png',hook:'Fourth generation of a Brooks River dynasty.',id:'Prominent shoulder hump, grizzled brown fur, blond-tipped ears.',story:'Born 2008 to 708 Amelia, granddaughter of 438 Reggie, mother of 901. Bold since she was a cub and quick to defend her space and her cubs. Fans call her Electra.',fishes:''},
+  610:{label:'610',short:'610',cls:'Mother + 2 spring cubs',photo:PH+'610-1789686723717.png',hook:'On her own as a baby. Now raising her first litter.',id:'Small, long muzzle, grizzled light brown fur. A large scar sometimes visible above her hips.',story:'So small in 2015 that rangers thought she was a yearling, and she carried a healing wound from an attack. This summer she kept her first cubs safe. First Fat Bear Week.',fishes:''},
+  806:{label:'806',short:'806',cls:'Mother + cub + adoptee',photo:PH+'806-1789686829763.png',hook:'Adopted Grazer’s cub. Also the summer’s most feared mom.',id:'Round blond-tipped ears, grizzled brown fur, a short mane early in summer.',story:'Took in Biggie, a 2.5-year-old separated from 128 Grazer, alongside her own spring cub. In late July she killed 909’s cub. Neither villain nor hero. First Fat Bear Week.',fishes:''},
+  901:{label:'901',short:'901',cls:'Mother + spring cub',photo:PH+'901-1789686889751.png',hook:'Lost one cub in June. The other is one of the biggest on the river.',id:'Medium-sized, blond-rimmed triangle ears, golden brown fur turning grizzled.',story:'First identified in 2018 as a subadult; a regular near the lodge, campground and river mouth. Gets fatter than most bears, which sets her cub up well.',fishes:'River mouth'},
+  620:{label:'620',short:'620',cls:'Subadult female',photo:PH+'620-1789687020588.png',hook:'Raised by two moms. Now on her own.',id:'Long tail, light brown fur that goes grizzled by late summer.',story:'Born 2022 to 910, raised in the rare blended family of 910 and her sister 909. Independent since spring 2025.',fishes:''},
+  694:{label:'694',short:'694',cls:'Subadult male',photo:PH+'694-1789687138773.png',hook:'Too small for the falls. Working on it.',id:'Round ears set high, uniform brown fur, hints of a lighter natal collar.',story:'Born 2022, independent in 2025. Plays with other young bears, but will cut a play session short for a salmon.',fishes:'Riffles below the falls'},
+  131:{label:'131 Marshmallow',short:'Marshmallow',cls:'Single adult female',photo:PH+'131-name-1789914863885.png',hook:'Fatter than she has ever been.',id:'Blond ears, dark eye rings, short muzzle, light brown to blond fur.',story:'Born 2018, independent in 2020. Never seen with cubs yet, but her size and fishing keep improving every year.',fishes:''},
+  428:{label:'428 Studious',short:'Studious',cls:'Single adult female',photo:PH+'428-1789687557287.png',hook:'Grazer’s daughter. Learned on the lip.',id:'Small, short pointed muzzle, blond ears, grizzled blond fur late summer.',story:'Born 2020. Fished the lip of the falls beside her mother as a cub, a spot most young bears never get. Now takes the lip when there’s room.',fishes:'The Lip'},
+  909:{label:'909',short:'909',cls:'Single adult female',photo:PH+'909-1789687619265.png',hook:'Lost both cubs. Kept eating.',id:'Large, brown fur, wide-set blond ears.',story:'Born 2016, daughter of champion 409 Beadnose and sister of 910. Arrived with two cubs; lost one in June and the other to 806 in July. Plenty of fat anyway.',fishes:'River mouth'},
+  910:{label:'910',short:'910',cls:'Single adult female',photo:PH+'910-1789687672263.png',hook:'Beadnose’s daughter, fishing wherever she wants.',id:'Large, dark brown, prominent brow ridge, short forward-pointing ears.',story:'Born 2016. Adopted her niece 609 in 2023, alone since 2025. Courted by Walker and Bucky this spring. Recognizable by her head lifts on the lip.',fishes:'The Lip'},
+  32:{label:'32 Chunk',short:'Chunk',cls:'Adult male',photo:PH+'32-fixed-1789767001431.png',hook:'Defending champion. Broken jaw, still huge.',id:'Big muzzle scar and a protruding canine from a 2025 jaw fracture.',story:'First identified in 2007. Barely seen this summer until September, then returned with a low-hanging belly. Nobody knows where he ate.',fishes:''},
+  89:{label:'89 Backpack',short:'Backpack',cls:'Adult male',photo:PH+'89-1789765144853.png',hook:'Quiet strength. Few scars.',id:'Blond ears, light brown fur going grizzled, few visible wounds.',story:'Son of champion Holly, named for riding on her back as a cub in 2006. Survived a bad leg injury in 2007. Gets prime spots without much fighting.',fishes:'Brooks Falls'},
+  151:{label:'151 Walker',short:'Walker',cls:'Adult male',photo:PH+'151-1789687872006.png',hook:'The fun one grew up.',id:'Dark brown, pear-shaped body, long muzzle, large round ears.',story:'A playful young bear who now challenges rivals instead. Younger males like Bucky and Gully are closing in on his rank.',fishes:''},
+  164:{label:'164 Bucky',short:'Bucky',cls:'Adult male',photo:PH+'164-1789687958898.png',hook:'Nine years old and still growing.',id:'Grizzled brown, blond-tipped ears, a line of darker fur near his eyes.',story:'First identified in 2019. Invented his own spot at the edge of the plunge pool under the falls. Now displaces most bears and picks fights for dominance.',fishes:'Plunge pool'},
+  903:{label:'903 Gully',short:'Gully',cls:'Adult male',photo:PH+'903-1789688011223.png',hook:'The bear who eats gulls.',id:'Grizzled brown, long straight muzzle, Eeyore-like sit on the lip.',story:'Born 2016, believed to be Grazer’s son. In 2020 he started charging flocks of gulls. Now outranks older bears like Walker.',fishes:'The Lip'}
+};
+const R1 = [[132,284],[806,901],[909,428],[131,910],[694,620],[610,89],[32,164],[151,903]];
+const FEED = {8:[0,1],9:[2,3],10:[4,5],11:[6,7],12:[8,9],13:[10,11],14:[12,13]};
+const OFFICIAL = {0:[171619,46449],1:[135510,74679],2:[155899,51493],3:[84145,98126],4:[17589,149449],5:[20635,140140],6:[46053,118731],7:[134153,31087],8:[75035,57600],9:[26766,104545],10:[6173,123416],11:[84514,45775],12:[36428,110385],13:[79945,75805],14:[98253,103334]};
+const ROUNDS = [[0,1,2,3,4,5,6,7],[8,9,10,11],[12,13],[14]];
+const RNAMES = ['Round 1','Round 2','Semifinal','Final'];
+const RDATES = ['Sept 23–24','Sept 25','Sept 28','Sept 29'];
+const GUESTS = ['Maya','Theo','Priya','Sam','Jo','Luis','Dana','Kit','Omar','Bea','Rafa','Nell'];
+const OPEN_ROSTER = [{name:'Alex'},{name:'Casey'},{name:'Jordan'},{name:'Morgan'},{name:'Rae', plusOf:'Theo'},{name:'Wren', plusOf:'Priya'}];
+const LINES = ['Look at the after photo. I rest my case.','{B} has been eating since June. Respect the grind.','That belly has its own zip code.','{B} did not come to Alaska to lose.','Hibernation is going to be so cozy for {B}.','The other one looks like a snack, not a contender.','{B}. That is the tweet.','Fat is a lifestyle and {B} is living it.'];
+const X = 2184, Y = 1686;
+const P = (x,y) => ({x: (x/X*100)+'%', y: (y/Y*100)+'%'});
+const L1=[365,490,630,755,920,1045,1185,1310].map(y=>P(190,y));
+const R1S=[365,490,635,760,920,1045,1190,1315].map(y=>P(1990,y));
+const L2=[425,685,1000,1240].map(y=>P(507,y));
+const R2=[420,680,995,1235].map(y=>P(1672,y));
+const LS=[535,1115].map(y=>P(672,y)), RS=[530,1110].map(y=>P(1505,y));
+const LF=P(825,830), RF=P(1352,830), CH=P(1090,865);
+const KEY='fbw-bracket-sim-v3';
+const INIT = {r:0, phase:'voting', rp:0, rev:{}, votes:{}, talk:{}, cur:0, side:0, joined:false, joinStep:null, myName:'', newName:'', brought:'', joinedAt:null, hist:[], lockArm:false, reclaim:'', wager:0, wagerLocked:false, tbGuess:'', tbLocked:false};
+const rnd = (a,b) => { let h = (a+1)*374761393 + (b+1)*668265263; h = (h ^ (h>>>13)) * 1274126177; return ((h ^ (h>>>16)) >>> 0) / 4294967296; };
+
+class Component extends DCLogic {
+  state = (() => { try { return Object.assign({}, INIT, JSON.parse(localStorage.getItem(KEY)||'{}'), {draft:'', zoom:false}); } catch(e) { return {...INIT, draft:''}; } })();
+  componentDidUpdate() { const {draft, zoom, ...rest} = this.state; try { localStorage.setItem(KEY, JSON.stringify(rest)); } catch(e) {} }
+  size() { return Math.max(3, Math.min(12, this.props.partySize ?? 8)); }
+  resolved(m) { return this.officialWinner(m) ?? this.partyWinner(m) ?? this.parts(m)[0]; }
+  parts(m) { if (m < 8) return R1[m]; const [a,b] = FEED[m]; return [this.resolved(a), this.resolved(b)]; }
+  guestVote(g, m) {
+    const pr = this.parts(m); const off = OFFICIAL[m];
+    const fav = off ? (off[0] >= off[1] ? 0 : 1) : (rnd(99,m) < 0.5 ? 0 : 1);
+    return pr[rnd(g,m) < 0.64 ? fav : 1-fav];
+  }
+  guestDone(g, r) { const len = ROUNDS[r].length; if (this.state.r > r) return len; if (this.state.phase === 'wager') return 0; if (this.state.phase !== 'voting') return len; return Math.min(len, Math.floor(rnd(g, 50+r) * (len + 3))); }
+  guestVoted(g, m) { const r = ROUNDS.findIndex(x => x.includes(m)); return ROUNDS[r].indexOf(m) < this.guestDone(g, r); }
+  tally(m) {
+    const pr = this.parts(m); const t = [0,0]; const n = this.size() - 1;
+    for (let g = 0; g < n; g++) { if (!this.guestVoted(g,m)) continue; t[this.guestVote(g,m) === pr[0] ? 0 : 1]++; }
+    const mine = this.state.votes[m]; if (mine) t[mine === pr[0] ? 0 : 1]++;
+    return t;
+  }
+  partyWinner(m) { const pr = this.parts(m), t = this.tally(m); return t[0] === t[1] ? null : t[1] > t[0] ? pr[1] : pr[0]; }
+  officialWinner(m) { const o = OFFICIAL[m]; if (!o) return null; const pr = this.parts(m); return o[0] >= o[1] ? pr[0] : pr[1]; }
+  lvl(m) { return this.state.rev[m] || 0; }
+  winner(m) { return this.lvl(m) >= 2 ? this.resolved(m) : null; }
+  guestWager(gi) { return Math.round(rnd(gi,77) * this.scoreFor(k => this.guestVote(gi,k), 14)); }
+  wagerRes(pick, bet) { if (!bet || this.lvl(14) < 1) return 0; const pw = this.partyWinner(14); if (pw === null) return 0; return pick === pw ? bet : -bet; }
+  scoreFor(pickFn, maxM = 15) { let s = 0; for (let m = 0; m < maxM; m++) { if (this.lvl(m) < 1) continue; const p = pickFn(m), pw = this.partyWinner(m); if (p && (pw === null || p === pw)) s++; } return s; }
+  finishJoin(name, brought) { const {r, phase} = this.state; this.setState({myName: name, brought: brought || '', joinStep: 'done', joinedAt: {r, phase}}); }
+
+  renderVals() {
+    const {r, phase, rp, rev, votes, talk, cur, side, draft, joined, myName, newName, brought, joinedAt} = this.state;
+    const signedIn = (this.props.signedInName ?? '').trim();
+    const joinStep = this.state.joinStep || (signedIn ? 'confirm' : 'who');
+    const n = this.size(); const guests = GUESTS.slice(0, n-1);
+    const round = ROUNDS[r]; const len = round.length;
+    const voting = phase === 'voting';
+    const isWager = phase === 'wager', isTb = phase === 'tb' || phase === 'tbDone', tbDone = phase === 'tbDone', inReveal = phase === 'reveal';
+    const onCard = voting && cur >= len;
+    const m = voting ? round[Math.min(cur, len-1)] : round[rp];
+    const pr = this.parts(m); const A = BEARS[pr[0]], B = BEARS[pr[1]];
+    const L = voting ? 0 : this.lvl(m);
+    const partyShown = inReveal && L >= 1, isRevealed = inReveal && L >= 2;
+    const mine = votes[m];
+    const t = this.tally(m); const off = OFFICIAL[m];
+    const ow = this.officialWinner(m), pw = this.partyWinner(m);
+    const winNum = isRevealed ? (ow ?? pw) : null;
+    const isTie = partyShown && pw === null;
+    const isBust = isRevealed && ow && pw && ow !== pw;
+    const lab = k => BEARS[k] ? BEARS[k].label : 'TBD';
+    const fmt = v => v.toLocaleString('en-US');
+    const tot = t[0] + t[1] || 1; const otot = off ? off[0] + off[1] : 1;
+    const meName = joined ? myName : 'You';
+    const myBase = this.scoreFor(k => votes[k], 14);
+    const myWager = Math.min(this.state.wager || 0, myBase);
+    const myWres = this.wagerRes(votes[14], myWager);
+    let myScore = this.scoreFor(k => votes[k]) + myWres;
+    const setW = v => this.setState({wager: Math.max(0, Math.min(myBase, v)), wagerLocked:false});
+    const wagerTxt = (m === 14 && myWager > 0) ? (myWres > 0 ? ' · BET +' + myWager : myWres < 0 ? ' · BET −' + myWager : ' · BET KEPT') : '';
+    const partyRevealed = Object.keys(rev).filter(k => rev[k] >= 1).length;
+    const myDone = round.filter(k => votes[k]).length;
+    const myResultShort = (!mine ? 'NO VOTE THIS MATCH' : pw === null ? '+1 PT · SPLIT ROOM, EVERYONE SCORES' : mine === pw ? '+1 PT · YOU READ THE ROOM' : 'AGAINST THE ROOM · 0 PTS') + wagerTxt;
+    const bustText = isBust ? ('The party picked ' + lab(pw) + ' ' + Math.max(t[0],t[1]) + '–' + Math.min(t[0],t[1]) + '. Katmai sent ' + lab(ow) + ' through.') : '';
+    const mk = num => { const b = BEARS[num] || {}; return {...b, num, clsUp: (b.cls||'').toUpperCase(), shortUp: (b.short||'').toUpperCase(), hasFishes: !!b.fishes}; };
+    const pair = [mk(pr[0]), mk(pr[1])];
+    const act = pair[side] || pair[0]; const oth = pair[1-side] || pair[1];
+    const tab = (b, on) => ({label: b.shortUp, sub: mine === b.num ? 'YOUR PICK' : (b.cls||''), bg: on ? '#E3262E' : 'transparent', bd: mine === b.num ? '#F7C21B' : (on ? '#E3262E' : '#1C6E8C'), fg: on ? '#FFF' : '#F3E6C4'});
+
+    const talkList = [];
+    if (mine && talk[m]) talkList.push({who: meName, bear: BEARS[mine].short, text: talk[m]});
+    if (partyShown) guests.forEach((g, gi) => { if ((gi + m) % 3 !== 0) return; const v = this.guestVote(gi, m); talkList.push({who:g, bear:BEARS[v].short, text: LINES[(gi*3+m) % LINES.length].replace('{B}', BEARS[v].short)}); });
+
+    const roundPips = (isWager || isTb) ? [] : round.map((k, i) => {
+      const on = voting ? (i === cur) : (i === rp);
+      const done = voting ? !!votes[k] : this.lvl(k) >= 2;
+      return {n: i+1, bg: on ? '#E3262E' : done ? '#F7C21B' : 'transparent', bd: on || done ? '#F7C21B' : '#1C6E8C', fg: on ? '#FFF' : done ? '#081627' : '#7FC4DA', go: () => voting && this.setState({cur: i, side: 0, draft: ''})};
+    });
+    const cardRows = round.map((k, i) => { const p = this.parts(k); return {n: String(i+1).padStart(2,'0'), matchup: BEARS[p[0]].short + ' vs ' + BEARS[p[1]].short, pick: votes[k] ? BEARS[votes[k]].short.toUpperCase() : '—', go: () => this.setState({cur: i, side: 0})}; });
+
+    const lastInRound = rp === len - 1;
+    const roundOver = inReveal && lastInRound && L >= 2;
+    const notMe = g => !(joined && g === myName);
+    const people = (joined ? [{name: meName, d: myDone}] : []).concat(guests.map((g,gi) => ({name:g, d: this.guestDone(gi, r)})).filter(p => notMe(p.name)));
+    const guestProgress = people.map(g => ({name:g.name, pct: (g.d/len*100)+'%', label: g.d + '/' + len, c: g.d === len ? '#F7C21B' : '#7FC4DA'}));
+    const doneCount = people.filter(g => g.d === len).length;
+    const missing = people.length - doneCount;
+
+    const finalShown = this.lvl(14) >= 1;
+    const players = (joined ? [{me:true, name: meName, s: myScore, dw: myWres}] : []).concat(guests.map((g,gi) => { const dw = this.wagerRes(this.guestVoted(gi,14) ? this.guestVote(gi,14) : null, this.guestWager(gi)); return {gi, name:g, s: this.scoreFor(k => this.guestVote(gi,k)) + dw, dw}; }).filter(p => notMe(p.name)));
+    players.sort((a,b) => b.s - a.s);
+    const finalDone = this.lvl(14) >= 2;
+    let tied = finalDone && players.length > 1 ? players.filter(p => p.s === players[0].s) : [];
+    if (finalDone && tied.length < 2 && players.length > 1 && this.props.simTie !== false) {
+      const mate = players.find(p => p.me && p !== players[0]) || players[1];
+      mate.s = players[0].s; players.sort((a,b) => b.s - a.s); tied = players.filter(p => p.s === players[0].s);
+    }
+    const meP = players.find(p => p.me); if (meP) myScore = meP.s;
+    const amTied = tied.some(p => p.me);
+    const tbAnswer = [5,10,13,14].reduce((a,k) => { if (this.lvl(k) < 1) return a; const p = this.parts(k), tt = this.tally(k); return a + (p[0] === 89 ? tt[0] : p[1] === 89 ? tt[1] : 0); }, 0);
+    const myGuess = parseInt(this.state.tbGuess, 10);
+    const myGuessIn = !!this.state.tbLocked && !isNaN(myGuess);
+    const tbList = tied.map(p => { const g = p.me ? (myGuessIn ? myGuess : null) : Math.max(0, tbAnswer + Math.round((rnd(p.gi,91) - 0.5) * Math.max(6, tbAnswer) * 0.8)); return {name: p.name, g, tm: p.me ? 0.5 : rnd(p.gi,92), off: g == null ? Infinity : Math.abs(g - tbAnswer)}; });
+    tbList.sort((a,b) => a.off - b.off || a.tm - b.tm);
+    const tbWinner = tbList[0] || {name:''};
+    const tbSame = tbList.length > 1 && tbList[0].off === tbList[1].off;
+    const guessesIn = tbList.filter(t => t.g != null).length;
+    const tbRows = tbList.map((t,i) => ({name: t.name, status: tbDone ? (t.g == null ? 'NO GUESS' : t.g + ' · OFF BY ' + t.off) : (t.g == null ? 'THINKING…' : 'LOCKED'), c: tbDone && i === 0 ? '#F7C21B' : '#F3E6C4'}));
+    const wagerRows = players.map(p => { const lk = p.me ? !!this.state.wagerLocked : rnd(p.gi,78) < 0.75; return {name: p.me ? p.name + ' (you)' : p.name, status: lk ? 'LOCKED' : 'DECIDING…', c: lk ? '#F7C21B' : '#7FC4DA', lk}; });
+    const wagerLockedCount = wagerRows.filter(w => w.lk).length;
+    const leaders = players.slice(0,5).map((p,i) => ({rank:i+1, name: p.me ? p.name + ' (you)' : p.name, score: p.s, delta: (r === 3 && inReveal && finalShown && p.dw) ? (p.dw > 0 ? '+' : '−') + Math.abs(p.dw) + ' BET' : '', dc: p.dw > 0 ? '#7FC4DA' : '#E3262E'}));
+
+    const {hist = [], lockArm} = this.state;
+    const go = patch => this.setState(s => ({hist: [...(s.hist||[]).slice(-60), {r:s.r, phase:s.phase, rp:s.rp, rev:s.rev, cur:s.cur}], lockArm:false, side:0, ...patch}));
+    let hostPrimaryLabel, hostStatus, hostPrimary;
+    const bump = v => go({rev: {...rev, [m]: v}});
+    if (voting) {
+      hostStatus = 'voting open · ' + doneCount + '/' + people.length + ' cards in';
+      if (missing === 0) { hostPrimaryLabel = 'Lock round · all cards in'; hostPrimary = () => go({phase:'reveal', rp:0}); }
+      else if (!lockArm) { hostPrimaryLabel = 'Lock round · ' + doneCount + '/' + people.length + ' in'; hostPrimary = () => this.setState({lockArm:true}); }
+      else { hostPrimaryLabel = 'Tap again: lock with ' + missing + ' missing'; hostPrimary = () => go({phase:'reveal', rp:0}); }
+    }
+    else if (isWager) { hostStatus = 'final wager · ' + wagerLockedCount + '/' + players.length + ' bets locked'; hostPrimaryLabel = 'Lock bets · open the Final'; hostPrimary = () => go({phase:'voting', rp:0, cur:0}); }
+    else if (phase === 'tb') { hostStatus = 'tiebreaker · ' + guessesIn + '/' + tbList.length + ' guesses in'; hostPrimaryLabel = 'Reveal tiebreaker answer'; hostPrimary = () => go({phase:'tbDone'}); }
+    else if (tbDone) { hostStatus = 'tiebreaker settled'; hostPrimaryLabel = 'Party champion: ' + tbWinner.name; hostPrimary = () => {}; }
+    else if (L === 0) { hostPrimaryLabel = 'Reveal party vote'; hostStatus = 'match ' + (rp+1) + ' of ' + len + ' on screen'; hostPrimary = () => bump(1); }
+    else if (L === 1) { hostPrimaryLabel = 'Reveal Katmai count'; hostStatus = 'party vote shown'; hostPrimary = () => bump(2); }
+    else if (!lastInRound) { hostPrimaryLabel = 'Next match →'; hostStatus = 'match ' + (rp+1) + ' final'; hostPrimary = () => go({rp: rp+1}); }
+    else if (r < 2) { hostPrimaryLabel = 'Open ' + RNAMES[r+1]; hostStatus = 'round complete'; hostPrimary = () => go({r: r+1, phase:'voting', rp:0, cur:0}); }
+    else if (r === 2) { hostPrimaryLabel = 'Open the Final Wager'; hostStatus = 'semis complete'; hostPrimary = () => go({r: 3, phase:'wager', rp:0, cur:0}); }
+    else if (tied.length > 1) { hostPrimaryLabel = 'Start tiebreaker · ' + tied.length + '-way tie'; hostStatus = 'final revealed'; hostPrimary = () => go({phase:'tb'}); }
+    else { hostPrimaryLabel = 'Champion crowned'; hostStatus = 'bracket complete'; hostPrimary = () => {}; }
+    const canBack = hist.length > 0 || lockArm;
+    const hostBack = () => this.setState(s => {
+      if (s.lockArm) return {lockArm:false};
+      const h = s.hist || []; if (!h.length) return null;
+      const prev = h[h.length-1]; return {...prev, hist: h.slice(0,-1), side:0};
+    });
+
+
+    const slots = []; const hot = voting ? new Set(round) : new Set(L >= 2 ? [] : [m]);
+    const push = (pos, num, matchIdx, big) => {
+      if (!num) return;
+      const lost = matchIdx != null && this.lvl(matchIdx) >= 2 && this.winner(matchIdx) !== num;
+      const isCur = matchIdx != null && hot.has(matchIdx);
+      slots.push({x:pos.x, y:pos.y, w: big ? '9.5%' : '4.9%', fs: big ? '30px' : (String(num).length > 2 ? '17px' : '21px'), t: String(num), bg: big ? '#F7C21B' : '#F3E6C4', bd: isCur ? '#F7C21B' : '#E3262E', glow: isCur ? (voting ? '0 0 14px 3px rgba(247,194,27,0.6)' : '0 0 0 4px #F7C21B, 0 0 24px 6px rgba(247,194,27,0.8)') : 'none', op: lost ? 0.35 : 1});
+    };
+    R1.forEach((p2, i) => { const LL = i < 4 ? L1 : R1S; const j = (i % 4) * 2; push(LL[j], p2[0], i); push(LL[j+1], p2[1], i); });
+    for (let i = 0; i < 8; i++) push((i < 4 ? L2 : R2)[i % 4], this.winner(i), [8,8,9,9,10,10,11,11][i]);
+    push(LS[0], this.winner(8), 12); push(LS[1], this.winner(9), 12); push(RS[0], this.winner(10), 13); push(RS[1], this.winner(11), 13);
+    push(LF, this.winner(12), 14); push(RF, this.winner(13), 14); push(CH, this.winner(14), null, true);
+
+    const nextUnvoted = round.findIndex((k, i) => i > cur && !votes[k]);
+    const nextIdx = nextUnvoted >= 0 ? nextUnvoted : (round.every(k => votes[k]) ? len : cur + 1);
+    const betweenText = r < 3 ? RNAMES[r+1] + ' opens when the host is ready.' : 'That’s the bracket. Long live the champion.';
+
+    // join flow
+    const taken = new Set(guests.map(g => g.toLowerCase()));
+    const rosterRows = guests.map(g => ({name:g, sub:'', open:false, taken:true, pick: () => this.setState({joinStep:'reclaim', reclaim:g})}))
+      .concat(OPEN_ROSTER.map(p => ({name:p.name, sub: p.plusOf ? p.plusOf + '’s +1' : '', open:true, taken:false, pick: () => this.finishJoin(p.name, p.plusOf)})))
+      .sort((a,b) => a.name.localeCompare(b.name));
+    const nn = (newName || '').trim();
+    const isDupe = nn && (taken.has(nn.toLowerCase()) || OPEN_ROSTER.some(p => p.name.toLowerCase() === nn.toLowerCase()));
+    const finalNew = isDupe ? nn + ' ' + (brought ? brought[0] + '.' : '2') : nn;
+    const hostChips = guests.concat(OPEN_ROSTER.filter(p => !p.plusOf).map(p => p.name)).map(name => ({name, bg: brought === name ? '#F7C21B' : 'transparent', bd: brought === name ? '#F7C21B' : '#1C6E8C', fg: brought === name ? '#081627' : '#F3E6C4', pick: () => this.setState({brought: brought === name ? '' : name})}));
+    const jr = joinedAt || {r, phase};
+    const lateNote = (jr.r === 0 && jr.phase === 'voting')
+      ? 'Round 1 is open. Your card is waiting.'
+      : (jr.phase === 'voting' || jr.phase === 'wager')
+        ? RNAMES[jr.r] + ' is open, so you’re starting here. Earlier rounds don’t count against you.'
+        : RNAMES[jr.r] + ' is mid-reveal. Watch the big screen; your first card is ' + (jr.r < 3 ? RNAMES[jr.r+1] : 'next time') + '.';
+    const reclaim = this.state.reclaim || '';
+    const joinTitles = {confirm:'READY TO PLAY?', who:'WHO ARE YOU?', new:'NEW PLAYER', done:'WELCOME', reclaim:'BACK AGAIN?'};
+    const joinSubs = {confirm:'You checked in on the invite. One tap and you’re in.', who: RNAMES[r] + ' is ' + (voting ? 'open' : 'being revealed') + '. Pick your name to jump in.', new:'Not on the roster? No problem. Type your name and you’re in.', done:'', reclaim:'New phone or closed the tab? Pick up where you left off.'};
+
+    return {
+      roundLabel: RNAMES[r], roundLabelUp: RNAMES[r].toUpperCase(), roundDateUp: RDATES[r].toUpperCase(),
+      roundCountLabel: len + (len === 1 ? ' matchup' : ' matchups'), roundLen: len, rpNum: rp + 1,
+      hostPrimary, hostPrimaryLabel, hostStatus, hostBack, hostBackOp: canBack ? 1 : 0.4,
+      showWager: isWager, wagerVal: myWager, wagerMax: myBase,
+      wagerMinus: () => setW(myWager - 1), wagerPlus: () => setW(myWager + 1), wagerZero: () => setW(0), wagerHalf: () => setW(Math.floor(myBase / 2)), wagerAll: () => setW(myBase),
+      lockWager: () => this.setState({wagerLocked:true}),
+      wagerLockLabel: this.state.wagerLocked ? '✓ BET LOCKED · ' + myWager + ' PTS' : 'LOCK IN ' + myWager + ' PTS',
+      wagerLockBg: this.state.wagerLocked ? 'transparent' : '#F7C21B', wagerLockFg: this.state.wagerLocked ? '#F7C21B' : '#081627',
+      wagerNote: myBase === 0 ? 'No points to bet yet. You can still vote in the Final.' : 'You can change your bet until the host opens the Final.',
+      tvWager: isWager, wagerRows, wagerLockedCount,
+      showTb: isTb, tvTb: isTb, tbReveal: tbDone,
+      tbNames: tied.map(p => p.name).join(' VS ').toUpperCase(),
+      tbIntro: amTied ? 'You’re tied for first. One question settles it.' : 'Tied for first. Watch the big screen.',
+      tbQuestion: 'How many party votes did Backpack get tonight, across all four of his matches?',
+      tbAsk: phase === 'tb' && amTied && !myGuessIn, tbLockedMine: phase === 'tb' && amTied && myGuessIn,
+      tbGuess: this.state.tbGuess || '', onTbGuess: e => this.setState({tbGuess: e.target.value.replace(/\D/g,'').slice(0,4)}),
+      lockTb: () => { if (!isNaN(myGuess)) this.setState({tbLocked:true}); },
+      tbLockBg: isNaN(myGuess) ? '#5E6B52' : '#F7C21B',
+      tbGuessShown: isNaN(myGuess) ? '' : myGuess, tbAnswer, tbWinnerUp: (tbWinner.name || '').toUpperCase(),
+      tbSameNote: tbSame ? 'Same distance, so the first guess locked in wins.' : '',
+      tbMine: amTied ? (myGuessIn ? 'You guessed ' + myGuess + ', off by ' + Math.abs(myGuess - tbAnswer) + '.' : 'You didn’t lock in a guess.') : '',
+      tbHasMine: amTied, tbHasSame: tbSame, tbRows,
+      isTie, jReclaim: joinStep === 'reclaim', reclaimUp: reclaim.toUpperCase(),
+      confirmReclaim: () => this.finishJoin(reclaim, ''),
+      reset: () => this.setState({...INIT, draft:'', zoom:false}),
+      rejoin: () => this.setState({joined:false, joinStep:null, newName:'', brought:'', joinedAt:null}),
+      showJoin: !joined, showGame: joined,
+      jConfirm: joinStep === 'confirm', jWho: joinStep === 'who', jNew: joinStep === 'new', jDone: joinStep === 'done',
+      joinTitle: joinTitles[joinStep], joinSub: joinSubs[joinStep] || '',
+      signedIn, signedInUp: signedIn.toUpperCase(),
+      joinSignedIn: () => this.finishJoin(signedIn, ''),
+      goWho: () => this.setState({joinStep:'who'}), goNew: () => this.setState({joinStep:'new'}),
+      rosterRows, hostChips, newName, onNewName: e => this.setState({newName: e.target.value}),
+      dupeHint: !!isDupe, dupeText: 'There’s already a ' + nn + ' here. You’ll show up as “' + finalNew + '”.',
+      joinBtnBg: nn ? '#F7C21B' : '#5E6B52',
+      joinNew: () => { if (nn) this.finishJoin(finalNew, brought); },
+      myNameUp: (myName || 'YOU').toUpperCase(), lateNote,
+      enterGame: () => this.setState({joined:true, cur:0, side:0}),
+      phoneStateLabel: !joined ? 'join flow' : isWager ? 'final wager' : isTb ? (tbDone ? 'tiebreaker answer' : 'tiebreaker') : voting ? (onCard ? 'round card, waiting on host' : 'filling in the round') : (isRevealed ? 'Katmai revealed' : partyShown ? 'party vote revealed' : 'waiting for reveal'),
+      tvStateLabel: isWager ? 'final wager, bets coming in' : isTb ? (tbDone ? 'tiebreaker answer' : 'tiebreaker, guesses coming in') : voting ? 'round open, cards coming in' : (isRevealed ? 'Katmai revealed' : partyShown ? 'party vote shown' : 'matchup up, pre-reveal'),
+      phoneTitle: isWager ? 'FINAL WAGER' : isTb ? 'TIEBREAKER' : voting ? (onCard ? 'YOUR ' + RNAMES[r].toUpperCase() + ' CARD' : 'MATCHUP ' + (cur+1) + '/' + len) : 'REVEAL ' + (rp+1) + '/' + len,
+      myScore, roundPips, cardRows, playerCount: people.length,
+      cardNote: myDone === len ? 'All ' + len + ' picks in. The host locks the round when everyone’s done.' : myDone + ' of ' + len + ' picked. Finish the rest before the host locks.',
+      showCard: onCard, showTabs: !onCard && !isWager && !isTb, showBear: !onCard && !isWager && !isTb,
+      showWaitReveal: inReveal && L === 0, myPickLabel: mine ? lab(mine) : 'nobody',
+      partyShown, isRevealed, katmaiPending: partyShown && !isRevealed, isBust, bustText,
+      isVoting: voting, isRevealPhase: inReveal, tvPreReveal: inReveal && L === 0,
+      tvMatchTitle: A.short.toUpperCase() + ' VS ' + B.short.toUpperCase(),
+      showBetweenRounds: roundOver, betweenText,
+      winnerLabel: winNum ? BEARS[winNum].short.toUpperCase() : '',
+      partyA: A.short.toUpperCase() + ' ' + t[0], partyB: t[1] + ' ' + B.short.toUpperCase(), partyPctA: (t[0]/tot*100) + '%',
+      offA: off ? A.short.toUpperCase() + ' ' + fmt(off[0]) : 'PENDING', offB: off ? fmt(off[1]) + ' ' + B.short.toUpperCase() : '', offPctA: off ? (off[0]/otot*100) + '%' : '50%',
+      myResultShort,
+      showTalk: (voting && !onCard && !!mine) || partyShown, canTalk: voting && !!mine,
+      talkList, talkTop: talkList.slice(0,3),
+      draft, onDraft: e => this.setState({draft: e.target.value}),
+      sendTalk: () => { const v = (draft||'').trim(); if (!v) return; this.setState(s => ({talk: {...s.talk, [m]: v}, draft:''})); },
+      pair, act, otherShortUp: oth.shortUp,
+      tabA: tab(pair[0], side === 0), tabB: tab(pair[1], side === 1),
+      showA: () => this.setState({side:0}), showB: () => this.setState({side:1}), swapSide: () => this.setState({side: 1-side}),
+      showVoteBar: voting && !onCard, showChoose: !mine || mine !== act.num, showNext: !!mine && mine === act.num,
+      nextLabel: nextIdx >= len ? 'LOCKED · SEE CARD ▶' : 'LOCKED · NEXT ▶',
+      voteAct: () => this.setState(s => ({votes: {...s.votes, [m]: act.num}})),
+      nextMatch: () => this.setState({cur: nextIdx, side: 0, draft: ''}),
+      guestProgress, doneCount, leaders, slots,
+      zoomRot: !!this.state.zoom && this.state.rot !== false, zoomUp: !!this.state.zoom && this.state.rot === false,
+      openZoom: () => this.setState({zoom: true}), closeZoom: () => this.setState({zoom: false}),
+      toggleRot: () => this.setState(s => ({rot: s.rot === false}))
+    };
+  }
+}
+</script>
+</body>
+</html>
