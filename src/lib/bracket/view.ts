@@ -11,6 +11,7 @@ import {
   hostPrimary,
   isBusted,
   level,
+  matchPoints,
   OFFICIAL,
   officialWinner,
   partyWinner,
@@ -532,5 +533,179 @@ export function buildFinalBoard(snap: Snapshot, now: number): FinalBoard | null 
       for (const v of votes) if (v.playerId === l.playerId) picks[v.matchId] = v.bearNum;
       return { id: l.playerId, name: l.name, score: l.score, picks };
     }),
+  };
+}
+
+// ── Recap (after the Final) ──────────────────────────────────────────────────
+
+export type RecapMatch = {
+  id: number;
+  round: string;
+  a: BearCard;
+  b: BearCard;
+  party: [number, number];
+  katmai: [number, number];
+  partyWinner: BearCard | null;
+  winner: BearCard;
+  busted: boolean;
+  margin: number;
+};
+
+export type RecapPlayer = {
+  rank: number;
+  name: string;
+  afterSemis: number;
+  bet: number;
+  wagerDelta: number;
+  wagerResult: string | null;
+  score: number;
+  withRoom: number;
+  voted: number;
+  matchedKatmai: number;
+};
+
+export type Recap = {
+  champion: string;
+  championScore: number;
+  bearChampion: BearCard;
+  players: RecapPlayer[];
+  matches: RecapMatch[];
+  busters: RecapMatch[];
+  closest: RecapMatch[];
+  lopsided: RecapMatch[];
+  splits: number;
+  /** Who led going into the Final Wager, if the wager changed the outcome. */
+  semisLeaders: { names: string[]; score: number; finalScores: number[] } | null;
+  allIn: { count: number; won: number; lost: number };
+  superlatives: { title: string; name: string; detail: string }[];
+  tiebreaker: { answer: number; rows: { name: string; guess: number | null; off: number | null }[] } | null;
+  quotes: { who: string; bear: string; text: string; match: string }[];
+};
+
+export function buildRecap(snap: Snapshot, now: number): Recap | null {
+  const g = snap.game;
+  if (!g.finishedAt) return null;
+  const champ = champion(snap, now);
+  if (!champ) return null;
+  const votes = countedVotes(snap, now);
+  const board = scoreboard(snap, now);
+  board.sort((a, b) => Number(b.playerId === champ.playerId) - Number(a.playerId === champ.playerId));
+
+  const matches: RecapMatch[] = OFFICIAL.map((o) => {
+    const t = tally(votes, o.id);
+    const pw = partyWinner(votes, o.id);
+    const [a, b] = parts(o.id);
+    return {
+      id: o.id,
+      round: o.round,
+      a: bearCard(a),
+      b: bearCard(b),
+      party: t,
+      katmai: [o.aVotes, o.bVotes],
+      partyWinner: pw == null ? null : bearCard(pw),
+      winner: bearCard(o.winner),
+      busted: pw != null && pw !== o.winner,
+      margin: Math.abs(t[0] - t[1]),
+    };
+  });
+  const voted = matches.filter((m) => m.party[0] + m.party[1] > 0);
+  const minMargin = Math.min(...voted.map((m) => m.margin));
+  const maxMargin = Math.max(...voted.map((m) => m.margin));
+
+  const players: RecapPlayer[] = board.map((l, i) => {
+    const mine = votes.filter((v) => v.playerId === l.playerId);
+    const withRoom = mine.filter((v) => matchPoints(v.bearNum, votes, v.matchId).points === 1).length;
+    return {
+      rank: i + 1,
+      name: l.name,
+      afterSemis: l.base,
+      bet: l.bet,
+      wagerDelta: l.wagerDelta,
+      wagerResult: l.wagerResult,
+      score: l.score,
+      withRoom,
+      voted: mine.length,
+      matchedKatmai: mine.filter((v) => v.bearNum === officialWinner(v.matchId)).length,
+    };
+  });
+
+  // Did the wager change who won? Compare the leaders after the Semis with the champion.
+  const topSemis = Math.max(...players.map((p) => p.afterSemis));
+  const leaders = players.filter((p) => p.afterSemis === topSemis);
+  const semisLeaders = leaders.some((p) => p.name === champ.name)
+    ? null
+    : { names: leaders.map((p) => p.name), score: topSemis, finalScores: leaders.map((p) => p.score) };
+
+  const allInPlayers = players.filter((p) => p.bet > 0 && p.bet === p.afterSemis);
+
+  const superlatives: Recap["superlatives"] = [];
+  const full = players.filter((p) => p.voted >= 8);
+  const best = (pick: (p: RecapPlayer) => number, pool = full) => {
+    const top = Math.max(...pool.map(pick));
+    return pool.filter((p) => pick(p) === top);
+  };
+  const names = (ps: RecapPlayer[]) => ps.map((p) => p.name).join(" & ");
+  if (full.length) {
+    const kw = best((p) => p.matchedKatmai);
+    superlatives.push({
+      title: "KATMAI WHISPERER",
+      name: names(kw),
+      detail: `Picked Katmai’s winner ${kw[0].matchedKatmai} of ${kw[0].voted} times. Katmai’s count never scores, but still.`,
+    });
+    const rebels = best((p) => p.voted - p.withRoom);
+    superlatives.push({
+      title: "LONE WOLF",
+      name: names(rebels),
+      detail: `Voted against the room ${rebels[0].voted - rebels[0].withRoom} times.`,
+    });
+  }
+  const swing = [...players].sort((a, b) => a.wagerDelta - b.wagerDelta)[0];
+  if (swing && swing.wagerDelta < 0)
+    superlatives.push({
+      title: "BIGGEST FALL",
+      name: names(players.filter((p) => p.wagerDelta === swing.wagerDelta)),
+      detail: `Bet ${-swing.wagerDelta} on the Final and lost every point of it.`,
+    });
+
+  let tiebreaker: Recap["tiebreaker"] = null;
+  if (g.phase === "tbDone") {
+    const r = tiebreakerRanking(snap, now);
+    tiebreaker = { answer: r.answer, rows: r.rows.map((x) => ({ name: x.name, guess: x.guess, off: x.off })) };
+  }
+
+  const nameOf = new Map(snap.players.map((p) => [p.id, p.name]));
+  const quotes = snap.talk
+    .filter((t) => !t.hidden && t.at <= now && nameOf.has(t.playerId))
+    .sort((a, b) => a.at - b.at)
+    .map((t) => {
+      const v = snap.votes.find((x) => x.playerId === t.playerId && x.matchId === t.matchId);
+      const [a, b] = parts(t.matchId);
+      return {
+        who: nameOf.get(t.playerId)!,
+        bear: v ? bearCard(v.bearNum).short : "",
+        text: t.text,
+        match: `${OFFICIAL[t.matchId].round} · ${bearCard(a).short} vs ${bearCard(b).short}`,
+      };
+    });
+
+  return {
+    champion: champ.name,
+    championScore: champ.score,
+    bearChampion: bearCard(officialWinner(FINAL)),
+    players,
+    matches,
+    busters: matches.filter((m) => m.busted),
+    closest: voted.filter((m) => m.margin === minMargin),
+    lopsided: voted.filter((m) => m.margin === maxMargin),
+    splits: voted.filter((m) => m.margin === 0).length,
+    semisLeaders,
+    allIn: {
+      count: allInPlayers.length,
+      won: allInPlayers.filter((p) => p.wagerDelta > 0).length,
+      lost: allInPlayers.filter((p) => p.wagerDelta < 0).length,
+    },
+    superlatives,
+    tiebreaker,
+    quotes,
   };
 }

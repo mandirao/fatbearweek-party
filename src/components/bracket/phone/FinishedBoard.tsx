@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { getBracketBear, OFFICIAL, parts, ROUND_NAMES, roundOf, FINAL } from "@/lib/bracket/engine";
 import type { FinalBoard } from "@/lib/bracket/view";
@@ -10,7 +11,7 @@ const short = (n: number) => getBracketBear(n)?.short ?? String(n);
 const POSTER_W = 1166;
 const POSTER_H = 900;
 
-function Poster({ final }: { final: FinalBoard }) {
+export function Poster({ final }: { final: Pick<FinalBoard, "slots"> }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.3);
   useEffect(() => {
@@ -81,6 +82,12 @@ export function FinishedBoard({ final, meId, champion }: { final: FinalBoard; me
         <span className="font-pixel text-[24px] text-gold">{up(champion ?? "")}</span>
         <span className="text-[14px] text-white">{bearChamp?.label} takes the Golden Salmon.</span>
       </div>
+      <Link
+        href="/bracket/recap"
+        className="flex items-center justify-center min-h-[54px] border-[3px] border-gold bg-gold text-night no-underline font-pixel text-[15px] hover:text-night"
+      >
+        SEE THE RECAP ▶
+      </Link>
       <Poster final={final} />
       <div className="flex flex-col gap-1.5">
         <span className="font-pixel text-[12px] text-ice">READ THE ROOM · FINAL LEADERBOARD</span>

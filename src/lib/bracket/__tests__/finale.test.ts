@@ -143,3 +143,31 @@ test("jump to keeps votes real players already cast in the open round", async ()
   expect(me.base).toBeGreaterThan(0);
   expect(bots.every((b) => b.base > 0)).toBe(true);
 });
+
+test("recap: champion, wager flip, all-in counts, busters, quote", async () => {
+  const { buildRecap } = await import("../view");
+  const { postTalk } = await import("../store");
+  const db = await makeTestDb();
+  await toWager(db);
+  // A and B lead (we give them bonus via a vote edit is overkill; just bet): A all in and loses, B all in and wins.
+  await setWager(db, "A", 14, true, tick());
+  await setWager(db, "B", 14, true, tick());
+  await hostAction(db, "openFinal", { now: tick(), rng });
+  await castVote(db, "A", FINAL, parts(FINAL)[0], tick());
+  await castVote(db, "B", FINAL, parts(FINAL)[1], tick());
+  await castVote(db, "C", FINAL, parts(FINAL)[1], tick());
+  await postTalk(db, "A", FINAL, "910 forever", tick());
+  await hostAction(db, "lockRound", { now: tick(), rng });
+  await hostAction(db, "revealParty", { now: tick(), rng });
+  await hostAction(db, "revealKatmai", { now: tick(), rng });
+  const { snap } = await loadSnapshot(db);
+  const r = buildRecap(snap, now)!;
+  expect(r.champion).toBe("B");
+  expect(r.championScore).toBe(29);
+  expect(r.allIn).toEqual({ count: 2, won: 1, lost: 1 });
+  expect(r.semisLeaders).toBeNull(); // B was already tied for the lead
+  expect(r.superlatives.find((s) => s.title === "BIGGEST FALL")?.name).toBe("A");
+  expect(r.quotes).toEqual([{ who: "A", bear: "910", text: "910 forever", match: "Final · 910 vs Backpack" }]);
+  expect(r.matches).toHaveLength(15);
+  expect(buildRecap({ ...snap, game: { ...snap.game, finishedAt: null } }, now)).toBeNull();
+});
