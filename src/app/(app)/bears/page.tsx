@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest } from "@/lib/guests";
 import { toggleBearChipAction, saveBearTextAction } from "@/lib/actions";
 import { BearField } from "@/components/BearField";
@@ -9,10 +10,11 @@ import { BRIEFS, bearPhotoUrl } from "@/lib/bears";
 export default async function BearsPage() {
   const meId = await getMeId();
   const me = meId ? await getGuest(meId) : null;
+  const archived = isArchived();
 
   return (
     <div className="flex flex-col">
-      {!me && (
+      {!me && !archived && (
         <Link
           href="/checkin"
           className="bg-salmon border-b-2 border-salmon-hover px-5 py-[13px] flex items-center justify-between gap-3 no-underline"
@@ -37,42 +39,44 @@ export default async function BearsPage() {
           </p>
         </div>
 
-        <div className="border-2 border-forest rounded overflow-hidden">
-          <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">YOUR BEAR</div>
-          <div className="p-3.5 flex flex-col gap-3.5 bg-warm-white">
-            {me?.bear ? (
-              <div className="flex items-center gap-3 bg-salmon rounded p-3.5">
-                <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-salmon-tint">
-                  TEAM {me.bear.toUpperCase()}
-                </span>
-                <form action={toggleBearChipAction}>
-                  <input type="hidden" name="bear" value={me.bear} />
-                  <button className="flex-none bg-transparent text-rust-tint border border-rust-rule rounded min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-salmon-hover">
-                    Undeclare
-                  </button>
-                </form>
-              </div>
-            ) : (
-              <div className="text-[15px] leading-[1.55] text-ink-muted">
-                {me
-                  ? "Nothing declared yet. Scout the field below, or type any bear you like."
-                  : "Check in on the invite first, then pick a bear here."}
-              </div>
-            )}
+        {!archived && (
+          <div className="border-2 border-forest rounded overflow-hidden">
+            <div className="bg-forest text-cream px-3 py-3 font-semibold text-xs tracking-[0.14em]">YOUR BEAR</div>
+            <div className="p-3.5 flex flex-col gap-3.5 bg-warm-white">
+              {me?.bear ? (
+                <div className="flex items-center gap-3 bg-salmon rounded p-3.5">
+                  <span className="flex-1 min-w-0 font-display text-[19px] leading-[1.1] text-salmon-tint">
+                    TEAM {me.bear.toUpperCase()}
+                  </span>
+                  <form action={toggleBearChipAction}>
+                    <input type="hidden" name="bear" value={me.bear} />
+                    <button className="flex-none bg-transparent text-rust-tint border border-rust-rule rounded min-h-11 px-3.5 font-sans font-semibold text-sm cursor-pointer hover:bg-salmon-hover">
+                      Undeclare
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <div className="text-[15px] leading-[1.55] text-ink-muted">
+                  {me
+                    ? "Nothing declared yet. Scout the field below, or type any bear you like."
+                    : "Check in on the invite first, then pick a bear here."}
+                </div>
+              )}
 
-            <form action={saveBearTextAction} className="flex gap-2">
-              <input
-                name="bear"
-                aria-label="Your bear"
-                placeholder="Type a bear (128, Holly, 856…)"
-                className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded py-[15px] px-3 text-base text-forest"
-              />
-              <button className="bg-forest text-cream border-none rounded min-h-11 px-4 font-sans font-bold text-[15px] tracking-[0.06em] cursor-pointer hover:bg-green-hover">
-                SET
-              </button>
-            </form>
+              <form action={saveBearTextAction} className="flex gap-2">
+                <input
+                  name="bear"
+                  aria-label="Your bear"
+                  placeholder="Type a bear (128, Holly, 856…)"
+                  className="flex-1 min-w-0 bg-warm-white border border-border-tan rounded py-[15px] px-3 text-base text-forest"
+                />
+                <button className="bg-forest text-cream border-none rounded min-h-11 px-4 font-sans font-bold text-[15px] tracking-[0.06em] cursor-pointer hover:bg-green-hover">
+                  SET
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
 
         <BearField meBear={me?.bear ?? null} />
 

@@ -1,5 +1,7 @@
 import { NavHeader } from "@/components/NavHeader";
+import Link from "next/link";
 import { getMeId, isHost } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest } from "@/lib/guests";
 import { switchUserAction } from "@/lib/actions";
 import { getBracketStatus } from "@/lib/bracket/server";
@@ -18,6 +20,17 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
         <div className="w-full max-w-[440px] bg-cream min-h-screen flex flex-col shadow-[0_0_60px_rgba(0,0,0,0.35)]">
           <NavHeader hostFlag={hostFlag} />
           <LiveBanner />
+
+          {isArchived() && (
+            <div className="bg-tan border-b border-border-tan px-5 py-3 text-sm leading-[1.5] text-ink-muted">
+              <strong className="text-forest">The party&apos;s over.</strong> This is the read-only archive: browse the
+              roster, the feast and the bears, or{" "}
+              <Link href="/bracket/recap" className="text-river underline underline-offset-2">
+                see how Bracket Night ended
+              </Link>
+              .
+            </div>
+          )}
 
           {me && (
             <div className="bg-tan border-b border-border-tan px-5 flex items-center justify-between gap-2.5">

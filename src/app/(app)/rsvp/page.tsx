@@ -1,11 +1,13 @@
 import { redirect } from "next/navigation";
 import { getMeId } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest } from "@/lib/guests";
 import { PARTY } from "@/lib/party";
 import { sayYesAction, sayNoAction, incGuestsAction, decGuestsAction, withdrawAction, switchUserAction } from "@/lib/actions";
 import Link from "next/link";
 
 export default async function RsvpPage() {
+  if (isArchived()) redirect("/roster");
   const meId = await getMeId();
   const me = meId ? await getGuest(meId) : null;
   if (!me) redirect("/checkin");

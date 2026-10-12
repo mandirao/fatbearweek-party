@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest, getAllGuests, yesHeadsTotal } from "@/lib/guests";
-import { PARTY, CAMS, WHATSAPP_URL, upcomingBroadcastEvents } from "@/lib/party";
+import { PARTY, CAMS, upcomingBroadcastEvents } from "@/lib/party";
 import { findPotluckItem } from "@/lib/potluck";
 import { switchUserAction } from "@/lib/actions";
 
@@ -21,7 +22,10 @@ export default async function InvitePage({
   const camIdx = Math.min(Math.max(parseInt(cam || "0", 10) || 0, 0), CAMS.length - 1);
   const activeCam = CAMS[camIdx];
 
-  const barLabel = me
+  const archived = isArchived();
+  const barLabel = archived
+    ? "THE PARTY'S OVER"
+    : me
     ? me.status === "yes"
       ? "YOU'RE ON THE ROSTER"
       : me.status === "no"
@@ -33,8 +37,8 @@ export default async function InvitePage({
       ? `${me.name} + ${me.extraGuests} · ${PARTY.whenShort}`
       : `${me.name} · ${PARTY.whenShort}`
     : PARTY.whenLabel;
-  const barCta = me && me.status ? "Change" : "RSVP";
-  const rsvpHref = me ? "/rsvp" : "/checkin";
+  const barCta = archived ? "Recap" : me && me.status ? "Change" : "RSVP";
+  const rsvpHref = archived ? "/bracket/recap" : me ? "/rsvp" : "/checkin";
 
   const myHeadline = me
     ? me.status === "yes"
@@ -85,9 +89,7 @@ export default async function InvitePage({
           </div>
           <div className="flex justify-between gap-3.5 px-3 py-[14px] text-base text-ink bg-sand">
             <span className="text-ink-faint flex-none">Where</span>
-            <a href={PARTY.mapUrl} target="_blank" className="font-medium text-right text-river">
-              {PARTY.addressLine} ↗
-            </a>
+            <span className="font-medium text-right">{PARTY.addressLine}</span>
           </div>
           <div className="flex justify-between gap-3.5 px-3 py-[14px] text-base text-ink bg-warm-white">
             <span className="text-ink-faint">Bracket night</span>
@@ -153,14 +155,6 @@ export default async function InvitePage({
                     <span>{myDish ? `You're bringing ${myDish.name}` : "Claim a dish for the feast"}</span>
                     <span className="text-salmon font-bold">→</span>
                   </Link>
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    className="flex items-center justify-between gap-2 bg-tan rounded-[3px] px-3.5 py-3 text-[15px] text-forest no-underline"
-                  >
-                    <span>Join the party WhatsApp group</span>
-                    <span className="text-salmon font-bold">→</span>
-                  </a>
                 </div>
               )}
               <div className="flex gap-2">

@@ -5,13 +5,10 @@ export const PARTY = {
   whenLabel: "Friday, October 2 · 7:00 PM",
   whenShort: "Oct 2, 7:00 PM",
   addressLine: "Denver, CO",
-  mapUrl: "https://maps.google.com/?q=Denver+CO",
   bracketNightLabel: "Starts ~8 PM",
 };
 
 export const SITE_URL = "https://fatbear.sprigbo.com";
-
-export const WHATSAPP_URL = "https://chat.whatsapp.com/REVOKED";
 
 export type Cam = {
   badge: string;

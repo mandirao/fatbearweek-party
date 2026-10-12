@@ -1,4 +1,5 @@
 import { isHost } from "@/lib/identity";
+import { ArchivedError, isArchived } from "@/lib/archive";
 import { bracketDb, invalidateBracketCache } from "@/lib/bracket/server";
 import { HOST_ACTIONS, type HostAction } from "@/lib/bracket/engine";
 import {
@@ -27,6 +28,7 @@ type Body =
   | { op: "dismissRejoin"; playerId: string };
 
 export async function POST(request: Request) {
+  if (isArchived()) return Response.json({ error: new ArchivedError().message }, { status: 403 });
   if (!(await isHost())) return Response.json({ error: "Host only." }, { status: 403 });
   const body = (await request.json().catch(() => ({}))) as Body;
   const db = bracketDb();

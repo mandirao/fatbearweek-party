@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMeId } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest } from "@/lib/guests";
 import { toggleBearChipAction } from "@/lib/actions";
 import {
@@ -168,7 +169,7 @@ export default async function BearDetailPage(props: PageProps<"/bears/[num]">) {
           </div>
         )}
 
-        {me ? (
+        {isArchived() ? null : me ? (
           <form action={toggleBearChipAction}>
             <input type="hidden" name="bear" value={backing} />
             <button

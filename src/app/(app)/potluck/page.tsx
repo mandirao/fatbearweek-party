@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getMeId } from "@/lib/identity";
+import { isArchived } from "@/lib/archive";
 import { getGuest, getAllGuests } from "@/lib/guests";
-import { POTLUCK_ITEMS, POTLUCK_COURSES, HOST, findPotluckItem } from "@/lib/potluck";
+import { POTLUCK_ITEMS, POTLUCK_COURSES, HOST, findPotluckItem, isMyDish } from "@/lib/potluck";
 import { claimDishAction } from "@/lib/actions";
 import { LiveCamPanel } from "@/components/LiveCamPanel";
 
@@ -11,6 +12,7 @@ export default async function PotluckPage({
   searchParams: Promise<{ taken?: string }>;
 }) {
   const { taken } = await searchParams;
+  const archived = isArchived();
   const meId = await getMeId();
   const me = meId ? await getGuest(meId) : null;
   const allGuests = await getAllGuests();
@@ -25,7 +27,7 @@ export default async function PotluckPage({
 
   return (
     <div className="flex flex-col">
-      {!me && (
+      {!me && !archived && (
         <Link
           href="/checkin"
           className="bg-salmon border-b-2 border-salmon-hover px-5 py-[13px] flex items-center justify-between gap-3 no-underline"
@@ -90,8 +92,8 @@ export default async function PotluckPage({
 
               {items.map((item) => {
                 const ownerName = item.host ? HOST : dishOwner.get(item.n);
-                const mine = !item.host && ownerName === me?.name;
-                const disabledRow = item.host || (!!ownerName && !mine);
+                const mine = isMyDish(item, me);
+                const disabledRow = archived || item.host || (!!ownerName && !mine);
 
                 const rowBg = item.host ? "bg-sand" : mine ? "bg-tan" : "";
                 const rowPad = item.host || mine ? "rounded-[3px] px-3 py-2.5" : "py-[7px]";
@@ -103,9 +105,11 @@ export default async function PotluckPage({
                     ? "YOURS — TAP TO RELEASE"
                     : ownerName
                       ? `${ownerName.toUpperCase()} IS BRINGING THIS`
-                      : me
-                        ? "TAP TO CLAIM"
-                        : "CHECK IN TO CLAIM";
+                      : archived
+                        ? "UNCLAIMED"
+                        : me
+                          ? "TAP TO CLAIM"
+                          : "CHECK IN TO CLAIM";
                 const pillClasses = mine
                   ? "bg-forest border-forest text-cream"
                   : ownerName

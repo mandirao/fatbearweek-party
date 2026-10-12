@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { getMeId, isHost } from "@/lib/identity";
+import { ArchivedError, isArchived } from "@/lib/archive";
 import { getAllGuests, getGuest } from "@/lib/guests";
 import { bracketDb, getLoaded, invalidateBracketCache } from "@/lib/bracket/server";
 import { buildPlayerView } from "@/lib/bracket/view";
@@ -72,6 +73,7 @@ type Body =
   | { op: "tbGuess"; value: number };
 
 export async function POST(request: Request) {
+  if (isArchived()) return Response.json({ error: new ArchivedError().message }, { status: 403, headers: noStore });
   const asId = new URL(request.url).searchParams.get("as");
   const body = (await request.json().catch(() => ({}))) as Body;
   const db = bracketDb();

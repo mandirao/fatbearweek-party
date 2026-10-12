@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { isArchived } from "@/lib/archive";
 import { getAllGuests } from "@/lib/guests";
 import { checkinAction, addSelfAction } from "@/lib/actions";
 
 export default async function CheckinPage() {
+  if (isArchived()) redirect("/roster");
   const guests = await getAllGuests();
 
   return (

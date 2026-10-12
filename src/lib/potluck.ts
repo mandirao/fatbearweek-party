@@ -83,3 +83,8 @@ export function findPotluckItem(n: number | null | undefined): PotluckItem | nul
   if (n == null) return null;
   return POTLUCK_ITEMS.find((i) => i.n === n) ?? null;
 }
+
+/** True when `me` has claimed this dish. Visitors who aren't signed in own nothing. */
+export function isMyDish(item: PotluckItem, me: { dishId: number | null } | null | undefined): boolean {
+  return !item.host && me?.dishId != null && me.dishId === item.n;
+}

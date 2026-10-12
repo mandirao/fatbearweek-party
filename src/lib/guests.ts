@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { guests, type Guest } from "@/db/schema";
+import { assertNotArchived } from "./archive";
 
 export function heads(g: Guest) {
   return 1 + (g.extraGuests || 0);
@@ -19,6 +20,7 @@ export async function getGuest(id: string): Promise<Guest | null> {
 }
 
 export async function addGuest(name: string): Promise<Guest> {
+  assertNotArchived();
   const db = getDb();
   const id = `n${Date.now()}${Math.floor(Math.random() * 1000)}`;
   const [row] = await db.insert(guests).values({ id, name }).returning();
@@ -29,11 +31,13 @@ export async function updateGuest(
   id: string,
   patch: Partial<Pick<Guest, "status" | "extraGuests" | "bear" | "dishId">>,
 ) {
+  assertNotArchived();
   const db = getDb();
   await db.update(guests).set(patch).where(eq(guests.id, id));
 }
 
 export async function resetAllGuests() {
+  assertNotArchived();
   const db = getDb();
   await db.update(guests).set({ status: null, extraGuests: 0, bear: null });
 }

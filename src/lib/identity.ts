@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { isArchived } from "./archive";
 
 const ME_COOKIE = "fbw_me";
 export const HOST_COOKIE = "fbw_host";
@@ -11,7 +12,9 @@ const COOKIE_OPTS = {
   maxAge: 60 * 60 * 24 * 365,
 };
 
+/** In archive mode nobody is signed in, so every page renders as a visitor would see it. */
 export async function getMeId(): Promise<string | null> {
+  if (isArchived()) return null;
   const store = await cookies();
   return store.get(ME_COOKIE)?.value ?? null;
 }
@@ -27,6 +30,7 @@ export async function clearMeId() {
 }
 
 export async function isHost(): Promise<boolean> {
+  if (isArchived()) return false;
   const store = await cookies();
   return store.get(HOST_COOKIE)?.value === "1";
 }
