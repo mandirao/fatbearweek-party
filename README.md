@@ -4,7 +4,7 @@
 
 Built for one evening, about 20 friends, and one deadline: Friday, October 2, 2026.
 
-**[Explore the party site →](https://fatbear.sprigbo.com)** · [See how Bracket Night ended](https://fatbear.sprigbo.com/bracket/recap)
+**[Explore the archived party →](https://fatbear.sprigbo.com)** · [See how Bracket Night ended](https://fatbear.sprigbo.com/bracket/recap)
 
 <p align="center">
   <img src="docs/screenshots/bracket-night-tv.png" width="100%" alt="Bracket Night on the TV after the Final: the official 2026 bracket poster filled in, the Final's party vote and Katmai count, the quote of the night, the party champion and the leaderboard" />
@@ -30,7 +30,7 @@ So instead of a group text and a spreadsheet, I built a small app with the perso
 - **Before the party:** an invite that doubles as RSVP, a potluck sheet, a field guide to the bears, and live Katmai cams.
 - **At the party:** **Bracket Night**, a host-run live game. Guests vote on their phones, the TV reveals results match by match, and a champion takes home the Golden Salmon.
 
-The party has happened. The app has an archive mode that preserves it as a read-only record of the real night: the real roster, the real potluck, the real votes and the real winner.
+The party has happened. The live site is now a read-only archive of the real night: the real roster, the real potluck, the real votes and the real winner.
 
 ## What it does
 
