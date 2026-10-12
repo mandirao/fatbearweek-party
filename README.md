@@ -37,7 +37,7 @@ The party has happened. The live site is now a read-only archive of the real nig
 ### 🎟 One link, no accounts
 The host texts one URL. A guest picks their name from the list, or adds it, and taps **I'm in**. No password, no sign-up, no app to install. They can come back to change their answer, say how many people they're bringing, and declare a bear allegiance for pre-party trash talk.
 
-### 🍽 A potluck that plans itself
+### 🍽 A holiday-themed potluck that plans itself
 A curated menu of on-theme food (salmon, smoke, berries, honey, anything bear- or forest-shaped). Each dish can be claimed once, enforced by a database constraint, so two people can't both sign up for the gummy bears.
 
 ### 🐻 A field guide to the bears
@@ -75,11 +75,11 @@ The night closes with a Final Wager and a tiebreaker question, if one is needed.
 
 ## How it was built
 
-My role was the product concept, the requirements, the interaction and visual direction, the game rules, evaluating what got built, the decisions and tradeoffs, and testing. I also ran the event. Much of the code was written by Claude Code agents under my direction (Claude Sonnet and Opus models), and I reviewed, steered and accepted their changes. The commit history carries those co-author trailers.
+My role was the product concept, the requirements, the interaction and visual direction, the game rules, evaluating what got built, the decisions and tradeoffs, and testing. I also ran the event (and baked a truly excellent cake). Much of the code was written by Claude Code agents under my direction (Claude Sonnet and Opus models), and I reviewed, steered and accepted their changes. The commit history carries those co-author trailers.
 
 The workflow went like this:
 
-1. **Explore the design with Claude Design.** I worked out the visual direction over multiple rounds of iteration in Claude Design, ending with high-fidelity, interactive HTML prototypes with exact copy, colors and behavior.
+1. **Explore the design with Claude Design.** I directed the visual brand and interface over multiple rounds of iteration in Claude Design, ending with high-fidelity, interactive HTML prototypes with exact copy, colors and behavior.
 2. **Hand off a written brief.** Once the design was set, Claude Design produced a design handoff and implementation brief for Claude Code. Those prototypes and briefs are in [`design-reference/`](design-reference/design_handoff_fat_bear_week). The Bracket Night brief ([`UPDATE-5-bracket-night.md`](design-reference/design_handoff_fat_bear_week/UPDATE-5-bracket-night.md)) is the clearest example: game model, scoring rules, edge cases and what the host sees at each step.
 3. **Build in the real stack with Claude Code.** Each prototype faked persistence in `localStorage`. The briefs explicitly asked for real server-side state.
 4. **Iterate in small commits**, with later design updates layered on top (`UPDATE-2` through `UPDATE-5`).
